@@ -71,6 +71,8 @@ GameObject:
   - component: {fileID: 114332890941174642}
   - component: {fileID: 54978766341040578}
   - component: {fileID: 114553316851585574}
+  - component: {fileID: 114033322418870622}
+  - component: {fileID: 114905885093899086}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -407,6 +409,22 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1933241136531968}
   m_Enabled: 1
+--- !u!114 &114033322418870622
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1523423699221036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4d3c3ff54d26a4db2f1558b3801664, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  componentsToDisable:
+  - {fileID: 114416590845875000}
+  - {fileID: 114332890941174642}
+  - {fileID: 81626711032088930}
+  - {fileID: 20669219845324688}
 --- !u!114 &114332890941174642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -463,6 +481,27 @@ MonoBehaviour:
     i15: 155
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &114905885093899086
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1523423699221036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 3
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!124 &124832631114197842
 Behaviour:
   m_ObjectHideFlags: 1

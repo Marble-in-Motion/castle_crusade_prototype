@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
-
-
+public class PlayerController : MonoBehaviour
+{
     [SerializeField]
     private float lookSensitivity = 3f;
 
