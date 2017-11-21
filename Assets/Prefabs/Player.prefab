@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4223782713943092}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34,7 +34,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4556974725443738}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Crossbow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +51,7 @@ GameObject:
   - component: {fileID: 4578528457860048}
   - component: {fileID: 33352752082972046}
   - component: {fileID: 23758183183379058}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PlayerModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,16 +66,17 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4933686849485560}
+  - component: {fileID: 54978766341040578}
   - component: {fileID: 136891660940147246}
+  - component: {fileID: 114553316851585574}
+  - component: {fileID: 114905885093899086}
   - component: {fileID: 114416590845875000}
   - component: {fileID: 114332890941174642}
-  - component: {fileID: 54978766341040578}
-  - component: {fileID: 114553316851585574}
   - component: {fileID: 114033322418870622}
-  - component: {fileID: 114905885093899086}
-  m_Layer: 0
+  - component: {fileID: 114537779658880172}
+  m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -90,7 +91,7 @@ GameObject:
   - component: {fileID: 4355125111790338}
   - component: {fileID: 33878471821304140}
   - component: {fileID: 23861035591373878}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Arrow_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +109,7 @@ GameObject:
   - component: {fileID: 20669219845324688}
   - component: {fileID: 124832631114197842}
   - component: {fileID: 81626711032088930}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +126,7 @@ GameObject:
   - component: {fileID: 4348712095040354}
   - component: {fileID: 33697855855159152}
   - component: {fileID: 23111549003342376}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CrossbowModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -425,6 +426,8 @@ MonoBehaviour:
   - {fileID: 114332890941174642}
   - {fileID: 81626711032088930}
   - {fileID: 20669219845324688}
+  - {fileID: 114537779658880172}
+  remoteLayerName: RemotePlayer
 --- !u!114 &114332890941174642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -449,6 +452,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lookSensitivity: 3
+--- !u!114 &114537779658880172
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1523423699221036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b9753970bee8ea4d8945afb48e12d7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bolt:
+    name: StandardBolt
+    damage: 10
+    range: 100
+  camera: {fileID: 20669219845324688}
+  mask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &114553316851585574
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -501,7 +523,7 @@ MonoBehaviour:
   m_VelocityThreshold: 0.0001
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
-  m_InterpolateMovement: 1
+  m_InterpolateMovement: 0
 --- !u!124 &124832631114197842
 Behaviour:
   m_ObjectHideFlags: 1
