@@ -9,8 +9,8 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField]
     private Camera cam;
 
-    private Vector3 rotation = Vector3.zero;
-    private Vector3 cameraRotation = Vector3.zero;
+    private Vector3 rotationX = Vector3.zero;
+    private Vector3 rotationY = Vector3.zero;
 
     private Rigidbody rb;
 
@@ -26,19 +26,19 @@ public class PlayerMotor : MonoBehaviour
     }
 
     // Gets a rotational vector
-    public void Rotate(Vector3 rotation, Vector3 cameraRotation)
+    public void Rotate(Vector3 x, Vector3 y)
     {
-        this.rotation = rotation;
-        this.cameraRotation = cameraRotation;
+        this.rotationX = x;
+        this.rotationY = y;
     }
 
     //Perform rotation
     void PerformRotation()
     {
-        rb.MoveRotation(rb.rotation * Quaternion.Euler(rotation));
+        rb.MoveRotation(rb.rotation * Quaternion.Euler(rotationX));
         if (cam != null)
         {
-            cam.transform.Rotate(-cameraRotation);
+            cam.transform.Rotate(-rotationY);
         }
     }
 }

@@ -6,7 +6,7 @@ public class PlayerShoot : NetworkBehaviour {
     public Bolt bolt;
 
     [SerializeField]
-    private Camera camera;
+    private Camera cam;
 
     [SerializeField]
     private LayerMask mask;
@@ -22,7 +22,7 @@ public class PlayerShoot : NetworkBehaviour {
     void Shoot()
     {
         RaycastHit hit;
-        if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, bolt.range, mask))
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, bolt.range, mask))
         {
             if (hit.collider.tag == PlayerController.PLAYER_TAG)
             {
