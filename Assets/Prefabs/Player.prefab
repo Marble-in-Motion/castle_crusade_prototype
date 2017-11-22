@@ -466,8 +466,8 @@ MonoBehaviour:
   bolt:
     name: StandardBolt
     damage: 10
-    range: 100
-  camera: {fileID: 20669219845324688}
+    range: 1000000
+  cam: {fileID: 20669219845324688}
   mask:
     serializedVersion: 2
     m_Bits: 4294967295

@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Spawn
+  - Tower1
+  - NPC
   layers:
   - Default
   - TransparentFX

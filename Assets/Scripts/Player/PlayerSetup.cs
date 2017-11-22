@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 
-public class PlayerSetup : NetworkBehaviour
+public class PlayerSetup : NetworkSetup
 {
 
     [SerializeField]
@@ -22,16 +22,10 @@ public class PlayerSetup : NetworkBehaviour
         } else
         {
             DisableNonLocalCompontents();
-            AssignRemoteLayer();
+            AssignLayer(remoteLayerName);
         }
 
-        RegisterPlayer();
-    }
-
-    void RegisterPlayer()
-    {
-        string id = "Player" + GetComponent<NetworkIdentity>().netId;
-        transform.name = id;
+        RegisterModel(PlayerController.PLAYER_TAG);
     }
 
     void OnDisable()
@@ -56,11 +50,6 @@ public class PlayerSetup : NetworkBehaviour
         {
             behaviour.enabled = false;
         }
-    }
-
-    private void AssignRemoteLayer()
-    {
-        gameObject.layer = LayerMask.NameToLayer(remoteLayerName);
     }
 
 }
