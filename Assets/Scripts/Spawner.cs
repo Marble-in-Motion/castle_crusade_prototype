@@ -15,7 +15,7 @@ public class Spawner : NetworkBehaviour {
 
     public override void OnStartServer()
     {
-        for (int i=0; i <= spawnNumber; i++)
+        for (int i=0; i < spawnNumber; i++)
         {
             GameObject obj = GameObject.Instantiate(prefab, spawnLocation.transform.position, Quaternion.identity) as GameObject;
             NetworkServer.Spawn(obj);
