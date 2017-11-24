@@ -8,6 +8,9 @@ public class PlayerShoot : NetworkBehaviour {
     [SerializeField]
     private Camera cam;
 
+	[SerializeField]
+	private GameObject crossbow;
+
     [SerializeField]
     private LayerMask mask;
 
@@ -22,15 +25,20 @@ public class PlayerShoot : NetworkBehaviour {
     void Shoot()
     {
         RaycastHit hit;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, bolt.range, mask))
+        if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, bolt.range, mask))
         {
-                CmdPlayerShot(hit.collider.name);
+            CmdPlayerShot(hit.collider.name, bolt.damage);
+			Debug.DrawRay(crossbow.transform.position, crossbow.transform.forward, Color.green);
         }
     }
 
     [Command]
-    void CmdPlayerShot(string id)
+	void CmdPlayerShot(string id, float damage)
     {
-        Debug.Log(id + "hit");
+        Debug.Log(id + " hit");
+		GameObject target = GameObject.Find(id);
+		if (target.GetComponent<NPCHealth> ()) {
+			target.GetComponent<NPCHealth>().DeductHealth(damage);
+		}
     }
 }

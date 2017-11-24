@@ -18,6 +18,8 @@ public class PlayerSetup : NetworkSetup
         
         if (isLocalPlayer)
         {
+			Cursor.visible = false;
+			Cursor.lockState = CursorLockMode.Locked;
             SetLocalCamera();
         } else
         {

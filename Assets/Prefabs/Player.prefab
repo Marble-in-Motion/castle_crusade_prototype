@@ -465,9 +465,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bolt:
     name: StandardBolt
-    damage: 10
+    damage: 40
     range: 1000000
   cam: {fileID: 20669219845324688}
+  crossbow: {fileID: 1381525484526570}
   mask:
     serializedVersion: 2
     m_Bits: 4294967295

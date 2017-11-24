@@ -343,7 +343,8 @@ GameObject:
   - component: {fileID: 195929142872577874}
   - component: {fileID: 114568545627358550}
   - component: {fileID: 114871128511097718}
-  - component: {fileID: 136738694019108844}
+  - component: {fileID: 65848476627367374}
+  - component: {fileID: 114379817493642874}
   m_Layer: 0
   m_Name: SpartanKing
   m_TagString: NPC
@@ -1007,7 +1008,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1596017570374888}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.9394634, y: -1.5040121e-16, z: 6.7734675}
+  m_LocalPosition: {x: 5.4795203, y: 1.3607406e-16, z: -6.1282306}
   m_LocalScale: {x: 10.210478, y: 10.2104845, z: 10.2104845}
   m_Children:
   - {fileID: 4637080167749194}
@@ -1272,6 +1273,18 @@ Transform:
   m_Father: {fileID: 4442025524818662}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &65848476627367374
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1596017570374888}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3, y: 0.5, z: 0.3}
+  m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!111 &111889327849507866
 Animation:
   m_ObjectHideFlags: 1
@@ -1297,6 +1310,18 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 1
+--- !u!114 &114379817493642874
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1596017570374888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 162a684e0304cf3498093c398747a6a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialHealth: 100
 --- !u!114 &114498984607916292
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1374,19 +1399,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AIName: Spartan
---- !u!136 &136738694019108844
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1596017570374888}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.12
-  m_Height: 0.5
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!137 &137324337170733880
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
