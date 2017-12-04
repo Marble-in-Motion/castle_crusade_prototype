@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -11,14 +12,35 @@ public class PlayerController : MonoBehaviour
 
     private PlayerMotor motor;
 
+    public int team;
+
     void Start()
     {
         motor = GetComponent<PlayerMotor>();
+        team = getTeam();
     }
+
+
 
     void Update()
     {
         UpdateMovement();
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            this.GetComponent<Currency>().spend(10);
+        }
+     }
+
+    private int getTeam()
+    {
+        int players = GameObject.FindGameObjectsWithTag("Player").Length;
+        if(players == 1){
+            return 1;
+        }
+        else
+        {
+            return 2;
+        }
     }
 
     private void UpdateMovement()

@@ -74,6 +74,7 @@ GameObject:
   - component: {fileID: 114332890941174642}
   - component: {fileID: 114033322418870622}
   - component: {fileID: 114537779658880172}
+  - component: {fileID: 114182777993880682}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -428,6 +429,19 @@ MonoBehaviour:
   - {fileID: 20669219845324688}
   - {fileID: 114537779658880172}
   remoteLayerName: RemotePlayer
+--- !u!114 &114182777993880682
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1523423699221036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19fbbfdc6820fcf459704b93643b407e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currencyTeam1: 100
+  currencyTeam2: 100
 --- !u!114 &114332890941174642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -452,6 +466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lookSensitivity: 3
+  team: 0
 --- !u!114 &114537779658880172
 MonoBehaviour:
   m_ObjectHideFlags: 1
