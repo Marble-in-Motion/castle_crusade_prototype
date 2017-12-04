@@ -12,12 +12,21 @@ public class PlayerController : MonoBehaviour
 
     private PlayerMotor motor;
 
-    public int team;
+    private TeamController team;
 
     void Start()
     {
         motor = GetComponent<PlayerMotor>();
-        team = getTeam();
+        int teamNum = getTeam();
+        if(teamNum == 1)
+        {
+            team = GameObject.FindGameObjectWithTag("Tower1").GetComponent<TeamController>();
+        }
+        else
+        {
+            team = GameObject.FindGameObjectWithTag("Tower2").GetComponent<TeamController>();
+        }
+        team.players.Add(this.gameObject);
     }
 
 
@@ -27,9 +36,10 @@ public class PlayerController : MonoBehaviour
         UpdateMovement();
         if (Input.GetKeyDown(KeyCode.A))
         {
-            this.GetComponent<Currency>().spend(10);
+            team.buy(10);
         }
-     }
+
+    }
 
     private int getTeam()
     {
