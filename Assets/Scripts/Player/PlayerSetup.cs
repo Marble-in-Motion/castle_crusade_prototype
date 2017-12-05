@@ -12,7 +12,7 @@ public class PlayerSetup : NetworkSetup
 
     Camera sceneCamera;
 
-    private Text CurrencyText;
+    public Text CurrencyText;
 
     void Start()
     {
