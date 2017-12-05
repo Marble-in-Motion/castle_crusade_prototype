@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.Networking;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -36,7 +37,8 @@ public class PlayerController : MonoBehaviour
         UpdateMovement();
         if (Input.GetKeyDown(KeyCode.A))
         {
-            team.buy(10);
+            int currency = team.buy(10);
+            this.GetComponentInChildren<Text>().text = "Coin: " + currency.ToString();
         }
 
     }

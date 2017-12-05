@@ -15,13 +15,13 @@ public class TeamController : MonoBehaviour {
         coin = 100;
 	}
 
-    public void buy(int amount)
+    public int buy(int amount)
     {
         if(coin - amount > 0)
         {
             coin -= amount;
         }
-        
+        return coin;
         
     }
 
