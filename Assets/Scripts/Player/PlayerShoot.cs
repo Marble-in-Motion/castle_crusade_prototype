@@ -33,7 +33,7 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
     [Command]
-	void CmdPlayerShot(string id, float damage)
+	public void CmdPlayerShot(string id, float damage)
     {
         Debug.Log(id + " hit");
 		GameObject target = GameObject.Find(id);
