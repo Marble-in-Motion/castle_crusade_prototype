@@ -16,7 +16,10 @@ public class PlayerSetup : NetworkSetup
 
     void Start()
     {
-        
+        Canvas canvas = this.GetComponentInChildren<Canvas>();
+        canvas.planeDistance = 1;
+        canvas.renderMode = RenderMode.ScreenSpaceCamera;
+        canvas.worldCamera = this.GetComponentInChildren<Camera>();
         CurrencyText = this.GetComponentInChildren<Text>();
         sceneCamera = Camera.main;
         CurrencyText.text = "Coin: " + 100.ToString();
