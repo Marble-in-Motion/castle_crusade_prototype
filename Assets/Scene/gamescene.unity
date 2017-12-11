@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45135456, g: 0.50093997, b: 0.5728295, a: 1}
+  m_IndirectSpecularColor: {r: 0.4513545, g: 0.5009402, b: 0.5728296, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 167446991}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -141,8 +141,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 1596017570374888, guid: cfb5c651f84c0564794f704215e73551, type: 2}
-  spawnLocation: {fileID: 699452657}
-  spawnNumber: 10
+  spawnLocation: {fileID: 167446988}
+  spawnNumber: 0
 --- !u!4 &167446990
 Transform:
   m_ObjectHideFlags: 0
@@ -204,14 +204,14 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &277048016
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 277048015}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1077351063, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -575,7 +575,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4111486544587298, guid: c5db7d573fac6e54bb8bc9fe5688cd61, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 10.83
+      value: 25.2
       objectReference: {fileID: 0}
     - target: {fileID: 4111486544587298, guid: c5db7d573fac6e54bb8bc9fe5688cd61, type: 2}
       propertyPath: m_LocalRotation.x

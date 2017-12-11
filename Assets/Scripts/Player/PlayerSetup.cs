@@ -16,6 +16,9 @@ public class PlayerSetup : NetworkSetup
 
     void Start()
     {
+		
+
+		//Wtf this do? Comment on it
         Canvas canvas = this.GetComponentInChildren<Canvas>();
         canvas.planeDistance = 1;
         canvas.renderMode = RenderMode.ScreenSpaceCamera;

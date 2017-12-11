@@ -741,6 +741,7 @@ MonoBehaviour:
   - {fileID: 81191126942757294}
   - {fileID: 20127840663888804}
   - {fileID: 114057112063546512}
+  - {fileID: 114705765437233430}
   remoteLayerName: RemotePlayer
   CurrencyText: {fileID: 0}
 --- !u!114 &114630779233909044
@@ -802,6 +803,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lookSensitivity: 3
+  prefab: {fileID: 1596017570374888, guid: cfb5c651f84c0564794f704215e73551, type: 2}
 --- !u!120 &120730952358239570
 LineRenderer:
   m_ObjectHideFlags: 1

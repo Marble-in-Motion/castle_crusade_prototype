@@ -15,6 +15,12 @@ public class PlayerController : MonoBehaviour
 
     private TeamController team;
 
+	private GameObject gameManager;
+
+	[SerializeField]
+	GameObject prefab;
+
+
     void Start()
     {
         motor = GetComponent<PlayerMotor>();
@@ -28,6 +34,9 @@ public class PlayerController : MonoBehaviour
             team = GameObject.FindGameObjectWithTag("Tower2").GetComponent<TeamController>();
         }
         team.players.Add(this.gameObject);
+
+		//find gamemanager and spawn
+	
     }
 
 
@@ -39,6 +48,8 @@ public class PlayerController : MonoBehaviour
         {
             int currency = team.buy(10);
             this.GetComponentInChildren<Text>().text = "Coin: " + currency.ToString();
+			gameManager = GameObject.FindWithTag("GameController");
+			gameManager.GetComponent<Spawner>().CmdSpawn(1, prefab);
         }
 
     }
