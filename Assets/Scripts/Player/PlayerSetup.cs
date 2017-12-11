@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class PlayerSetup : NetworkSetup
 {
@@ -12,10 +12,17 @@ public class PlayerSetup : NetworkSetup
 
     Camera sceneCamera;
 
+    public Text CurrencyText;
+
     void Start()
     {
-        sceneCamera = Camera.main;
         
+        CurrencyText = this.GetComponentInChildren<Text>();
+        sceneCamera = Camera.main;
+        CurrencyText.text = "Coin: " + 100.ToString();
+
+        
+
         if (isLocalPlayer)
         {
 			Cursor.visible = false;
