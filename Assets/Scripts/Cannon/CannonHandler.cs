@@ -35,7 +35,7 @@ public class CannonHandler : MonoBehaviour {
 
 	GameObject GetClosestEnemy (GameObject[] enemies)
 	{
-		GameObject bestTarget = new GameObject();
+		GameObject bestTarget = null;
 		float closestDistanceSqr = Mathf.Infinity;
 		Vector3 currentPosition = this.transform.position;
 		foreach(GameObject gameObj in enemies)
