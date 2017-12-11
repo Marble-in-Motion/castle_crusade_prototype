@@ -67,6 +67,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4111486544587298}
+  - component: {fileID: 114410824501019018}
+  - component: {fileID: 114985947301598700}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Tower1
@@ -282,6 +284,20 @@ MonoBehaviour:
   m_Script: {fileID: -1050975500, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114410824501019018
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1470799091443390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42ae8ec33a4b69b43a87598a0f2e45b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
+  team: 0
+  coin: 0
 --- !u!114 &114935659719149342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -304,3 +320,35 @@ MonoBehaviour:
   m_Script: {fileID: -1050975500, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114985947301598700
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1470799091443390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 197
+    i1: 219
+    i2: 125
+    i3: 87
+    i4: 63
+    i5: 172
+    i6: 110
+    i7: 84
+    i8: 187
+    i9: 139
+    i10: 201
+    i11: 254
+    i12: 86
+    i13: 136
+    i14: 205
+    i15: 97
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
