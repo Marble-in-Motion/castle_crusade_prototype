@@ -51,7 +51,7 @@ public class PlayerShoot : NetworkBehaviour {
 
         RaycastHit hit;
 		if (Physics.Raycast (crossbow.transform.position, crossbow.transform.forward, out hit, bolt.range, mask)) {
-			CmdPlayerShot (hit.collider.name, bolt.damage, hit.normal);
+			CmdPlayerShot (hit.collider.name, bolt.damage/*, hit.normal*/);
 			laserLine.SetPosition (1, hit.point);
 		} else {
 			//maybe extract this too
@@ -70,8 +70,8 @@ public class PlayerShoot : NetworkBehaviour {
 		if (target.GetComponent<NPCHealth> ()) {
 			target.GetComponent<NPCHealth>().DeductHealth(damage);
 		}
-		if (target.transform != null && target.collider.tag == "NPC") {
-			target.transform.position = (target.transform.position -((2) * 1/*normal of the hit*/));
+		if (target.transform != null /*&& target.collider.tag == "NPC"*/) {
+			target.transform.position = (target.transform.position /*- (normal of the hit)*/);
 		}
 
 
