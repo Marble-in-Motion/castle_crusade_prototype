@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class TeamController : MonoBehaviour {
 
     public List<GameObject> players;
     public int team;
+
     public int coin;
 
 

@@ -16,9 +16,12 @@ public class PlayerSetup : NetworkSetup
 
     void Start()
     {
+        
         CurrencyText = this.GetComponentInChildren<Text>();
         sceneCamera = Camera.main;
         CurrencyText.text = "Coin: " + 100.ToString();
+
+        
 
         if (isLocalPlayer)
         {
