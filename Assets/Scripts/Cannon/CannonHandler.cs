@@ -13,11 +13,22 @@ public class CannonHandler : MonoBehaviour {
 	[SerializeField]
 	private LayerMask mask;
 
+	private LineRenderer laserLine;
+	private WaitForSeconds shotDuration = new WaitForSeconds(0.05f);
+
 	// Use this for initialization
 	void Start () {
 		level = 0;
 		fireRate = 0.5f;
 		bolt = new Bolt ();
+		laserLine = GetComponent<LineRenderer> ();
+		laserLine.enabled = true;
+	}
+
+	IEnumerator Wait() {
+		laserLine.enabled = true;
+		yield return shotDuration;
+		laserLine.enabled = false;
 	}
 
 	// Update is called once per frame
@@ -55,10 +66,15 @@ public class CannonHandler : MonoBehaviour {
 	}
 
 	void shoot(GameObject target) {
+		laserLine.SetPosition(0, this.transform.position);
+
+		StartCoroutine (Wait ());
+
 		RaycastHit hit;
 		if (Physics.Raycast (this.transform.position, target.transform.position - this.transform.position, out hit, bolt.range, mask)) {
 			this.GetComponentInParent<PlayerShoot> ().CmdPlayerShot (hit.collider.name, bolt.damage);
 			Debug.DrawRay(this.transform.position, target.transform.position, Color.green);
+			laserLine.SetPosition (1, hit.point);
 		}
 	}
 
