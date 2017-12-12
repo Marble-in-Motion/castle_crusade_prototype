@@ -36,13 +36,11 @@ public class PlayerShoot : NetworkBehaviour {
 		laserLine.enabled = true;
 		yield return shotDuration;
 		laserLine.enabled = false;
-
 	}
 
 	[Client]
 	void Shoot()
 	{
-
 		laserLine.SetPosition(0, crossbow.transform.position);
 
 		StartCoroutine (Wait ());
