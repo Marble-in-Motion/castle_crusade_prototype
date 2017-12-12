@@ -29,7 +29,9 @@ public class CannonHandler : MonoBehaviour {
 			nextFire = Time.time + fireRate;
 			GameObject[] enemies = GameObject.FindGameObjectsWithTag ("NPC");
 			GameObject target = GetClosestEnemy (enemies);
-			shoot (target);
+			if (target != null) {
+				shoot (target);
+			}
 		}
 	}
 
