@@ -833,8 +833,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lookSensitivity: 3
-  prefab: {fileID: 1596017570374888, guid: cfb5c651f84c0564794f704215e73551, type: 2}
-  spawnLoc: {fileID: 1003548094726790, guid: d3d2afa73c8413f438e0b7c1dc962cbd, type: 2}
+  team: {fileID: 0}
+  prefabT1: {fileID: 1596017570374888, guid: cfb5c651f84c0564794f704215e73551, type: 2}
+  prefabT2: {fileID: 1596017570374888, guid: fb741655c17945849bc8ade66bcef8a5, type: 2}
 --- !u!120 &120730952358239570
 LineRenderer:
   m_ObjectHideFlags: 1
