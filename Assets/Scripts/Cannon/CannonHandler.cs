@@ -38,8 +38,10 @@ public class CannonHandler : MonoBehaviour {
 		}
 		if (Time.time > nextFire) {
 			nextFire = Time.time + fireRate;
-			GameObject[] enemies = GameObject.FindGameObjectsWithTag ("NPC");
-			GameObject target = GetClosestEnemy (enemies);
+            int teamNum = this.GetComponentInParent<PlayerController>().team.team;
+            int opposition = (teamNum == 1) ? 2 : 1;
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag ("NPCT"+ opposition);
+            GameObject target = GetClosestEnemy (enemies);
 			if (target != null) {
 				shoot (target);
 			}

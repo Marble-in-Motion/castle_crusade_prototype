@@ -11,6 +11,8 @@ TagManager:
   - NetworkManager
   - TroopSpawn1
   - TroopSpawn2
+  - NPCT1
+  - NPCT2
   layers:
   - Default
   - TransparentFX

@@ -7,8 +7,9 @@ public class AIController : NetworkBehaviour {
 
     private NavMeshAgent agent;
 
-    [SerializeField]
+    //[SerializeField]
     public GameObject target;
+
 
 
     void Start () {
@@ -20,6 +21,7 @@ public class AIController : NetworkBehaviour {
     private void SetTarget()
     {
         agent.SetDestination(target.transform.position);
+     
     }
 	
 }

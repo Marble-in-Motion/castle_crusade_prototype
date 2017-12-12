@@ -346,8 +346,8 @@ GameObject:
   - component: {fileID: 65848476627367374}
   - component: {fileID: 114379817493642874}
   m_Layer: 0
-  m_Name: SpartanKing
-  m_TagString: NPC
+  m_Name: SpartanKingTower1
+  m_TagString: NPCT1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

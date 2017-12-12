@@ -13,15 +13,15 @@ public class PlayerController : NetworkBehaviour
 
     private PlayerMotor motor;
 
-    private TeamController team;
+    public TeamController team;
 
 	[SerializeField]
-	GameObject prefab;
+	public GameObject prefabT1;
 
-	//[SerializeField]
-	//GameObject spawnLoc;
+    [SerializeField]
+    public GameObject prefabT2;
 
-	private GameObject target;
+    private GameObject target;
 	private GameObject troopSpawn;
 
     void Start()
@@ -88,12 +88,19 @@ public class PlayerController : NetworkBehaviour
 
 	[Command]
 	public void CmdRequestTroopSpawn() {
+        GameObject prefab;
+        if (team.team == 1)
+        {
+            prefab = prefabT1;
+        }
+        else
+        {
+            prefab = prefabT2;
+        }
 		GameObject troop = Instantiate(prefab, troopSpawn.transform.position, Quaternion.identity) as GameObject; //SpawnWithClientAuthority WORKS JUST LIKE NetworkServer.Spawn ...THE
-
 		troop.GetComponent<AIController> ().target = target;
-
-		NetworkServer.SpawnWithClientAuthority(troop, this.gameObject); //THIS WILL SPAWN THE troop THAT WAS CREATED ABOVE AND GIVE AUTHORITY TO THIS PLAYER. THIS PLAYER (GAMEOBJECT) MUST
-		
+        NetworkServer.SpawnWithClientAuthority(troop, this.gameObject); //THIS WILL SPAWN THE troop THAT WAS CREATED ABOVE AND GIVE AUTHORITY TO THIS PLAYER. THIS PLAYER (GAMEOBJECT) MUST
+	
 	}
 
 }
