@@ -833,10 +833,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lookSensitivity: 3
-  team: {fileID: 0}
+  teamController: {fileID: 0}
   prefabT1: {fileID: 1596017570374888, guid: cfb5c651f84c0564794f704215e73551, type: 2}
   prefabT2: {fileID: 1596017570374888, guid: fb741655c17945849bc8ade66bcef8a5, type: 2}
-  spawnLocations: []
+  spawnLocations:
+  - {fileID: 1840419914008834, guid: 04eb8b3cb6cb72548bf9075ea49eaaa3, type: 2}
+  - {fileID: 1353330709948498, guid: 6796731307ee413499763311c66181d7, type: 2}
   playerId: 0
 --- !u!120 &120730952358239570
 LineRenderer:

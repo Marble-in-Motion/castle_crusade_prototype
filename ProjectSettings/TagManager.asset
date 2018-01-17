@@ -13,6 +13,8 @@ TagManager:
   - TroopSpawn2
   - NPCT1
   - NPCT2
+  - TeamController1
+  - TeamController2
   layers:
   - Default
   - TransparentFX

@@ -5,8 +5,15 @@ using UnityEngine.Networking;
 
 public class TeamController : MonoBehaviour {
 
+    [SerializeField]
+    public GameObject towerSpawn;
+
+    [SerializeField]
+    public GameObject towerTarget;
+
     public List<GameObject> players;
-    public int team;
+
+    public int teamNumber;
 
     public int coin;
 
@@ -17,6 +24,11 @@ public class TeamController : MonoBehaviour {
         coin = 100;
 	}
 
+    public int getCoin()
+    {
+        return coin;
+    }
+
     public int buy(int amount)
     {
         if(coin - amount > 0)
@@ -25,6 +37,11 @@ public class TeamController : MonoBehaviour {
         }
         return coin;
         
+    }
+
+    public void addTeamMember(GameObject player)
+    {
+        players.Add(player);
     }
 
 }

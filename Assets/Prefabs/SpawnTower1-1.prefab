@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4021362991077204}
   m_Layer: 0
   m_Name: SpawnTower1-1
-  m_TagString: Untagged
+  m_TagString: TroopSpawn1
   m_Icon: {fileID: -3701561207968579530, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

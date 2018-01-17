@@ -123,21 +123,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1729337849291006
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4435019831687274}
-  m_Layer: 0
-  m_Name: Troop spawn
-  m_TagString: TroopSpawn1
-  m_Icon: {fileID: -3701561207968579530, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1999777441251050
 GameObject:
   m_ObjectHideFlags: 1
@@ -178,7 +163,6 @@ Transform:
   m_LocalScale: {x: 1.7685, y: 1.7685, z: 1.7685}
   m_Children:
   - {fileID: 4459255827767664}
-  - {fileID: 4435019831687274}
   - {fileID: 4629841383745292}
   - {fileID: 4408838826568332}
   m_Father: {fileID: 0}
@@ -195,21 +179,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4340135974863334}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!4 &4435019831687274
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1729337849291006}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.17, z: 2.74}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4340135974863334}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4459255827767664
 Transform:
   m_ObjectHideFlags: 1
@@ -251,7 +222,7 @@ Transform:
   - {fileID: 4224932130679770}
   - {fileID: 4671326377630028}
   m_Father: {fileID: 4340135974863334}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4671326377630028
 Transform:
@@ -331,8 +302,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ae8ec33a4b69b43a87598a0f2e45b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  towerSpawn: {fileID: 0}
+  towerTarget: {fileID: 0}
   players: []
-  team: 2
+  teamNumber: 0
   coin: 100
 --- !u!114 &114089021092188076
 MonoBehaviour:
@@ -368,7 +341,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SceneId:
-    m_Value: 1
+    m_Value: 2
   m_AssetId:
     i0: 229
     i1: 184

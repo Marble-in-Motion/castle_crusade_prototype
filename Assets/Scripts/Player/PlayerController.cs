@@ -14,7 +14,7 @@ public class PlayerController : NetworkBehaviour
 
     private PlayerMotor motor;
 
-    public TeamController team;
+    public TeamController teamController;
 
 	[SerializeField]
 	public GameObject prefabT1;
@@ -26,32 +26,33 @@ public class PlayerController : NetworkBehaviour
     public GameObject[] spawnLocations;
 
     private GameObject target;
-	private GameObject troopSpawn;
+	public GameObject troopSpawn;
     public int playerId;
+
+    public GameObject spawnTarget;
 
     void Start()
     {
         motor = GetComponent<PlayerMotor>();
         playerId = getPlayerId();
         int teamNum = getTeam();
-        GameObject spawnTarget = spawnLocations[playerId];
+        spawnTarget = spawnLocations[playerId];
 		this.transform.position = spawnTarget.transform.position;
         if (teamNum == 1)
         {
-            team = GameObject.FindGameObjectWithTag("Tower1").GetComponent<TeamController>();
-			target = GameObject.FindGameObjectWithTag("Tower2");
+            teamController = GameObject.FindGameObjectWithTag("TeamController1").GetComponent<TeamController>();
+            
 			troopSpawn = GameObject.FindGameObjectWithTag ("TroopSpawn1");
             
         }
         else
         {
-            team = GameObject.FindGameObjectWithTag("Tower2").GetComponent<TeamController>();
-			target = GameObject.FindGameObjectWithTag("Tower1");
-			troopSpawn = GameObject.FindGameObjectWithTag ("TroopSpawn2");
+            teamController = GameObject.FindGameObjectWithTag("TeamController2").GetComponent<TeamController>();
+            troopSpawn = GameObject.FindGameObjectWithTag ("TroopSpawn2");
 
         }
-        
-        team.players.Add(this.gameObject);
+
+        teamController.addTeamMember(this.gameObject);
     }
 
 
@@ -61,7 +62,7 @@ public class PlayerController : NetworkBehaviour
         UpdateMovement();
         if (Input.GetKeyDown(KeyCode.A))
         {
-            int currency = team.buy(10);
+            int currency = teamController.buy(10);
             this.GetComponentInChildren<Text>().text = "Coin: " + currency.ToString();
         }
 		else if (Input.GetKeyDown(KeyCode.S) && isLocalPlayer) {
@@ -103,7 +104,7 @@ public class PlayerController : NetworkBehaviour
 	[Command]
 	public void CmdRequestTroopSpawn() {
         GameObject prefab;
-        if (team.team == 1)
+        if (teamController.teamNumber == 1)
         {
             prefab = prefabT1;
         }
@@ -112,7 +113,7 @@ public class PlayerController : NetworkBehaviour
             prefab = prefabT2;
         }
 		GameObject troop = Instantiate(prefab, troopSpawn.transform.position, Quaternion.identity) as GameObject; //SpawnWithClientAuthority WORKS JUST LIKE NetworkServer.Spawn ...THE
-		troop.GetComponent<AIController> ().target = target;
+		troop.GetComponent<AIController> ().target = teamController.towerTarget;
         NetworkServer.SpawnWithClientAuthority(troop, this.gameObject); //THIS WILL SPAWN THE troop THAT WAS CREATED ABOVE AND GIVE AUTHORITY TO THIS PLAYER. THIS PLAYER (GAMEOBJECT) MUST
 	
 	}
