@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Networking;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -21,19 +22,26 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     public GameObject prefabT2;
 
+    [SerializeField]
+    public GameObject[] spawnLocations;
+
     private GameObject target;
 	private GameObject troopSpawn;
+    public int playerId;
 
     void Start()
     {
         motor = GetComponent<PlayerMotor>();
-
+        playerId = getPlayerId();
         int teamNum = getTeam();
-        if(teamNum == 1)
+        GameObject spawnTarget = spawnLocations[playerId];
+        CmdChangePlayerLocation(spawnTarget.transform);
+        if (teamNum == 1)
         {
             team = GameObject.FindGameObjectWithTag("Tower1").GetComponent<TeamController>();
 			target = GameObject.FindGameObjectWithTag("Tower2");
 			troopSpawn = GameObject.FindGameObjectWithTag ("TroopSpawn1");
+            
         }
         else
         {
@@ -42,8 +50,8 @@ public class PlayerController : NetworkBehaviour
 			troopSpawn = GameObject.FindGameObjectWithTag ("TroopSpawn2");
 
         }
+        
         team.players.Add(this.gameObject);
-	
     }
 
 
@@ -62,10 +70,16 @@ public class PlayerController : NetworkBehaviour
 
     }
 
+    private int getPlayerId()
+    {
+        int players = GameObject.FindGameObjectsWithTag("Player").Length - 1;
+        return players;
+    }
+
     private int getTeam()
     {
-        int players = GameObject.FindGameObjectsWithTag("Player").Length;
-        if(players == 1){
+        
+        if(playerId == 0){
             return 1;
         }
         else
@@ -84,6 +98,12 @@ public class PlayerController : NetworkBehaviour
         Vector3 y = new Vector3(xRot, 0f, 0f) * lookSensitivity;
 
         motor.Rotate(x, y);
+    }
+
+    [Command]
+    public void CmdChangePlayerLocation(Transform targetLocation)
+    {
+        this.transform.position = targetLocation.position;
     }
 
 	[Command]
