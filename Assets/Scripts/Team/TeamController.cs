@@ -3,24 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class TeamController : MonoBehaviour {
+public class TeamController : NetworkBehaviour {
 
     [SerializeField]
-    public GameObject towerSpawn;
+    public GameObject tower1;
 
     [SerializeField]
-    public GameObject towerTarget;
+    public GameObject tower2;
 
-    public List<GameObject> players;
+    [SerializeField]
+    public GameObject prefabT1;
 
-    public int teamNumber;
+    [SerializeField]
+    public GameObject prefabT2;
 
+
+    public List<GameObject> playersTeam1;
+
+    public List<GameObject> playersTeam2;
+   
     public int coin;
 
+    static int playerCount;
 
-	// Use this for initialization
-	void Start () {
-        players = new List<GameObject>();
+    [SerializeField]
+    public GameObject [] spawnLocations;
+
+    // Use this for initialization
+    void Start () {
+        playersTeam1 = new List<GameObject>();
+        playersTeam1 = new List<GameObject>();
         coin = 100;
 	}
 
@@ -39,9 +51,58 @@ public class TeamController : MonoBehaviour {
         
     }
 
-    public void addTeamMember(GameObject player)
+    [Server]
+    public void SetPlayerId(GameObject newPlayer)
     {
-        players.Add(player);
+        int players = GameObject.FindGameObjectsWithTag("Player").Length - 1;
+        newPlayer.GetComponent<PlayerController>().playerId = players;
+    }
+
+    [Server]
+    public void SetPlayerTeam(GameObject newPlayer) {
+        int id = newPlayer.GetComponent<PlayerController>().playerId;
+        if(id == 0)
+        {
+            newPlayer.GetComponent<PlayerController>().teamNum = 1;
+            playersTeam1.Add(newPlayer);
+            newPlayer.GetComponent<PlayerController>().troopSpawn = GameObject.FindGameObjectWithTag("TroopSpawn1");
+            newPlayer.GetComponent<PlayerController>().target = tower2;
+        }
+        else
+        {
+            newPlayer.GetComponent<PlayerController>().teamNum = 2;
+            playersTeam2.Add(newPlayer);
+            newPlayer.GetComponent<PlayerController>().troopSpawn = GameObject.FindGameObjectWithTag("TroopSpawn2");
+            newPlayer.GetComponent<PlayerController>().target = tower1;
+        }
+       
+    }
+
+   
+
+    [Server]
+    public void SetPlayerLocation(GameObject newPlayer)
+    {
+        int id = newPlayer.GetComponent<PlayerController>().playerId;
+        Transform location = spawnLocations[id].transform;
+        newPlayer.transform.position = location.position;
+    }
+
+    [Server]
+    public void SendTroop(GameObject player)
+    {
+        GameObject prefab;
+        if (player.GetComponent<PlayerController>().teamNum == 1)
+        {
+            prefab = prefabT1;
+        }
+        else
+        {
+            prefab = prefabT2;
+        }
+        GameObject troop = Instantiate(prefab, player.GetComponent<PlayerController>().troopSpawn.transform.position, Quaternion.identity) as GameObject; //SpawnWithClientAuthority WORKS JUST LIKE NetworkServer.Spawn ...THE
+        troop.GetComponent<AIController>().target = player.GetComponent<PlayerController>().target;
+        NetworkServer.SpawnWithClientAuthority(troop, this.gameObject); //THIS WILL SPAWN THE troop THAT WAS CREATED ABOVE AND GIVE AUTHORITY TO THIS PLAYER. THIS PLAYER (GAMEOBJECT) MUST
     }
 
 }

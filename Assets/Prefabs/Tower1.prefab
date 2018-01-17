@@ -36,7 +36,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4194691932978656}
   - component: {fileID: 114660105369679916}
-  - component: {fileID: 114733068026882748}
   m_Layer: 0
   m_Name: Tower1
   m_TagString: Tower1
@@ -59,7 +58,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1540132324307086
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,22 +322,6 @@ MonoBehaviour:
     i15: 231
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
---- !u!114 &114733068026882748
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1423207765519546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42ae8ec33a4b69b43a87598a0f2e45b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  towerSpawn: {fileID: 0}
-  towerTarget: {fileID: 0}
-  players: []
-  teamNumber: 0
-  coin: 100
 --- !u!114 &114785330524876174
 MonoBehaviour:
   m_ObjectHideFlags: 1

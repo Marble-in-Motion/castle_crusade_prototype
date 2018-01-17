@@ -25,17 +25,23 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     public GameObject[] spawnLocations;
 
-    private GameObject target;
+    public GameObject target;
+
 	public GameObject troopSpawn;
+
+    [SyncVar]
     public int playerId;
+
+    [SyncVar]
+    public int teamNum;
 
     public GameObject spawnTarget;
 
     void Start()
     {
+        teamController = GameObject.Find("TeamController").GetComponent<TeamController>();
         motor = GetComponent<PlayerMotor>();
-        playerId = getPlayerId();
-        int teamNum = getTeam();
+        CmdSetUp();
         spawnTarget = spawnLocations[playerId];
 		this.transform.position = spawnTarget.transform.position;
         if (teamNum == 1)
@@ -52,7 +58,6 @@ public class PlayerController : NetworkBehaviour
 
         }
 
-        teamController.addTeamMember(this.gameObject);
     }
 
 
@@ -71,14 +76,16 @@ public class PlayerController : NetworkBehaviour
 
     }
 
-    private int getPlayerId()
+    [Command]
+    private void CmdSetUp()
     {
-        int players = GameObject.FindGameObjectsWithTag("Player").Length - 1;
-        return players;
+        teamController.SetPlayerId(this.gameObject);
+        teamController.SetPlayerTeam(this.gameObject);
+        teamController.SetPlayerLocation(this.gameObject);
     }
 
-    private int getTeam()
-    {
+/*    private int getTeam()
+  88  {
         
         if(playerId == 0){
             return 1;
@@ -87,7 +94,7 @@ public class PlayerController : NetworkBehaviour
         {
             return 2;
         }
-    }
+    }*/
 
     private void UpdateMovement()
     {
@@ -104,7 +111,7 @@ public class PlayerController : NetworkBehaviour
 	[Command]
 	public void CmdRequestTroopSpawn() {
         GameObject prefab;
-        if (teamController.teamNumber == 1)
+        if (teamNum == 1)
         {
             prefab = prefabT1;
         }
@@ -113,7 +120,7 @@ public class PlayerController : NetworkBehaviour
             prefab = prefabT2;
         }
 		GameObject troop = Instantiate(prefab, troopSpawn.transform.position, Quaternion.identity) as GameObject; //SpawnWithClientAuthority WORKS JUST LIKE NetworkServer.Spawn ...THE
-		troop.GetComponent<AIController> ().target = teamController.towerTarget;
+		troop.GetComponent<AIController> ().target = teamController.tower2;
         NetworkServer.SpawnWithClientAuthority(troop, this.gameObject); //THIS WILL SPAWN THE troop THAT WAS CREATED ABOVE AND GIVE AUTHORITY TO THIS PLAYER. THIS PLAYER (GAMEOBJECT) MUST
 	
 	}
