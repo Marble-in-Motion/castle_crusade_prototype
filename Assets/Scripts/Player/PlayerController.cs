@@ -44,23 +44,7 @@ public class PlayerController : NetworkBehaviour
         CmdSetUp();
         spawnTarget = spawnLocations[playerId];
 		this.transform.position = spawnTarget.transform.position;
-        if (teamNum == 1)
-        {
-            teamController = GameObject.FindGameObjectWithTag("TeamController1").GetComponent<TeamController>();
-            
-			troopSpawn = GameObject.FindGameObjectWithTag ("TroopSpawn1");
-            
-        }
-        else
-        {
-            teamController = GameObject.FindGameObjectWithTag("TeamController2").GetComponent<TeamController>();
-            troopSpawn = GameObject.FindGameObjectWithTag ("TroopSpawn2");
-
-        }
-
     }
-
-
 
     void Update()
     {
@@ -83,18 +67,6 @@ public class PlayerController : NetworkBehaviour
         teamController.SetPlayerTeam(this.gameObject);
         teamController.SetPlayerLocation(this.gameObject);
     }
-
-/*    private int getTeam()
-  88  {
-        
-        if(playerId == 0){
-            return 1;
-        }
-        else
-        {
-            return 2;
-        }
-    }*/
 
     private void UpdateMovement()
     {

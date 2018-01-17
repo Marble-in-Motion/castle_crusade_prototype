@@ -84,6 +84,7 @@ public class TeamController : NetworkBehaviour {
     public void SetPlayerLocation(GameObject newPlayer)
     {
         int id = newPlayer.GetComponent<PlayerController>().playerId;
+        newPlayer.GetComponent<PlayerController>().spawnTarget = spawnLocations[id];
         Transform location = spawnLocations[id].transform;
         newPlayer.transform.position = location.position;
     }
