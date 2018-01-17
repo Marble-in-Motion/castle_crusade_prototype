@@ -110,19 +110,7 @@ public class PlayerController : NetworkBehaviour
 
 	[Command]
 	public void CmdRequestTroopSpawn() {
-        GameObject prefab;
-        if (teamNum == 1)
-        {
-            prefab = prefabT1;
-        }
-        else
-        {
-            prefab = prefabT2;
-        }
-		GameObject troop = Instantiate(prefab, troopSpawn.transform.position, Quaternion.identity) as GameObject; //SpawnWithClientAuthority WORKS JUST LIKE NetworkServer.Spawn ...THE
-		troop.GetComponent<AIController> ().target = teamController.tower2;
-        NetworkServer.SpawnWithClientAuthority(troop, this.gameObject); //THIS WILL SPAWN THE troop THAT WAS CREATED ABOVE AND GIVE AUTHORITY TO THIS PLAYER. THIS PLAYER (GAMEOBJECT) MUST
-	
+        teamController.SendTroop(this.gameObject);
 	}
 
 }

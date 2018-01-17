@@ -102,7 +102,7 @@ public class TeamController : NetworkBehaviour {
         }
         GameObject troop = Instantiate(prefab, player.GetComponent<PlayerController>().troopSpawn.transform.position, Quaternion.identity) as GameObject; //SpawnWithClientAuthority WORKS JUST LIKE NetworkServer.Spawn ...THE
         troop.GetComponent<AIController>().target = player.GetComponent<PlayerController>().target;
-        NetworkServer.SpawnWithClientAuthority(troop, this.gameObject); //THIS WILL SPAWN THE troop THAT WAS CREATED ABOVE AND GIVE AUTHORITY TO THIS PLAYER. THIS PLAYER (GAMEOBJECT) MUST
+        NetworkServer.Spawn(troop); //THIS WILL SPAWN THE troop THAT WAS CREATED ABOVE AND GIVE AUTHORITY TO THIS PLAYER. THIS PLAYER (GAMEOBJECT) MUST
     }
 
 }
