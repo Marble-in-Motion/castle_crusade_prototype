@@ -35,7 +35,7 @@ public class PlayerController : NetworkBehaviour
         playerId = getPlayerId();
         int teamNum = getTeam();
         GameObject spawnTarget = spawnLocations[playerId];
-        CmdChangePlayerLocation(spawnTarget.transform);
+		this.transform.position = spawnTarget.transform.position;
         if (teamNum == 1)
         {
             team = GameObject.FindGameObjectWithTag("Tower1").GetComponent<TeamController>();
@@ -98,12 +98,6 @@ public class PlayerController : NetworkBehaviour
         Vector3 y = new Vector3(xRot, 0f, 0f) * lookSensitivity;
 
         motor.Rotate(x, y);
-    }
-
-    [Command]
-    public void CmdChangePlayerLocation(Transform targetLocation)
-    {
-        this.transform.position = targetLocation.position;
     }
 
 	[Command]
