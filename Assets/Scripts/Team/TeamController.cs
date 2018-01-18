@@ -22,14 +22,14 @@ public class TeamController : NetworkBehaviour {
     private GameObject prefabT2;
 
 
-    public List<GameObject> playersTeam1;
+    private List<GameObject> playersTeam1;
 
-    public List<GameObject> playersTeam2;
+    private List<GameObject> playersTeam2;
    
     public int coin;
 
     [SerializeField]
-    public GameObject [] spawnLocations;
+    private GameObject [] spawnLocations;
 
     // Use this for initialization
     void Start () {
@@ -85,9 +85,9 @@ public class TeamController : NetworkBehaviour {
         prefab = (player.GetComponent<PlayerController>().TeamNum == TEAM1) ? prefabT1 : prefabT2;
 
 
-        GameObject troop = Instantiate(prefab, player.GetComponent<PlayerController>().TroopSpawn.transform.position, Quaternion.identity) as GameObject; //SpawnWithClientAuthority WORKS JUST LIKE NetworkServer.Spawn ...THE
+        GameObject troop = Instantiate(prefab, player.GetComponent<PlayerController>().TroopSpawn.transform.position, Quaternion.identity) as GameObject;
         troop.GetComponent<AIController>().target = player.GetComponent<PlayerController>().Target;
-        NetworkServer.Spawn(troop); //THIS WILL SPAWN THE troop THAT WAS CREATED ABOVE AND GIVE AUTHORITY TO THIS PLAYER. THIS PLAYER (GAMEOBJECT) MUST
+        NetworkServer.Spawn(troop);
     }
 
 
