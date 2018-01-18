@@ -6,12 +6,8 @@ using UnityEngine.UI;
 
 public class PlayerController : NetworkBehaviour
 {
-    [SerializeField]
-    private float lookSensitivity = 3f;
 
     public const string PLAYER_TAG = "Player";
-
-    private PlayerMotor motor;
 
     public TeamController team;
 
@@ -26,8 +22,6 @@ public class PlayerController : NetworkBehaviour
 
     void Start()
     {
-        motor = GetComponent<PlayerMotor>();
-
         int teamNum = getTeam();
         if(teamNum == 1)
         {
@@ -46,11 +40,9 @@ public class PlayerController : NetworkBehaviour
 	
     }
 
-
-
+    
     void Update()
     {
-        UpdateMovement();
         if (Input.GetKeyDown(KeyCode.A))
         {
             int currency = team.buy(10);
@@ -74,19 +66,7 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    private void UpdateMovement()
-    {
-        float yRot = Input.GetAxisRaw("Mouse X");
-        Vector3 x = new Vector3(0f, yRot, 0f) * lookSensitivity;
-        
-
-        float xRot = Input.GetAxisRaw("Mouse Y");
-        Vector3 y = new Vector3(xRot, 0f, 0f) * lookSensitivity;
-
-        motor.Rotate(x, y);
-    }
-
-	[Command]
+    [Command]
 	public void CmdRequestTroopSpawn() {
         GameObject prefab;
         if (team.team == 1)

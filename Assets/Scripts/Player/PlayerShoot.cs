@@ -7,9 +7,6 @@ public class PlayerShoot : NetworkBehaviour {
 	public Bolt bolt;
 
 	[SerializeField]
-	private Camera cam;
-
-	[SerializeField]
 	private GameObject crossbow;
 
 	[SerializeField]

@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMotor : MonoBehaviour
+public class CrossbowMotor : MonoBehaviour
 {
 
     [SerializeField]
-    private Camera cam;
+    private GameObject crossbow;
 
-    private Vector3 rotationX = Vector3.zero;
-    private Vector3 rotationY = Vector3.zero;
+    private Vector3 rotationX, rotationY = Vector3.zero;
 
     private Rigidbody rb;
 
@@ -30,15 +29,16 @@ public class PlayerMotor : MonoBehaviour
     {
         this.rotationX = x;
         this.rotationY = y;
-    }
+    } 
 
     //Perform rotation
     void PerformRotation()
     {
-        rb.MoveRotation(rb.rotation * Quaternion.Euler(rotationX));
-        if (cam != null)
+        rb.MoveRotation(rb.rotation * Quaternion.Euler(rotationY));
+        if (crossbow != null)
         {
-            cam.transform.Rotate(-rotationY);
+            crossbow.transform.Rotate(-rotationX);
         }
+
     }
 }
