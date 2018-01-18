@@ -15,25 +15,64 @@ public class PlayerController : NetworkBehaviour
     public TeamController teamController;
 
 	[SerializeField]
-	public GameObject prefabT1;
+	private GameObject prefabT1;
 
     [SerializeField]
-    public GameObject prefabT2;
+    private GameObject prefabT2;
 
     [SerializeField]
-    public GameObject[] spawnLocations;
+    private GameObject[] spawnLocations;
 
-    public GameObject target;
+    private GameObject target;
 
-	public GameObject troopSpawn;
-
-    [SyncVar]
-    public int spawnId;
+	private GameObject troopSpawn;
 
     [SyncVar]
-    public int teamNum;
+    private int spawnId;
 
-    public GameObject spawnTarget;
+    [SyncVar]
+    private int teamNum;
+
+    private GameObject spawnTarget;
+
+    public int TeamNum
+    {
+        get
+        {
+            return teamNum;
+        }
+
+        set
+        {
+            teamNum = value;
+        }
+    }
+
+    public GameObject TroopSpawn
+    {
+        get
+        {
+            return troopSpawn;
+        }
+
+        set
+        {
+            troopSpawn = value;
+        }
+    }
+
+    public GameObject Target
+    {
+        get
+        {
+            return target;
+        }
+
+        set
+        {
+            target = value;
+        }
+    }
 
     void Start()
     {
@@ -62,10 +101,12 @@ public class PlayerController : NetworkBehaviour
     public void InitialisePlayerInfo(int spawnId, int teamNum,GameObject troopSpawn, GameObject target)
     {
         this.spawnId = spawnId;
-        this.teamNum = teamNum;
-        this.troopSpawn = troopSpawn;
-        this.target = target;
+        this.TeamNum = teamNum;
+        this.TroopSpawn = troopSpawn;
+        this.Target = target;
     }
+
+
 
     [Command]
     private void CmdSetUp()
@@ -87,6 +128,7 @@ public class PlayerController : NetworkBehaviour
 
 	[Command]
 	public void CmdRequestTroopSpawn() {
+        //create troop controller
         teamController.SendTroop(this.gameObject);
 	}
 
