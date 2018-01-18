@@ -59,7 +59,7 @@ public class PlayerController : NetworkBehaviour
 
     }
 
-    public void initialisePlayerInfo(int spawnId, int teamNum,GameObject troopSpawn, GameObject target)
+    public void InitialisePlayerInfo(int spawnId, int teamNum,GameObject troopSpawn, GameObject target)
     {
         this.spawnId = spawnId;
         this.teamNum = teamNum;
@@ -89,6 +89,8 @@ public class PlayerController : NetworkBehaviour
 	public void CmdRequestTroopSpawn() {
         teamController.SendTroop(this.gameObject);
 	}
+
+    
 
 }
 

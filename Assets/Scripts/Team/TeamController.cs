@@ -75,7 +75,7 @@ public class TeamController : NetworkBehaviour {
         newPlayer.GetComponent<PlayerController>().spawnTarget = spawnLocations[id];
         Transform location = spawnLocations[id].transform;
         newPlayer.transform.position = location.position;
-        newPlayer.GetComponent<PlayerController>().initialisePlayerInfo(id, teamNum, troopSpawn, target);
+        newPlayer.GetComponent<PlayerController>().InitialisePlayerInfo(id, teamNum, troopSpawn, target);
     }
 
     [Server]
@@ -95,6 +95,6 @@ public class TeamController : NetworkBehaviour {
         NetworkServer.Spawn(troop); //THIS WILL SPAWN THE troop THAT WAS CREATED ABOVE AND GIVE AUTHORITY TO THIS PLAYER. THIS PLAYER (GAMEOBJECT) MUST
     }
 
-    
+
 
 }
