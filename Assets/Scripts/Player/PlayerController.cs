@@ -15,7 +15,7 @@ public class PlayerController : NetworkBehaviour
 
     private PlayerMotor motor;
 
-    public TeamController teamController;
+    private TeamController teamController;
 
 	[SerializeField]
 	private GameObject prefabT1;
