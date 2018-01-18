@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class TeamController : NetworkBehaviour {
 
-    const string PLAYER_TAG = "Player";
+
     const int TEAM1 = 1;
     const int TEAM2 = 2;
 
@@ -55,7 +55,7 @@ public class TeamController : NetworkBehaviour {
 
     [Server]
     public void SetPlayerInfo(GameObject newPlayer) {
-        int id = GameObject.FindGameObjectsWithTag("Player").Length - 1;
+        int id = GameObject.FindGameObjectsWithTag(PlayerController.PLAYER_TAG).Length - 1;
         int teamNum;
         GameObject troopSpawn;
         GameObject target;

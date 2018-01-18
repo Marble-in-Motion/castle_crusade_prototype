@@ -4,8 +4,6 @@ using UnityEngine.UI;
 public class PlayerSetup : NetworkSetup
 {
 
-    const string PLAYER_TAG = "Player";
-
     [SerializeField]
     Behaviour[] componentsToDisable;
 
@@ -42,7 +40,7 @@ public class PlayerSetup : NetworkSetup
             AssignLayer(remoteLayerName);
         }
 
-        RegisterModel(PLAYER_TAG);
+        RegisterModel(PlayerController.PLAYER_TAG);
     }
 
     void OnDisable()

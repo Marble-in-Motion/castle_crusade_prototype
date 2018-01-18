@@ -7,6 +7,9 @@ using System;
 
 public class PlayerController : NetworkBehaviour
 {
+
+    public const string PLAYER_TAG = "Player";
+
     [SerializeField]
     private float lookSensitivity = 3f;
 
