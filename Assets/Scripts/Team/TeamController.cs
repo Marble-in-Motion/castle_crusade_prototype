@@ -51,35 +51,31 @@ public class TeamController : NetworkBehaviour {
         
     }
 
+  
     [Server]
-    public void SetPlayerId(GameObject newPlayer)
-    {
-        int players = GameObject.FindGameObjectsWithTag("Player").Length - 1;
-        newPlayer.GetComponent<PlayerController>().playerId = players;
-    }
-
-    [Server]
-    public void SetPlayerTeam(GameObject newPlayer) {
+    public void SetPlayerInfo(GameObject newPlayer) {
         int id = GameObject.FindGameObjectsWithTag("Player").Length - 1;
-        newPlayer.GetComponent<PlayerController>().playerId = id;
+        int teamNum;
+        GameObject troopSpawn;
+        GameObject target;
         if(id == 0)
         {
-            newPlayer.GetComponent<PlayerController>().teamNum = 1;
+            teamNum = 1;
             playersTeam1.Add(newPlayer);
-            newPlayer.GetComponent<PlayerController>().troopSpawn = GameObject.FindGameObjectWithTag("TroopSpawn1");
-            newPlayer.GetComponent<PlayerController>().target = tower2;
+            troopSpawn = GameObject.FindGameObjectWithTag("TroopSpawn1");
+            target = tower2;
         }
         else
         {
-            newPlayer.GetComponent<PlayerController>().teamNum = 2;
+            teamNum = 2;
             playersTeam2.Add(newPlayer);
-            newPlayer.GetComponent<PlayerController>().troopSpawn = GameObject.FindGameObjectWithTag("TroopSpawn2");
-            newPlayer.GetComponent<PlayerController>().target = tower1;
+            troopSpawn = GameObject.FindGameObjectWithTag("TroopSpawn2");
+            target = tower1;
         }
         newPlayer.GetComponent<PlayerController>().spawnTarget = spawnLocations[id];
         Transform location = spawnLocations[id].transform;
         newPlayer.transform.position = location.position;
-
+        newPlayer.GetComponent<PlayerController>().initialisePlayerInfo(id, teamNum, troopSpawn, target);
     }
 
     [Server]
@@ -98,5 +94,7 @@ public class TeamController : NetworkBehaviour {
         troop.GetComponent<AIController>().target = player.GetComponent<PlayerController>().target;
         NetworkServer.Spawn(troop); //THIS WILL SPAWN THE troop THAT WAS CREATED ABOVE AND GIVE AUTHORITY TO THIS PLAYER. THIS PLAYER (GAMEOBJECT) MUST
     }
+
+    
 
 }

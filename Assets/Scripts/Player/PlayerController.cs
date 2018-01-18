@@ -10,8 +10,6 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private float lookSensitivity = 3f;
 
-    public const string PLAYER_TAG = "Player";
-
     private PlayerMotor motor;
 
     public TeamController teamController;
@@ -30,7 +28,7 @@ public class PlayerController : NetworkBehaviour
 	public GameObject troopSpawn;
 
     [SyncVar]
-    public int playerId;
+    public int spawnId;
 
     [SyncVar]
     public int teamNum;
@@ -42,7 +40,8 @@ public class PlayerController : NetworkBehaviour
         teamController = GameObject.Find("TeamController").GetComponent<TeamController>();
         motor = GetComponent<PlayerMotor>();
         CmdSetUp();
-        spawnTarget = spawnLocations[playerId];
+        //this is needed otherwise it does not seem to move client to correct position
+        spawnTarget = spawnLocations[spawnId];
 		this.transform.position = spawnTarget.transform.position;
     }
 
@@ -60,11 +59,18 @@ public class PlayerController : NetworkBehaviour
 
     }
 
+    public void initialisePlayerInfo(int spawnId, int teamNum,GameObject troopSpawn, GameObject target)
+    {
+        this.spawnId = spawnId;
+        this.teamNum = teamNum;
+        this.troopSpawn = troopSpawn;
+        this.target = target;
+    }
+
     [Command]
     private void CmdSetUp()
     {
-        teamController.SetPlayerId(this.gameObject);
-        teamController.SetPlayerTeam(this.gameObject);
+        teamController.SetPlayerInfo(this.gameObject);
     }
 
     private void UpdateMovement()
