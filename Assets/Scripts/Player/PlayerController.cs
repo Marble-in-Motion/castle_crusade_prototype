@@ -65,7 +65,6 @@ public class PlayerController : NetworkBehaviour
     {
         teamController.SetPlayerId(this.gameObject);
         teamController.SetPlayerTeam(this.gameObject);
-        teamController.SetPlayerLocation(this.gameObject);
     }
 
     private void UpdateMovement()

@@ -60,7 +60,8 @@ public class TeamController : NetworkBehaviour {
 
     [Server]
     public void SetPlayerTeam(GameObject newPlayer) {
-        int id = newPlayer.GetComponent<PlayerController>().playerId;
+        int id = GameObject.FindGameObjectsWithTag("Player").Length - 1;
+        newPlayer.GetComponent<PlayerController>().playerId = id;
         if(id == 0)
         {
             newPlayer.GetComponent<PlayerController>().teamNum = 1;
@@ -75,18 +76,10 @@ public class TeamController : NetworkBehaviour {
             newPlayer.GetComponent<PlayerController>().troopSpawn = GameObject.FindGameObjectWithTag("TroopSpawn2");
             newPlayer.GetComponent<PlayerController>().target = tower1;
         }
-       
-    }
-
-   
-
-    [Server]
-    public void SetPlayerLocation(GameObject newPlayer)
-    {
-        int id = newPlayer.GetComponent<PlayerController>().playerId;
         newPlayer.GetComponent<PlayerController>().spawnTarget = spawnLocations[id];
         Transform location = spawnLocations[id].transform;
         newPlayer.transform.position = location.position;
+
     }
 
     [Server]
