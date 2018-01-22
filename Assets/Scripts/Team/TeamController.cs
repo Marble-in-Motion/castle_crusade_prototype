@@ -46,5 +46,10 @@ public class TeamController : ITeamController {
         playerIds.Add(playerId);
     }
 
+    public bool HasPlayer(int playerId)
+    {
+        return playerIds.Contains(playerId);
+    }
+
 
 }

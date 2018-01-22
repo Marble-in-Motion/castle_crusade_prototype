@@ -11,5 +11,12 @@ namespace Assets.Scripts.Team
 
         void AddPlayer(int playerId);
 
+        bool HasPlayer(int playerId);
+
+        int GetCoin();
+
+        int SpendGold(int amount);
+
+
     }
 }

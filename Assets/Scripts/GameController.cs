@@ -35,13 +35,22 @@ public class GameController : NetworkBehaviour {
 		
 	}
 
-
     public void InitialisePlayer(Player player)
     {
         AddPlayerToTeam(player);
         MovePlayerToSpawn(player);
         sceneCamera.gameObject.SetActive(false);
+    }
 
+    public ITeamController GetTeamController(int playerId) {
+        if (team1.HasPlayer(playerId))
+        {
+            return team1;
+        } else if (team2.HasPlayer(playerId))
+        {
+            return team2;
+        }
+        throw new System.Exception();
     }
 
     private void AddPlayerToTeam(Player player)
@@ -49,11 +58,13 @@ public class GameController : NetworkBehaviour {
         int playerId = player.GetId();
         ITeamController team = (playerId % 2 == 0) ? team1 : team2;
         team.AddPlayer(playerId);
-        player.SetTeamId(team.GetId());
     }
 
     private void MovePlayerToSpawn(Player player)
     {
+        Debug.Log(player.GetId());
         player.transform.position = spawnPoints[player.GetId()].transform.position;
     }
+
+   
 }

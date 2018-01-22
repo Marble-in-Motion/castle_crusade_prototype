@@ -4,26 +4,25 @@ using UnityEngine.Networking;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Assets.Scripts.Team;
 
 public class Player : NetworkSetup
 {
 
     public const string PLAYER_TAG = "Player";
+    private const string REMOTE_LAYER_NAME = "RemotePlayer";
 
     private int id;
 
-    private int teamId;
-
     private PlayerMotor motor;
+
+    private ITeamController teamController;
 
     [SerializeField]
     private float lookSensitivity = 3f;
 
     [SerializeField]
     Behaviour[] componentsToDisable;
-
-    [SerializeField]
-    string remoteLayerName = "RemotePlayer";
 
     public Text CurrencyText;
 
@@ -35,59 +34,62 @@ public class Player : NetworkSetup
 
     public int GetTeamId()
     {
-        return teamId;
+        return (teamController != null) ? teamController.GetId() : -1;
     }
     
-    public void SetTeamId(int id)
-    {
-        teamId = id;
-    }
-
-
     void Start()
     {
-        motor = GetComponent<PlayerMotor>();
-        id = FindObjectsOfType<Player>().Length - 1;
-
-        GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
-        gameController.InitialisePlayer(this);
-
-
-        //Canvas canvas = this.GetComponentInChildren<Canvas>();
-        //canvas.planeDistance = 1;
-        //canvas.renderMode = RenderMode.ScreenSpaceCamera;
-        //canvas.worldCamera = this.GetComponentInChildren<Camera>();
-        //CurrencyText = this.GetComponentInChildren<Text>();
-        //CurrencyText.text = "Coin: " + 100.ToString();
-
         if (isLocalPlayer)
         {
+            motor = GetComponent<PlayerMotor>();
+            id = FindObjectsOfType<Player>().Length - 1;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+
+            RegisterModel(Player.PLAYER_TAG, id);
+
+            GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+            gameController.InitialisePlayer(this);
+            teamController = gameController.GetTeamController(id);
+
+
+            Canvas canvas = this.GetComponentInChildren<Canvas>();
+            canvas.planeDistance = 1;
+            canvas.renderMode = RenderMode.ScreenSpaceCamera;
+            canvas.worldCamera = this.GetComponentInChildren<Camera>();
+            CurrencyText = this.GetComponentInChildren<Text>();
+            CurrencyText.text = "Coin: " + 100.ToString();
         }
-        else
+        
+
+        if (!isLocalPlayer)
         {
             DisableNonLocalCompontents();
-            AssignLayer(remoteLayerName);
+            AssignLayer(REMOTE_LAYER_NAME);
+            //Destroy(this);
         }
 
-        RegisterModel(Player.PLAYER_TAG);
     }
 
     void Update()
     {
-        UpdateMovement();
+        if (isLocalPlayer)
+        {
+            UpdateMovement();
 
-        // spawn npc command
-  //      if (Input.GetKeyDown(KeyCode.A))
-  //      {
-  //          int currency = teamController.buy(10);
-  //          this.GetComponentInChildren<Text>().text = "Coin: " + currency.ToString();
-  //      }
-		//else if (Input.GetKeyDown(KeyCode.S) && isLocalPlayer) {
-		//	CmdRequestTroopSpawn();
-		//}
-
+            // spawn npc command
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                Debug.Log("A: " + id);
+                int currency = teamController.SpendGold(10);
+                this.GetComponentInChildren<Text>().text = "Coin: " + currency.ToString();
+            }
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                Debug.Log("S: " + id);
+                //CmdRequestTroopSpawn();
+            }
+        }
     }
 
 
