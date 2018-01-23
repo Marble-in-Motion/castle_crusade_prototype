@@ -10,6 +10,7 @@ public class TeamController : ITeamController {
 
     private List<int> playerIds;
 
+    [SyncVar]
     private int coin;
 
     private int towerHealth;

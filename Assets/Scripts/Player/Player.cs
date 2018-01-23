@@ -18,6 +18,8 @@ public class Player : NetworkSetup
 
     private ITeamController teamController;
 
+    private SpawnController spawnController;
+
     [SerializeField]
     private float lookSensitivity = 3f;
 
@@ -51,7 +53,7 @@ public class Player : NetworkSetup
             GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
             gameController.InitialisePlayer(this);
             teamController = gameController.GetTeamController(id);
-
+            spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
 
             Canvas canvas = this.GetComponentInChildren<Canvas>();
             canvas.planeDistance = 1;
@@ -87,7 +89,7 @@ public class Player : NetworkSetup
             else if (Input.GetKeyDown(KeyCode.S))
             {
                 Debug.Log("S: " + id);
-                //CmdRequestTroopSpawn();
+                CmdRequestOffensiveTroopSpawn();
             }
         }
     }
@@ -116,13 +118,17 @@ public class Player : NetworkSetup
         motor.Rotate(x, y);
     }
 
-	//[Command]
-	//public void CmdRequestTroopSpawn() {
- //       //create troop controller
- //       teamController.SendTroop(this.gameObject);
-	//}
+    [Command]
+    public void CmdRequestOffensiveTroopSpawn()
+    {
+        int teamId = GetTeamId();
+        int spawnId = 0; //Get a value ting
+        int troopId = 0; //Get a value ting
 
-    
+        spawnController.SpawnOffensive(spawnId, teamId, troopId);
+    }
+
+
 
 }
 

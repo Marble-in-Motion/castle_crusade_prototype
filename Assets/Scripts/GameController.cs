@@ -27,7 +27,6 @@ public class GameController : NetworkBehaviour {
         team2 = new TeamController(2);
 
         // playerSpawns - get them bruv
-
     }
 	
 	// Update is called once per frame
