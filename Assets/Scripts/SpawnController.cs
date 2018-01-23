@@ -7,14 +7,17 @@ public class SpawnController : NetworkBehaviour
 {
     public const string SPAWN_CONTROLLER_TAG = "SpawnController";
 
+    //troops
     [SerializeField]
-    GameObject[] troopPrefabs;
+    private GameObject[] troopPrefabs;
 
+    //spawn location - lanes
     [SerializeField]
-    GameObject[] spawnLocations;
+    private GameObject[] spawnLocations;
 
+    //targets
     [SerializeField]
-    GameObject[] towers;
+    private GameObject[] towers;
 
     private GameObject GetTroopFromId(int troopId)
     {
@@ -28,19 +31,18 @@ public class SpawnController : NetworkBehaviour
 
     private GameObject GetTargetTower(int teamId)
     {
-        return (teamId == 1) ? towers[1] : towers[0];
+        return (teamId == TeamController.TEAM1) ? towers[1] : towers[0];
     }
 
-    //spawn troops
-    public void SpawnOffensive(int troopId, int laneId, int teamId)
+
+    public void SpawnOffensive(int troopId, int spawnId, int teamId)
     {
         GameObject troopPrefab = GetTroopFromId(troopId);
-        GameObject lane = GetSpawnFromId(laneId);
+        GameObject lane = GetSpawnFromId(spawnId);
         GameObject targetTower = GetTargetTower(teamId);
 
-        GameObject obj = Instantiate(troopPrefab, lane.transform.position, Quaternion.identity) as GameObject;
-        //set target
-
-        NetworkServer.Spawn(obj);
+        GameObject troop = Instantiate(troopPrefab, lane.transform.position, Quaternion.identity) as GameObject;
+        troop.GetComponent<AIController>().target = targetTower;
+        NetworkServer.Spawn(troop);
     }
 }

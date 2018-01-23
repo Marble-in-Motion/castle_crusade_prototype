@@ -41,26 +41,29 @@ public class Player : NetworkSetup
     
     void Start()
     {
+        id = FindObjectsOfType<Player>().Length - 1;
+        RegisterModel(Player.PLAYER_TAG, GetId());
+
         if (isLocalPlayer)
         {
+            // Player Initialisation
+            GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+            gameController.InitialisePlayer(this);
+            teamController = gameController.GetTeamController(GetId());
+            spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
             motor = GetComponent<PlayerMotor>();
-            id = FindObjectsOfType<Player>().Length - 1;
+            
+            // Camera Settings
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
 
-            RegisterModel(Player.PLAYER_TAG, id);
-
-            GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
-            gameController.InitialisePlayer(this);
-            teamController = gameController.GetTeamController(id);
-            spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
-
+            // Canvas Settings
             Canvas canvas = this.GetComponentInChildren<Canvas>();
             canvas.planeDistance = 1;
             canvas.renderMode = RenderMode.ScreenSpaceCamera;
             canvas.worldCamera = this.GetComponentInChildren<Camera>();
             CurrencyText = this.GetComponentInChildren<Text>();
-            CurrencyText.text = "Coin: " + 100.ToString();
+            CurrencyText.text = "Coin: " + teamController.GetCoin().ToString();
         }
         
 
@@ -86,10 +89,15 @@ public class Player : NetworkSetup
                 int currency = teamController.SpendGold(10);
                 this.GetComponentInChildren<Text>().text = "Coin: " + currency.ToString();
             }
-            else if (Input.GetKeyDown(KeyCode.S))
+            else if (Input.GetKeyDown(KeyCode.Q))
             {
-                Debug.Log("S: " + id);
-                CmdRequestOffensiveTroopSpawn();
+                Debug.Log("Q_1: " + id);
+                CmdRequestOffensiveTroopSpawn(0, 0);
+            }
+            else if (Input.GetKeyDown(KeyCode.W))
+            {
+                Debug.Log("W_2: " + id);
+                CmdRequestOffensiveTroopSpawn(0, 1);
             }
         }
     }
@@ -119,13 +127,11 @@ public class Player : NetworkSetup
     }
 
     [Command]
-    public void CmdRequestOffensiveTroopSpawn()
+    private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
     {
         int teamId = GetTeamId();
-        int spawnId = 0; //Get a value ting
-        int troopId = 0; //Get a value ting
-
-        spawnController.SpawnOffensive(spawnId, teamId, troopId);
+        Debug.Log("Team: " + teamId.ToString());
+        spawnController.SpawnOffensive(troopId, spawnId, teamId);
     }
 
 

@@ -6,6 +6,9 @@ using UnityEngine.Networking;
 
 public class TeamController : ITeamController {
 
+    public const int TEAM1 = 1;
+    public const int TEAM2 = 2;
+
     private int id;
 
     private List<int> playerIds;

@@ -23,8 +23,8 @@ public class GameController : NetworkBehaviour {
         sceneCamera = Camera.main;
         sceneCamera.gameObject.SetActive(true);
 
-        team1 = new TeamController(1);
-        team2 = new TeamController(2);
+        team1 = new TeamController(TeamController.TEAM1);
+        team2 = new TeamController(TeamController.TEAM2);
 
         // playerSpawns - get them bruv
     }
