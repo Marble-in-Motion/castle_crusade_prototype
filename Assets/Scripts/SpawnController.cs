@@ -24,9 +24,9 @@ public class SpawnController : NetworkBehaviour
         return troopPrefabs[troopId];
     }
 
-    private GameObject GetSpawnFromId(int spawnId)
+    private GameObject GetSpawnFromId(int spawnId, int teamId)
     {
-        return spawnLocations[spawnId];
+		return (teamId == TeamController.TEAM1) ? spawnLocations [spawnId] : spawnLocations [spawnId + 5];
     }
 
     private GameObject GetTargetTower(int teamId)
@@ -38,7 +38,7 @@ public class SpawnController : NetworkBehaviour
     public void SpawnOffensive(int troopId, int spawnId, int teamId)
     {
         GameObject troopPrefab = GetTroopFromId(troopId);
-        GameObject lane = GetSpawnFromId(spawnId);
+        GameObject lane = GetSpawnFromId(spawnId, teamId);
         GameObject targetTower = GetTargetTower(teamId);
 
         GameObject troop = Instantiate(troopPrefab, lane.transform.position, Quaternion.identity) as GameObject;
