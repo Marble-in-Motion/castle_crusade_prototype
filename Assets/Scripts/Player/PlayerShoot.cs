@@ -19,11 +19,13 @@ public class PlayerShoot : NetworkBehaviour {
 	void Start () {
 		laserLine = GetComponent<LineRenderer> ();
 		shootAudio = GetComponent<AudioSource> ();
+		bolt = new Bolt ();
 	}
 
 	void Update () {
 		if (Input.GetButtonDown("Fire1"))
 		{
+			Debug.Log ("Shot fired");
 			Shoot();
 		}
 	}
@@ -39,18 +41,17 @@ public class PlayerShoot : NetworkBehaviour {
 	void Shoot()
 	{
 		laserLine.SetPosition(0, crossbow.transform.position);
-
 		StartCoroutine(Wait());
-
 		RaycastHit hit;
 		if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, bolt.range, mask)) {
+			Debug.Log("4");
 			CmdPlayerShot(hit.collider.name, bolt.damage);
 			laserLine.SetPosition(1, hit.point);
 		} else {
 			//calculate max range of projectile
+			Debug.Log("5");
 			laserLine.SetPosition(1, crossbow.transform.position + crossbow.transform.forward * bolt.range);
 		}
-
 	}
 
 	[Command]
@@ -64,7 +65,5 @@ public class PlayerShoot : NetworkBehaviour {
 		if (target.transform != null /*&& target.collider.tag == "NPC"*/) {
 			target.transform.position = (target.transform.position /*- (normal of the hit)*/);
 		}
-
-
 	}
 }

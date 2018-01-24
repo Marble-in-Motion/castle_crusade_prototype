@@ -130,7 +130,6 @@ public class Player : NetworkSetup
     private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
     {
         int teamId = GetTeamId();
-        Debug.Log("Team: " + teamId.ToString());
         spawnController.SpawnOffensive(troopId, spawnId, teamId);
     }
 
