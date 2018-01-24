@@ -149,7 +149,7 @@ public class Player : NetworkSetup
     {
         Debug.Log("Attempt Spend");
         Debug.Log(id);
-        int teamid = id % 2;
+        int teamid = id%2;
         TeamController temp;
         if (teamid == 0)
         {
