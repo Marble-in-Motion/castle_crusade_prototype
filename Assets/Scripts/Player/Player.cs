@@ -4,7 +4,6 @@ using UnityEngine.Networking;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-using Assets.Scripts.Team;
 
 public class Player : NetworkSetup
 {
@@ -12,11 +11,11 @@ public class Player : NetworkSetup
     public const string PLAYER_TAG = "Player";
     private const string REMOTE_LAYER_NAME = "RemotePlayer";
 
-    private int id;
+    public int id;
 
     private PlayerMotor motor;
 
-    private ITeamController teamController;
+    private TeamController teamController;
 
     private SpawnController spawnController;
 
@@ -87,7 +86,7 @@ public class Player : NetworkSetup
             {
                 Debug.Log("A: " + id);
                 int currency = teamController.SpendGold(10);
-                this.GetComponentInChildren<Text>().text = "Coin: " + currency.ToString();
+                
             }
             else if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -99,6 +98,8 @@ public class Player : NetworkSetup
                 Debug.Log("W_2: " + id);
                 CmdRequestOffensiveTroopSpawn(0, 1);
             }
+
+            this.GetComponentInChildren<Text>().text = "Coin: " + teamController.GetCoin().ToString();
         }
     }
 

@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Team;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -11,9 +10,14 @@ public class GameController : NetworkBehaviour {
     [SerializeField]
     private List<GameObject> spawnPoints;
 
-    private ITeamController team1;
+    [SerializeField]
+    private GameObject team1GameObject;
 
-    private ITeamController team2;
+    [SerializeField]
+    private GameObject team2GameObject;
+
+    private TeamController team1;
+    private TeamController team2;
 
     private Camera sceneCamera;
 
@@ -23,8 +27,8 @@ public class GameController : NetworkBehaviour {
         sceneCamera = Camera.main;
         sceneCamera.gameObject.SetActive(true);
 
-        team1 = new TeamController(TeamController.TEAM1);
-        team2 = new TeamController(TeamController.TEAM2);
+        team1 = team1GameObject.GetComponent<TeamController>();
+        team2 = team2GameObject.GetComponent<TeamController>();
 
         // playerSpawns - get them bruv
     }
@@ -41,7 +45,7 @@ public class GameController : NetworkBehaviour {
         sceneCamera.gameObject.SetActive(false);
     }
 
-    public ITeamController GetTeamController(int playerId) {
+    public TeamController GetTeamController(int playerId) {
         if (team1.HasPlayer(playerId))
         {
             return team1;
@@ -55,7 +59,7 @@ public class GameController : NetworkBehaviour {
     private void AddPlayerToTeam(Player player)
     {
         int playerId = player.GetId();
-        ITeamController team = (playerId % 2 == 0) ? team1 : team2;
+        TeamController team = (playerId % 2 == 0) ? team1 : team2;
         team.AddPlayer(playerId);
     }
 
