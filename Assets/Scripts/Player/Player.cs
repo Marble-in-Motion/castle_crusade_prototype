@@ -42,7 +42,12 @@ public class Player : NetworkSetup
     {
         id = FindObjectsOfType<Player>().Length - 1;
         RegisterModel(Player.PLAYER_TAG, GetId());
-		spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
+        
+        spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
+        //GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+        //gameController.InitialisePlayer(this);
+        //teamController = gameController.GetTeamController(GetId());
+
 
         if (isLocalPlayer)
         {
@@ -64,7 +69,8 @@ public class Player : NetworkSetup
             CurrencyText = this.GetComponentInChildren<Text>();
             CurrencyText.text = "Coin: " + teamController.GetCoin().ToString();
         }
-        
+
+        //teamController = gameController.GetTeamController(GetId());
 
         if (!isLocalPlayer)
         {
@@ -72,6 +78,8 @@ public class Player : NetworkSetup
             AssignLayer(REMOTE_LAYER_NAME);
             //Destroy(this);
         }
+
+        
 
     }
 
