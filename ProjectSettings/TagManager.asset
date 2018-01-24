@@ -19,6 +19,11 @@ TagManager:
   - TroopSpawn3
   - TroopSpawn4
   - TroopSpawn5
+  - TroopSpawn6
+  - TroopSpawn7
+  - TroopSpawn8
+  - TroopSpawn9
+  - TroopSpawn10
   layers:
   - Default
   - TransparentFX

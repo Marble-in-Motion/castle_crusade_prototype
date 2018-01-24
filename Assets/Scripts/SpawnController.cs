@@ -26,7 +26,7 @@ public class SpawnController : NetworkBehaviour
 
     private GameObject GetSpawnFromId(int spawnId, int teamId)
     {
-		return (teamId == TeamController.TEAM1) ? spawnLocations [spawnId] : spawnLocations [spawnId + 5];
+		return (teamId == TeamController.TEAM1) ? spawnLocations [spawnId + 5] : spawnLocations [spawnId];
     }
 
     private GameObject GetTargetTower(int teamId)

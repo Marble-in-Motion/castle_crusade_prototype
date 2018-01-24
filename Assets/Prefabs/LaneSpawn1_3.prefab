@@ -9,31 +9,31 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1702584513331056}
+  m_RootGameObject: {fileID: 1210638748572966}
   m_IsPrefabParent: 1
---- !u!1 &1702584513331056
+--- !u!1 &1210638748572966
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4200396473876874}
+  - component: {fileID: 4127009893346890}
   m_Layer: 0
-  m_Name: Lane5Spawn
-  m_TagString: TroopSpawn5
+  m_Name: LaneSpawn1_3
+  m_TagString: TroopSpawn3
   m_Icon: {fileID: -3701561207968579530, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4200396473876874
+--- !u!4 &4127009893346890
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1702584513331056}
+  m_GameObject: {fileID: 1210638748572966}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12, y: 6, z: -118}
+  m_LocalPosition: {x: 75, y: 3, z: 115}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
