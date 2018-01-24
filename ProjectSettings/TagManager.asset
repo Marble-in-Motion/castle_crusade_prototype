@@ -15,6 +15,7 @@ TagManager:
   - NPCT2
   - TeamController1
   - TeamController2
+  - SpawnController
   layers:
   - Default
   - TransparentFX

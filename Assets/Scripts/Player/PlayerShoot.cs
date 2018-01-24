@@ -7,9 +7,6 @@ public class PlayerShoot : NetworkBehaviour {
 	public Bolt bolt;
 
 	[SerializeField]
-	private Camera cam;
-
-	[SerializeField]
 	private GameObject crossbow;
 
 	[SerializeField]
@@ -32,7 +29,7 @@ public class PlayerShoot : NetworkBehaviour {
 	}
 
 	IEnumerator Wait() {
-		shootAudio.Play ();
+		shootAudio.Play();
 		laserLine.enabled = true;
 		yield return shotDuration;
 		laserLine.enabled = false;
@@ -43,18 +40,16 @@ public class PlayerShoot : NetworkBehaviour {
 	{
 		laserLine.SetPosition(0, crossbow.transform.position);
 
-		StartCoroutine (Wait ());
+		StartCoroutine(Wait());
 
 		RaycastHit hit;
-		if (Physics.Raycast (crossbow.transform.position, crossbow.transform.forward, out hit, bolt.range, mask)) {
-			CmdPlayerShot (hit.collider.name, bolt.damage/*, hit.normal*/);
-			laserLine.SetPosition (1, hit.point);
+		if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, bolt.range, mask)) {
+			CmdPlayerShot(hit.collider.name, bolt.damage);
+			laserLine.SetPosition(1, hit.point);
 		} else {
-			//maybe extract this too
-			laserLine.SetPosition (1, crossbow.transform.position + crossbow.transform.forward * bolt.range);
+			//calculate max range of projectile
+			laserLine.SetPosition(1, crossbow.transform.position + crossbow.transform.forward * bolt.range);
 		}
-
-		//MOVE THIS THE FUCK OUT
 
 	}
 
