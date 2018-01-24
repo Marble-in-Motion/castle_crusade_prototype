@@ -14,7 +14,7 @@ public class TeamController : NetworkBehaviour {
     public List<int> playerIds;
 
     [SyncVar]
-    private int coin;
+    public int coin;
 
     private int towerHealth;
 
@@ -34,15 +34,18 @@ public class TeamController : NetworkBehaviour {
     {
         return coin;
     }
-
-    public int SpendGold(int amount)
+    
+    [ClientCallback]
+    public void CmdSpendGold(int amount)
     {
         if (coin - amount > 0)
         {
             coin -= amount;
         }
-        return coin;
+        Debug.Log(coin);
+        Debug.Log("Spent");
     }
+
 
     public void AddPlayer(int playerId)
     {

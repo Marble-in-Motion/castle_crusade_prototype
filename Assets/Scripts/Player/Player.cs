@@ -85,8 +85,8 @@ public class Player : NetworkSetup
             if (Input.GetKeyDown(KeyCode.A))
             {
                 Debug.Log("A: " + id);
-                int currency = teamController.SpendGold(10);
-                
+                SpendGold(10);
+                Debug.Log("End");
             }
             else if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -133,6 +133,13 @@ public class Player : NetworkSetup
         int teamId = GetTeamId();
         Debug.Log("Team: " + teamId.ToString());
         spawnController.SpawnOffensive(troopId, spawnId, teamId);
+    }
+
+    //[Command]
+    public void SpendGold(int amount)
+    {
+        Debug.Log("Attempt Spend");
+        teamController.CmdSpendGold(amount);
     }
 
 
