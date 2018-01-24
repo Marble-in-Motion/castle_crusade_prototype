@@ -16,6 +16,9 @@ TagManager:
   - TeamController1
   - TeamController2
   - SpawnController
+  - TroopSpawn3
+  - TroopSpawn4
+  - TroopSpawn5
   layers:
   - Default
   - TransparentFX
