@@ -47,6 +47,8 @@ public class TeamController : NetworkBehaviour {
     }
 
 
+
+
     public void AddPlayer(int playerId)
     {
         playerIds.Add(playerId);
