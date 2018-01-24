@@ -91,19 +91,28 @@ public class Player : NetworkSetup
             // spawn npc command
             if (Input.GetKeyDown(KeyCode.A))
             {
-                Debug.Log("A: " + id);
                 CmdSpendGold(10);
             }
-            else if (Input.GetKeyDown(KeyCode.Q))
+            else if (Input.GetKeyDown(KeyCode.Y))
             {
-                Debug.Log("Q_1: " + id);
                 CmdRequestOffensiveTroopSpawn(0, 0);
             }
-            else if (Input.GetKeyDown(KeyCode.W))
+            else if (Input.GetKeyDown(KeyCode.J))
             {
-                Debug.Log("W_2: " + id);
                 CmdRequestOffensiveTroopSpawn(0, 1);
             }
+			else if (Input.GetKeyDown(KeyCode.N))
+			{
+				CmdRequestOffensiveTroopSpawn(0, 2);
+			}
+			else if (Input.GetKeyDown(KeyCode.B))
+			{
+				CmdRequestOffensiveTroopSpawn(0, 3);
+			}
+			else if (Input.GetKeyDown(KeyCode.G))
+			{
+				CmdRequestOffensiveTroopSpawn(0, 4);
+			}
 
             this.GetComponentInChildren<Text>().text = "Coin: " + teamController.GetCoin().ToString();
         }
