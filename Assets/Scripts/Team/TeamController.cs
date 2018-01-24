@@ -1,14 +1,15 @@
-﻿using Assets.Scripts.Team;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class TeamController : ITeamController {
+public class TeamController : NetworkBehaviour
+{
 
     public const int TEAM1 = 1;
     public const int TEAM2 = 2;
 
+    [SerializeField]
     private int id;
 
     private List<int> playerIds;
@@ -18,9 +19,8 @@ public class TeamController : ITeamController {
 
     private int towerHealth;
 
-    public TeamController(int id)
+    void Start()
     {
-        this.id = id;
         playerIds = new List<int>();
         coin = 100;
         towerHealth = 100;
@@ -36,16 +36,16 @@ public class TeamController : ITeamController {
         return coin;
     }
 
-    public int SpendGold(int amount)
+    [ClientCallback]
+    public void CmdSpendGold(int amount)
     {
         if (coin - amount > 0)
         {
             coin -= amount;
         }
-        return coin;
     }
 
-    public void AddPlayer(int playerId)
+    public void CmdAddPlayer(int playerId)
     {
         playerIds.Add(playerId);
     }
