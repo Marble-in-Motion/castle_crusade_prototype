@@ -500,6 +500,30 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114632657462465552, guid: 7fdc310b1c16d8c449e90dca519c9d05,
+        type: 2}
+      propertyPath: spawnPoints.Array.data[0]
+      value: 
+      objectReference: {fileID: 1574873387122162, guid: fb79f7cc4001b9448b11511e923e48a2,
+        type: 2}
+    - target: {fileID: 114632657462465552, guid: 7fdc310b1c16d8c449e90dca519c9d05,
+        type: 2}
+      propertyPath: spawnPoints.Array.data[1]
+      value: 
+      objectReference: {fileID: 1574873387122162, guid: 9dc4c091f5de1ba4a87cf62ddb3a537f,
+        type: 2}
+    - target: {fileID: 114632657462465552, guid: 7fdc310b1c16d8c449e90dca519c9d05,
+        type: 2}
+      propertyPath: spawnPoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 1574873387122162, guid: d2342d4235096114c9b7fbb1ddb74c9b,
+        type: 2}
+    - target: {fileID: 114632657462465552, guid: 7fdc310b1c16d8c449e90dca519c9d05,
+        type: 2}
+      propertyPath: spawnPoints.Array.data[3]
+      value: 
+      objectReference: {fileID: 1861744178035064, guid: 3696bc08502c8204d9796e91f2c1fcfb,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7fdc310b1c16d8c449e90dca519c9d05, type: 2}
   m_IsPrefabParent: 0
