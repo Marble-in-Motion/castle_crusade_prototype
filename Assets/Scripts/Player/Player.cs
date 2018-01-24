@@ -43,6 +43,7 @@ public class Player : NetworkSetup
     {
         id = FindObjectsOfType<Player>().Length - 1;
         RegisterModel(Player.PLAYER_TAG, GetId());
+		spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
 
         if (isLocalPlayer)
         {
@@ -50,7 +51,6 @@ public class Player : NetworkSetup
             GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
             gameController.InitialisePlayer(this);
             teamController = gameController.GetTeamController(GetId());
-            spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
             motor = GetComponent<PlayerMotor>();
             
             // Camera Settings
