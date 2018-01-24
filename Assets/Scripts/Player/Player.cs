@@ -45,14 +45,12 @@ public class Player : NetworkSetup
 
         spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
-        //gameController.InitialisePlayer(this);
 
 
 
         if (isLocalPlayer)
         {
             // Player Initialisation
-            //GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
             gameController.InitialisePlayer(this);
             teamController = gameController.GetTeamController(GetId());
             motor = GetComponent<PlayerMotor>();
@@ -95,7 +93,6 @@ public class Player : NetworkSetup
             {
                 Debug.Log("A: " + id);
                 CmdSpendGold(10);
-                Debug.Log("End");
             }
             else if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -149,17 +146,17 @@ public class Player : NetworkSetup
     {
 
         int teamid = id % 2;
-        TeamController temp;
+        TeamController tc;
         if (teamid == 0)
         {
-            temp = GameObject.FindGameObjectWithTag("TeamController1").GetComponent<TeamController>();
+            tc = GameObject.FindGameObjectWithTag("TeamController1").GetComponent<TeamController>();
         }
         else
         {
-            temp = GameObject.FindGameObjectWithTag("TeamController2").GetComponent<TeamController>();
+            tc = GameObject.FindGameObjectWithTag("TeamController2").GetComponent<TeamController>();
         }
 
-        temp.CmdSpendGold(amount);
+        tc.CmdSpendGold(amount);
     }
 
 

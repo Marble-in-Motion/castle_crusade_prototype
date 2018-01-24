@@ -10,12 +10,12 @@ public class TeamController : NetworkBehaviour
     public const int TEAM2 = 2;
 
     [SerializeField]
-    public int id;
+    private int id;
 
-    public List<int> playerIds;
+    private List<int> playerIds;
 
     [SyncVar]
-    public int coin;
+    private int coin;
 
     private int towerHealth;
 
@@ -43,8 +43,6 @@ public class TeamController : NetworkBehaviour
         {
             coin -= amount;
         }
-        Debug.Log(coin);
-        Debug.Log("Spent");
     }
 
     public void CmdAddPlayer(int playerId)
