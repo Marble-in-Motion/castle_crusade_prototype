@@ -35,7 +35,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4194691932978656}
-  - component: {fileID: 114660105369679916}
+  - component: {fileID: 208651631506802194}
   m_Layer: 0
   m_Name: Tower1
   m_TagString: Tower1
@@ -200,8 +200,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1885344622698030}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0, y: 0.77, z: 0}
+  m_LocalScale: {x: 200, y: 300, z: 200}
   m_Children: []
   m_Father: {fileID: 4194691932978656}
   m_RootOrder: 0
@@ -263,7 +263,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 32889fa60f3d0ae4fad207fefcefe31e, type: 2}
+  - {fileID: 2100000, guid: d2dcf16b9f073f84aaa2224169f9d91e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -289,39 +289,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1885344622698030}
-  m_Mesh: {fileID: 4300000, guid: b0e423cf233360742ab46b41ef7c1aa3, type: 3}
---- !u!114 &114660105369679916
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1423207765519546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 3
-  m_AssetId:
-    i0: 199
-    i1: 56
-    i2: 243
-    i3: 75
-    i4: 155
-    i5: 114
-    i6: 136
-    i7: 20
-    i8: 123
-    i9: 41
-    i10: 181
-    i11: 193
-    i12: 118
-    i13: 109
-    i14: 36
-    i15: 231
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_Mesh: {fileID: 4300000, guid: d1a191c5487228641a281dd40cef1722, type: 3}
 --- !u!114 &114785330524876174
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -366,3 +334,18 @@ MonoBehaviour:
   m_Script: {fileID: -1050975500, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!208 &208651631506802194
+NavMeshObstacle:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1423207765519546}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 2.75, y: 7.5, z: 2.75}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
