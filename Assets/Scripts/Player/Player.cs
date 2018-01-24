@@ -44,15 +44,15 @@ public class Player : NetworkSetup
         RegisterModel(Player.PLAYER_TAG, GetId());
         
         spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
-        //GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+        GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
         //gameController.InitialisePlayer(this);
-        //teamController = gameController.GetTeamController(GetId());
+        
 
 
         if (isLocalPlayer)
         {
             // Player Initialisation
-            GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+            //GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
             gameController.InitialisePlayer(this);
             teamController = gameController.GetTeamController(GetId());
             motor = GetComponent<PlayerMotor>();
@@ -70,7 +70,8 @@ public class Player : NetworkSetup
             CurrencyText.text = "Coin: " + teamController.GetCoin().ToString();
         }
 
-        //teamController = gameController.GetTeamController(GetId());
+        
+
 
         if (!isLocalPlayer)
         {
@@ -147,7 +148,19 @@ public class Player : NetworkSetup
     public void CmdSpendGold(int amount)
     {
         Debug.Log("Attempt Spend");
-        teamController.CmdSpendGold(amount);
+        Debug.Log(id);
+        int teamid = id % 2;
+        TeamController temp;
+        if (teamid == 0)
+        {
+            temp = GameObject.FindGameObjectWithTag("TeamController1").GetComponent<TeamController>();
+        }
+        else
+        {
+            temp = GameObject.FindGameObjectWithTag("TeamController2").GetComponent<TeamController>();
+        }
+         
+        temp.CmdSpendGold(amount);
     }
 
 

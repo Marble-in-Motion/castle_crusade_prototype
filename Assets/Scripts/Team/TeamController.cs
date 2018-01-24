@@ -46,10 +46,8 @@ public class TeamController : NetworkBehaviour {
         Debug.Log("Spent");
     }
 
-
-
-
-    public void AddPlayer(int playerId)
+    //[Command]
+    public void CmdAddPlayer(int playerId)
     {
         playerIds.Add(playerId);
     }

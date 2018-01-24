@@ -60,7 +60,7 @@ public class GameController : NetworkBehaviour {
     {
         int playerId = player.GetId();
         TeamController team = (playerId % 2 == 0) ? team1 : team2;
-        team.AddPlayer(playerId);
+        team.CmdAddPlayer(playerId);
     }
 
     private void MovePlayerToSpawn(Player player)
