@@ -19,6 +19,9 @@ public class TeamController : NetworkBehaviour
 
     private int towerHealth;
 
+    private float nextActionTime = 0.0f;
+    public float period = 1.0f;
+
     void Start()
     {
         playerIds = new List<int>();
@@ -59,6 +62,15 @@ public class TeamController : NetworkBehaviour
     public void AddGold(int amount)
     {
         coin += amount;
+    }
+
+    void Update()
+    {
+        if (Time.time > nextActionTime)
+        {
+            nextActionTime += period;
+            AddGold(1);
+        }
     }
 
 
