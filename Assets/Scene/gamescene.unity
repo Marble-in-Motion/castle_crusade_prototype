@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4513539, g: 0.50093955, b: 0.57282877, a: 1}
+  m_IndirectSpecularColor: {r: 0.45135462, g: 0.50094026, b: 0.57282996, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -57542,6 +57542,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114305577602490256, guid: c738f34b9b7288147b29b5c1766d24e7,
+        type: 2}
+      propertyPath: teamController
+      value: 
+      objectReference: {fileID: 603918180}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c738f34b9b7288147b29b5c1766d24e7, type: 2}
   m_IsPrefabParent: 0
@@ -61176,6 +61181,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 114498849243490692, guid: e5b8afeca8c93e346953bf10e71e7b1a,
+        type: 2}
+      propertyPath: teamController
+      value: 
+      objectReference: {fileID: 1847117223}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e5b8afeca8c93e346953bf10e71e7b1a, type: 2}
   m_IsPrefabParent: 0

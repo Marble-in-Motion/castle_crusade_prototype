@@ -17,7 +17,8 @@ public class TeamController : NetworkBehaviour
     [SyncVar]
     private int coin;
 
-    private int towerHealth;
+	[SyncVar]
+	public int towerHealth;
 
     private float nextActionTime = 0.0f;
     private float secondsToCoinIncrease = 1.0f;
@@ -73,5 +74,8 @@ public class TeamController : NetworkBehaviour
         }
     }
 
-
+	[ClientCallback]
+	public void DeductTowerHealth(int damage)  {
+		towerHealth = towerHealth - damage;
+	}
 }

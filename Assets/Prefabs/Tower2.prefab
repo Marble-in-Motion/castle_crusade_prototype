@@ -52,6 +52,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4340135974863334}
   - component: {fileID: 208572709185147676}
+  - component: {fileID: 114498849243490692}
+  - component: {fileID: 136387309233219560}
   m_Layer: 0
   m_Name: Tower2
   m_TagString: Tower2
@@ -306,6 +308,18 @@ MonoBehaviour:
   m_Script: {fileID: -1050975500, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114498849243490692
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1439812847354710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89cbb2a594130104dac735c9bcc271c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamController: {fileID: 0}
 --- !u!114 &114842999827763306
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -317,6 +331,19 @@ MonoBehaviour:
   m_Script: {fileID: -1050975500, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!136 &136387309233219560
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1439812847354710}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 7
+  m_Height: 7
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!208 &208572709185147676
 NavMeshObstacle:
   m_ObjectHideFlags: 1
