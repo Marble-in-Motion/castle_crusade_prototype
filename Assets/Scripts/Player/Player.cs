@@ -11,7 +11,7 @@ public class Player : NetworkSetup
     public const string PLAYER_TAG = "Player";
     private const string REMOTE_LAYER_NAME = "RemotePlayer";
 
-    public int id;
+    private int id;
 
     private PlayerMotor motor;
 
@@ -23,19 +23,14 @@ public class Player : NetworkSetup
     private float lookSensitivity = 3f;
 
     [SerializeField]
-    Behaviour[] componentsToDisable;
+    private Behaviour[] componentsToDisable;
 
-    public Text CurrencyText;
+    private Text CurrencyText;
 
 
     public int GetId()
     {
         return id;
-    }
-
-    public int GetTeamId()
-    {
-        return (teamController != null) ? teamController.GetId() : -1;
     }
 
     void Start()
@@ -45,14 +40,12 @@ public class Player : NetworkSetup
 
         spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
-
-
+        teamController = gameController.GetTeamController(id);
 
         if (isLocalPlayer)
         {
             // Player Initialisation
             gameController.InitialisePlayer(this);
-            teamController = gameController.GetTeamController(GetId());
             motor = GetComponent<PlayerMotor>();
 
             // Camera Settings
@@ -68,17 +61,11 @@ public class Player : NetworkSetup
             CurrencyText.text = "Coin: " + teamController.GetCoin().ToString();
         }
 
-
-
-
         if (!isLocalPlayer)
         {
             DisableNonLocalCompontents();
             AssignLayer(REMOTE_LAYER_NAME);
-            //Destroy(this);
         }
-
-
 
     }
 
@@ -119,7 +106,6 @@ public class Player : NetworkSetup
     }
 
 
-
     private void DisableNonLocalCompontents()
     {
         foreach (Behaviour behaviour in componentsToDisable)
@@ -127,7 +113,6 @@ public class Player : NetworkSetup
             behaviour.enabled = false;
         }
     }
-
 
 
     private void UpdateMovement()
@@ -145,29 +130,13 @@ public class Player : NetworkSetup
     [Command]
     private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
     {
-        int teamId = GetTeamId();
-        Debug.Log("Team: " + teamId.ToString());
+        int teamId = teamController.GetId();
         spawnController.SpawnOffensive(troopId, spawnId, teamId);
     }
 
     [Command]
     public void CmdSpendGold(int amount)
     {
-
-        int teamid = id % 2;
-        TeamController tc;
-        if (teamid == 0)
-        {
-            tc = GameObject.FindGameObjectWithTag("TeamController1").GetComponent<TeamController>();
-        }
-        else
-        {
-            tc = GameObject.FindGameObjectWithTag("TeamController2").GetComponent<TeamController>();
-        }
-
-        tc.CmdSpendGold(amount);
+        teamController.SpendGold(amount);
     }
-
-
-
 }
