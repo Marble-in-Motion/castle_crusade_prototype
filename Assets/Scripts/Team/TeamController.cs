@@ -55,5 +55,11 @@ public class TeamController : NetworkBehaviour
         return playerIds.Contains(playerId);
     }
 
+    [ClientCallback]
+    public void AddGold(int amount)
+    {
+        coin += amount;
+    }
+
 
 }
