@@ -20,7 +20,7 @@ public class TeamController : NetworkBehaviour
     private int towerHealth;
 
     private float nextActionTime = 0.0f;
-    public float period = 1.0f;
+    private float secondsToCoinIncrease = 1.0f;
 
     void Start()
     {
@@ -68,7 +68,7 @@ public class TeamController : NetworkBehaviour
     {
         if (Time.time > nextActionTime)
         {
-            nextActionTime += period;
+            nextActionTime += secondsToCoinIncrease;
             AddGold(1);
         }
     }
