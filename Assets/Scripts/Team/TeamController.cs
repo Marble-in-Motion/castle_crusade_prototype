@@ -19,6 +19,9 @@ public class TeamController : NetworkBehaviour
 
     private int towerHealth;
 
+    private float nextActionTime = 0.0f;
+    private float secondsToCoinIncrease = 1.0f;
+
     void Start()
     {
         playerIds = new List<int>();
@@ -53,6 +56,21 @@ public class TeamController : NetworkBehaviour
     public bool HasPlayer(int playerId)
     {
         return playerIds.Contains(playerId);
+    }
+
+    [ClientCallback]
+    public void AddGold(int amount)
+    {
+        coin += amount;
+    }
+
+    void Update()
+    {
+        if (Time.time > nextActionTime)
+        {
+            nextActionTime += secondsToCoinIncrease;
+            AddGold(1);
+        }
     }
 
 

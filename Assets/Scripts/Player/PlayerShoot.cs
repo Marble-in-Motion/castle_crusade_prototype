@@ -61,9 +61,14 @@ public class PlayerShoot : NetworkBehaviour {
 		GameObject target = GameObject.Find(id);
 		if (target.GetComponent<NPCHealth> ()) {
 			target.GetComponent<NPCHealth>().DeductHealth(damage);
+            if (!target.GetComponent<NPCHealth>().IsAlive())
+            {
+                this.GetComponentInParent<Player>().CmdAddGold(10);
+            }
 		}
 		if (target.transform != null /*&& target.collider.tag == "NPC"*/) {
 			target.transform.position = (target.transform.position /*- (normal of the hit)*/);
 		}
 	}
+
 }
