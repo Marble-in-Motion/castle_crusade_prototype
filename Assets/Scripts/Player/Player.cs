@@ -76,7 +76,11 @@ public class Player : NetworkSetup
             UpdateMovement();
 
             // spawn npc command
-            if (Input.GetKeyDown(KeyCode.Y))
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                CmdSpendGold(10);
+            }
+            else if (Input.GetKeyDown(KeyCode.Y))
             {
                 CmdRequestOffensiveTroopSpawn(0, 0);
             }
@@ -127,7 +131,6 @@ public class Player : NetworkSetup
     private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
     {
         int teamId = teamController.GetId();
-        CmdSpendGold(5);
         spawnController.SpawnOffensive(troopId, spawnId, teamId);
     }
 
@@ -135,11 +138,5 @@ public class Player : NetworkSetup
     public void CmdSpendGold(int amount)
     {
         teamController.SpendGold(amount);
-    }
-
-    [Command]
-    public void CmdAddGold(int amount)
-    {
-        teamController.AddGold(amount);
     }
 }
