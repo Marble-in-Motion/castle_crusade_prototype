@@ -17,9 +17,6 @@ public class GameController : NetworkBehaviour
     [SerializeField]
     private GameObject team2GameObject;
 
-    private TeamController team1;
-    private TeamController team2;
-
     private Camera sceneCamera;
 
 
@@ -29,10 +26,6 @@ public class GameController : NetworkBehaviour
         sceneCamera = Camera.main;
         sceneCamera.gameObject.SetActive(true);
 
-        team1 = team1GameObject.GetComponent<TeamController>();
-        team2 = team2GameObject.GetComponent<TeamController>();
-
-        // playerSpawns - get them bruv
     }
 
     // Update is called once per frame
@@ -43,29 +36,20 @@ public class GameController : NetworkBehaviour
 
     public void InitialisePlayer(Player player)
     {
-        AddPlayerToTeam(player);
         MovePlayerToSpawn(player);
         sceneCamera.gameObject.SetActive(false);
     }
 
     public TeamController GetTeamController(int playerId)
     {
-        if (team1.HasPlayer(playerId))
+        if (CalculateTeamId(playerId) == TeamController.TEAM1)
         {
-            return team1;
+            return team1GameObject.GetComponent<TeamController>();
         }
-        else if (team2.HasPlayer(playerId))
+        else
         {
-            return team2;
+            return team2GameObject.GetComponent<TeamController>(); ;
         }
-        throw new System.Exception();
-    }
-
-    private void AddPlayerToTeam(Player player)
-    {
-        int playerId = player.GetId();
-        TeamController team = (playerId % 2 == 0) ? team1 : team2;
-        team.CmdAddPlayer(playerId);
     }
 
     private void MovePlayerToSpawn(Player player)
@@ -74,5 +58,9 @@ public class GameController : NetworkBehaviour
         player.transform.position = spawnPoints[player.GetId()].transform.position;
     }
 
+    private int CalculateTeamId(int playerId)
+    {
+        return (playerId % 2 == 0) ? TeamController.TEAM1 : TeamController.TEAM2;
+    }
 
 }
