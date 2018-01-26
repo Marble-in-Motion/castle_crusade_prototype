@@ -9,21 +9,12 @@ TagManager:
   - NPC
   - Tower2
   - NetworkManager
-  - TroopSpawn1
-  - TroopSpawn2
   - NPCT1
   - NPCT2
   - TeamController1
   - TeamController2
   - SpawnController
-  - TroopSpawn3
-  - TroopSpawn4
-  - TroopSpawn5
-  - TroopSpawn6
-  - TroopSpawn7
-  - TroopSpawn8
-  - TroopSpawn9
-  - TroopSpawn10
+  - TroopSpawn
   layers:
   - Default
   - TransparentFX
