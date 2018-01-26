@@ -37,9 +37,9 @@ public class TeamController : NetworkBehaviour
     }
 
     [ClientCallback]
-    public void CmdSpendGold(int amount)
+    public void SpendGold(int amount)
     {
-        if (coin - amount > 0)
+        if (coin - amount >= 0)
         {
             coin -= amount;
         }
