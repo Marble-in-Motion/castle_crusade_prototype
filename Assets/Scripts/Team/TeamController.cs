@@ -17,6 +17,7 @@ public class TeamController : NetworkBehaviour
     [SyncVar]
     private int coin;
 
+    [SyncVar]
     public int towerHealth;
 
     void Start()
