@@ -55,5 +55,8 @@ public class TeamController : NetworkBehaviour
         return playerIds.Contains(playerId);
     }
 
-
+    [ClientCallback]
+    public void DeductTowerHealth(int damage)  {
+        towerHealth = towerHealth - damage;
+    }
 }
