@@ -24,7 +24,7 @@ public class NPCHealth : NetworkBehaviour {
 		}
 	}
 
-	private bool IsAlive() {
+	public bool IsAlive() {
 		return this.currentHealth > 0;
 	}
 

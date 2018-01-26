@@ -38,7 +38,11 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
+<<<<<<< HEAD
   m_IndirectSpecularColor: {r: 0.4513545, g: 0.5009402, b: 0.5728296, a: 1}
+=======
+  m_IndirectSpecularColor: {r: 0.4513539, g: 0.50093955, b: 0.57282877, a: 1}
+>>>>>>> 2f2edd133286f02b191aa9e2cc36ba68e2f71f91
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -4540,7 +4544,11 @@ NavMeshObstacle:
   m_TimeToStationary: 0.5
 --- !u!1 &91668182 stripped
 GameObject:
+<<<<<<< HEAD
   m_PrefabParentObject: {fileID: 1975769317532092, guid: c738f34b9b7288147b29b5c1766d24e7,
+=======
+  m_PrefabParentObject: {fileID: 1758398947263016, guid: c738f34b9b7288147b29b5c1766d24e7,
+>>>>>>> 2f2edd133286f02b191aa9e2cc36ba68e2f71f91
     type: 2}
   m_PrefabInternal: {fileID: 1212516696}
 --- !u!1 &92071612
@@ -34931,7 +34939,11 @@ NavMeshObstacle:
   m_TimeToStationary: 0.5
 --- !u!1 &718027148 stripped
 GameObject:
+<<<<<<< HEAD
   m_PrefabParentObject: {fileID: 1163020879844928, guid: e5b8afeca8c93e346953bf10e71e7b1a,
+=======
+  m_PrefabParentObject: {fileID: 1097798455297226, guid: e5b8afeca8c93e346953bf10e71e7b1a,
+>>>>>>> 2f2edd133286f02b191aa9e2cc36ba68e2f71f91
     type: 2}
   m_PrefabInternal: {fileID: 1285288832}
 --- !u!1 &718563523
@@ -35935,6 +35947,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 740783823}
   m_Mesh: {fileID: 4301190, guid: b1d56fdb6569dd8428e571b1bd58e183, type: 3}
+--- !u!1 &741033368 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1010805380986014, guid: c738f34b9b7288147b29b5c1766d24e7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1212516696}
 --- !u!1 &741624556
 GameObject:
   m_ObjectHideFlags: 0
@@ -42657,6 +42674,36 @@ Prefab:
       propertyPath: spawnPoints.Array.data[3]
       value: 
       objectReference: {fileID: 718027148}
+    - target: {fileID: 114632657462465552, guid: 7fdc310b1c16d8c449e90dca519c9d05,
+        type: 2}
+      propertyPath: spawnPoints.Array.data[4]
+      value: 
+      objectReference: {fileID: 741033368}
+    - target: {fileID: 114632657462465552, guid: 7fdc310b1c16d8c449e90dca519c9d05,
+        type: 2}
+      propertyPath: spawnPoints.Array.data[5]
+      value: 
+      objectReference: {fileID: 1358411949}
+    - target: {fileID: 114632657462465552, guid: 7fdc310b1c16d8c449e90dca519c9d05,
+        type: 2}
+      propertyPath: spawnPoints.Array.data[6]
+      value: 
+      objectReference: {fileID: 2110409151}
+    - target: {fileID: 114632657462465552, guid: 7fdc310b1c16d8c449e90dca519c9d05,
+        type: 2}
+      propertyPath: spawnPoints.Array.data[7]
+      value: 
+      objectReference: {fileID: 1064160189}
+    - target: {fileID: 114632657462465552, guid: 7fdc310b1c16d8c449e90dca519c9d05,
+        type: 2}
+      propertyPath: spawnPoints.Array.data[8]
+      value: 
+      objectReference: {fileID: 1881380560}
+    - target: {fileID: 114632657462465552, guid: 7fdc310b1c16d8c449e90dca519c9d05,
+        type: 2}
+      propertyPath: spawnPoints.Array.data[9]
+      value: 
+      objectReference: {fileID: 1598703070}
     - target: {fileID: 114632657462465552, guid: 7fdc310b1c16d8c449e90dca519c9d05,
         type: 2}
       propertyPath: team1GameObject
@@ -49700,6 +49747,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1062964141}
   m_Mesh: {fileID: 4300658, guid: b1d56fdb6569dd8428e571b1bd58e183, type: 3}
+--- !u!1 &1064160189 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1764500022251952, guid: e5b8afeca8c93e346953bf10e71e7b1a,
+    type: 2}
+  m_PrefabInternal: {fileID: 1285288832}
 --- !u!1 &1067620245
 GameObject:
   m_ObjectHideFlags: 0
@@ -50336,7 +50388,11 @@ NavMeshObstacle:
   m_TimeToStationary: 0.5
 --- !u!1 &1081331411 stripped
 GameObject:
+<<<<<<< HEAD
   m_PrefabParentObject: {fileID: 1677948574835648, guid: c738f34b9b7288147b29b5c1766d24e7,
+=======
+  m_PrefabParentObject: {fileID: 1944883984068370, guid: c738f34b9b7288147b29b5c1766d24e7,
+>>>>>>> 2f2edd133286f02b191aa9e2cc36ba68e2f71f91
     type: 2}
   m_PrefabInternal: {fileID: 1212516696}
 --- !u!1 &1081464254
@@ -64561,6 +64617,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1357072372}
   m_Mesh: {fileID: 4300170, guid: b1d56fdb6569dd8428e571b1bd58e183, type: 3}
+--- !u!1 &1358411949 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1977006645089032, guid: e5b8afeca8c93e346953bf10e71e7b1a,
+    type: 2}
+  m_PrefabInternal: {fileID: 1285288832}
 --- !u!1 &1360711548
 GameObject:
   m_ObjectHideFlags: 0
@@ -77325,6 +77386,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1596152073}
   m_Mesh: {fileID: 4300938, guid: b1d56fdb6569dd8428e571b1bd58e183, type: 3}
+--- !u!1 &1598703070 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1194328318422164, guid: e5b8afeca8c93e346953bf10e71e7b1a,
+    type: 2}
+  m_PrefabInternal: {fileID: 1285288832}
 --- !u!1 &1599197435
 GameObject:
   m_ObjectHideFlags: 0
@@ -82606,7 +82672,11 @@ MeshFilter:
   m_Mesh: {fileID: 4300150, guid: b1d56fdb6569dd8428e571b1bd58e183, type: 3}
 --- !u!1 &1719957643 stripped
 GameObject:
+<<<<<<< HEAD
   m_PrefabParentObject: {fileID: 1144229230331844, guid: e5b8afeca8c93e346953bf10e71e7b1a,
+=======
+  m_PrefabParentObject: {fileID: 1963867883654344, guid: e5b8afeca8c93e346953bf10e71e7b1a,
+>>>>>>> 2f2edd133286f02b191aa9e2cc36ba68e2f71f91
     type: 2}
   m_PrefabInternal: {fileID: 1285288832}
 --- !u!1 &1722381942
@@ -89991,6 +90061,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1880814808}
   m_Mesh: {fileID: 4300756, guid: b1d56fdb6569dd8428e571b1bd58e183, type: 3}
+--- !u!1 &1881380560 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1035044811014592, guid: c738f34b9b7288147b29b5c1766d24e7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1212516696}
 --- !u!1 &1881895486
 GameObject:
   m_ObjectHideFlags: 0
@@ -100003,6 +100078,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2106204944}
   m_Mesh: {fileID: 4300608, guid: b1d56fdb6569dd8428e571b1bd58e183, type: 3}
+--- !u!1 &2110409151 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1220149301736614, guid: c738f34b9b7288147b29b5c1766d24e7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1212516696}
 --- !u!1 &2112956895
 GameObject:
   m_ObjectHideFlags: 0

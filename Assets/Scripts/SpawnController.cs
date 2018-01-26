@@ -26,7 +26,7 @@ public class SpawnController : NetworkBehaviour
 
     private GameObject GetSpawnFromId(int spawnId, int teamId)
     {
-		return (teamId == TeamController.TEAM1) ? spawnLocations [spawnId + 5] : spawnLocations [spawnId];
+		return (teamId == TeamController.TEAM1) ? spawnLocations[spawnId + 5] : spawnLocations[spawnId];
     }
 
     private GameObject GetTargetTower(int teamId)
@@ -37,6 +37,7 @@ public class SpawnController : NetworkBehaviour
 
     public void SpawnOffensive(int troopId, int spawnId, int teamId)
     {
+        Debug.Log(troopId + " " + spawnId + " " + teamId);
         GameObject troopPrefab = GetTroopFromId(troopId);
         GameObject lane = GetSpawnFromId(spawnId, teamId);
         GameObject targetTower = GetTargetTower(teamId);

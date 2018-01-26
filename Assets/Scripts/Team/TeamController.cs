@@ -20,6 +20,9 @@ public class TeamController : NetworkBehaviour
     [SyncVar]
     public int towerHealth;
 
+    private float nextActionTime = 0.0f;
+    private float secondsToCoinIncrease = 1.0f;
+
     void Start()
     {
         playerIds = new List<int>();
@@ -60,4 +63,20 @@ public class TeamController : NetworkBehaviour
     public void DeductTowerHealth(int damage)  {
         towerHealth = towerHealth - damage;
     }
+
+
+    public void AddGold(int amount)
+    {
+        coin += amount;
+    }
+
+    void Update()
+    {
+        if (Time.time > nextActionTime)
+        {
+            nextActionTime += secondsToCoinIncrease;
+            AddGold(1);
+        }
+    }
+
 }
