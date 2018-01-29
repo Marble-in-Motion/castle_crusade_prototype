@@ -127,14 +127,11 @@ public class Player : NetworkSetup
     private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
     {
         int teamId = teamController.GetId();
-        CmdSpendGold(5);
-        spawnController.SpawnOffensive(troopId, spawnId, teamId);
-    }
-
-    [Command]
-    public void CmdSpendGold(int amount)
-    {
-        teamController.SpendGold(amount);
+        bool successfulPurchase = teamController.SpendGold(5);
+        if (successfulPurchase) {
+            spawnController.SpawnOffensive(troopId, spawnId, teamId);
+        }
+        
     }
 
     [Command]

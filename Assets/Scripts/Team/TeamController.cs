@@ -41,12 +41,14 @@ public class TeamController : NetworkBehaviour
     }
 
     [ClientCallback]
-    public void SpendGold(int amount)
+    public bool SpendGold(int amount)
     {
         if (coin - amount >= 0)
         {
             coin -= amount;
+            return true;
         }
+        return false;
     }
 
     public void CmdAddPlayer(int playerId)
