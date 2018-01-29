@@ -18,16 +18,16 @@ public class TeamController : NetworkBehaviour
     private int coin;
 
 	[SyncVar]
-	public int towerHealth;
+	public float towerHealth;
 
-    private float nextActionTime = 0.0f;
+	private float nextActionTime = 0.0f;
     private float secondsToCoinIncrease = 1.0f;
 
     void Start()
     {
         playerIds = new List<int>();
         coin = 100;
-        towerHealth = 100;
+        towerHealth = 100f;
     }
 
     public int GetId()
@@ -78,4 +78,5 @@ public class TeamController : NetworkBehaviour
 	public void DeductTowerHealth(int damage)  {
 		towerHealth = towerHealth - damage;
 	}
+		
 }

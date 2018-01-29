@@ -27,6 +27,8 @@ public class Player : NetworkSetup
 
     private Text CurrencyText;
 
+	private float maxTowerHealth = 100f;
+	public Image healthBar;
 
     public int GetId()
     {
@@ -59,6 +61,7 @@ public class Player : NetworkSetup
             canvas.worldCamera = this.GetComponentInChildren<Camera>();
             CurrencyText = this.GetComponentInChildren<Text>();
             CurrencyText.text = "Coin: " + teamController.GetCoin().ToString();
+			healthBar = this.GetComponentsInChildren<Image>()[2];
         }
 
         if (!isLocalPlayer)
@@ -98,6 +101,10 @@ public class Player : NetworkSetup
 			}
 
             this.GetComponentInChildren<Text>().text = "Coin: " + teamController.GetCoin().ToString();
+
+			float calc_Health = teamController.towerHealth / maxTowerHealth;
+			SetHealthBar (calc_Health);
+
         }
     }
 
@@ -142,4 +149,9 @@ public class Player : NetworkSetup
     {
         teamController.AddGold(amount);
     }
+
+	public void SetHealthBar(float calcHealth){
+		healthBar.transform.localScale = new Vector3(Mathf.Clamp(calcHealth,0f ,1f), healthBar.transform.localScale.y, healthBar.transform.localScale.z);
+		Debug.Log (healthBar.transform.localScale);
+	}
 }
