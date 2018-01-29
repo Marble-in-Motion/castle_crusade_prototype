@@ -53,8 +53,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
-  playerIds: 
-  coin: 0
+  towerHealth: 0
+  maxTowerHealth: 0
+  healthBar: {fileID: 1969891366074254, guid: 9853d0b234811954ba6678cbd0519681, type: 2}
 --- !u!114 &114858424446128224
 MonoBehaviour:
   m_ObjectHideFlags: 1
