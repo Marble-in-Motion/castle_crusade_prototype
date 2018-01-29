@@ -32,6 +32,10 @@ public class Player : NetworkSetup
 	private float maxTowerHealth = 100f;
 	private Image healthBar;
 
+	private int gameOver = 0;
+
+	Animator anim;
+
     public int GetId()
     {
         return id;
@@ -39,6 +43,7 @@ public class Player : NetworkSetup
 
     void Start()
     {
+		gameOver = 0;
         id = FindObjectsOfType<Player>().Length - 1;
         RegisterModel(Player.PLAYER_TAG, GetId());
 
@@ -51,6 +56,7 @@ public class Player : NetworkSetup
             // Player Initialisation
             gameController.InitialisePlayer(this);
             motor = GetComponent<PlayerMotor>();
+			anim = GetComponent<Animator> ();
 
             // Camera Settings
             Cursor.visible = false;
@@ -119,6 +125,10 @@ public class Player : NetworkSetup
 			float calc_Health = teamController.towerHealth / maxTowerHealth;
 			SetHealthBar (calc_Health);
 
+			gameOver = teamController.GetIsGameOver ();
+			if (gameOver == 1) {
+				anim.SetTrigger ("GameOver");
+			}
         }
     }
 

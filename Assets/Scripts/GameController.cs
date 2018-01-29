@@ -19,12 +19,16 @@ public class GameController : NetworkBehaviour
 
     private Camera sceneCamera;
 
+	[SyncVar]
+	private int gameOver;
+
 
     // Use this for initialization
     void Start()
     {
         sceneCamera = Camera.main;
         sceneCamera.gameObject.SetActive(true);
+		gameOver = 0;
 
     }
 
@@ -62,5 +66,13 @@ public class GameController : NetworkBehaviour
     {
         return (playerId % 2 == 0) ? TeamController.TEAM1 : TeamController.TEAM2;
     }
+
+	public void GameIsOver() {
+		Debug.Log ("GAME IS OVER");
+		gameOver = 1;
+		team1GameObject.GetComponent<TeamController> ().SetGameOver ();
+		team2GameObject.GetComponent<TeamController> ().SetGameOver ();
+		//tell other team controller the game is over.
+	}
 
 }
