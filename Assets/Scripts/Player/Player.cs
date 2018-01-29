@@ -62,9 +62,6 @@ public class Player : NetworkSetup
             canvas.renderMode = RenderMode.ScreenSpaceCamera;
             canvas.worldCamera = this.GetComponentInChildren<Camera>();
             
-			//CurrencyText = this.GetComponentInChildren<Text>();
-            //CurrencyText.text = "Coin: " + teamController.GetCoin().ToString();
-
 			Text[] texts = this.GetComponentsInChildren<Text>();
 			for(int i = 0; i < texts.Length; i++){
 				if (texts [i].tag == COINS_TAG) {
