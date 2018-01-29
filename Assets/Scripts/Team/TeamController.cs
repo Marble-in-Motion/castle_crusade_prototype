@@ -23,11 +23,15 @@ public class TeamController : NetworkBehaviour
 	private float nextActionTime = 0.0f;
     private float secondsToCoinIncrease = 1.0f;
 
+	[SyncVar]
+	private int isGameOver;
+
     void Start()
     {
         playerIds = new List<int>();
         coin = 100;
         towerHealth = 100f;
+		isGameOver = 0;
     }
 
     public int GetId()
@@ -39,6 +43,14 @@ public class TeamController : NetworkBehaviour
     {
         return coin;
     }
+
+	public int GetIsGameOver() {
+		return isGameOver;
+	}
+
+	public void SetGameOver() {
+		isGameOver = 1;
+	}
 
     [ClientCallback]
     public bool SpendGold(int amount)
@@ -74,11 +86,20 @@ public class TeamController : NetworkBehaviour
             nextActionTime += secondsToCoinIncrease;
             AddGold(1);
         }
+
     }
 
 	[ClientCallback]
 	public void DeductTowerHealth(int damage)  {
 		towerHealth = towerHealth - damage;
+		if (towerHealth <= 0) {
+			Debug.Log ("Tower health " + id + " is 0");
+			TellGameControllerGameOver ();
+		}
 	}
 		
+	private void TellGameControllerGameOver() {
+		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+		gameController.GameIsOver();
+	}
 }
