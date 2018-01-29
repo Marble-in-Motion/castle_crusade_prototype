@@ -9,7 +9,9 @@ public class Player : NetworkSetup
 {
 
     public const string PLAYER_TAG = "Player";
-    private const string REMOTE_LAYER_NAME = "RemotePlayer";
+	public const string BAR_TAG = "Bar";
+	public const string COINS_TAG = "Coins";
+	private const string REMOTE_LAYER_NAME = "RemotePlayer";
 
     private int id;
 
@@ -28,7 +30,7 @@ public class Player : NetworkSetup
     private Text CurrencyText;
 
 	private float maxTowerHealth = 100f;
-	public Image healthBar;
+	private Image healthBar;
 
     public int GetId()
     {
@@ -59,9 +61,24 @@ public class Player : NetworkSetup
             canvas.planeDistance = 1;
             canvas.renderMode = RenderMode.ScreenSpaceCamera;
             canvas.worldCamera = this.GetComponentInChildren<Camera>();
-            CurrencyText = this.GetComponentInChildren<Text>();
-            CurrencyText.text = "Coin: " + teamController.GetCoin().ToString();
-			healthBar = this.GetComponentsInChildren<Image>()[2];
+            
+			//CurrencyText = this.GetComponentInChildren<Text>();
+            //CurrencyText.text = "Coin: " + teamController.GetCoin().ToString();
+
+			Text[] texts = this.GetComponentsInChildren<Text>();
+			for(int i = 0; i < texts.Length; i++){
+				if (texts [i].tag == COINS_TAG) {
+					CurrencyText = texts [i];
+				}
+			}
+
+			Image[] images = this.GetComponentsInChildren<Image>();
+			for(int i = 0; i < images.Length; i++){
+				if (images [i].tag == BAR_TAG) {
+					healthBar = images [i];
+				}
+			}
+				
         }
 
         if (!isLocalPlayer)
@@ -152,6 +169,5 @@ public class Player : NetworkSetup
 
 	public void SetHealthBar(float calcHealth){
 		healthBar.transform.localScale = new Vector3(Mathf.Clamp(calcHealth,0f ,1f), healthBar.transform.localScale.y, healthBar.transform.localScale.z);
-		Debug.Log (healthBar.transform.localScale);
 	}
 }
