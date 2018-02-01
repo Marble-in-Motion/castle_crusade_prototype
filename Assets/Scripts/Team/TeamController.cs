@@ -69,13 +69,21 @@ public class TeamController : NetworkBehaviour
         coin += amount;
     }
 
-    void Update()
+    
+    private void AddCoinPerSecond()
     {
+        if (!isServer) return;
+
         if (Time.time > nextActionTime)
         {
             nextActionTime += secondsToCoinIncrease;
             AddGold(1);
         }
+    }
+
+    void Update()
+    {
+        AddCoinPerSecond();
 
     }
 
