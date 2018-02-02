@@ -122,7 +122,7 @@ public class Player : NetworkSetup
 
             this.GetComponentInChildren<Text>().text = "Coin: " + teamController.GetCoin().ToString();
 
-			float calc_Health = teamController.towerHealth / maxTowerHealth;
+			float calc_Health = teamController.GetTowerHealth() / maxTowerHealth;
 			SetHealthBar (calc_Health);
 
 			gameOver = teamController.GetIsGameOver ();

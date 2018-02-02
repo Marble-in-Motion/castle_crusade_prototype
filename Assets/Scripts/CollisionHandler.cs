@@ -15,7 +15,7 @@ public class CollisionHandler : MonoBehaviour {
 	{
 		Debug.Log("COllision");
 		NPCDamage = 10;
-		teamController.GetComponent<TeamController>().DeductTowerHealth(NPCDamage);
+		teamController.GetComponent<TeamController>().CmdDeductTowerHealth(NPCDamage);
 		Destroy(other.gameObject);
 	}
 

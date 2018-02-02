@@ -12,10 +12,8 @@ public class TeamController : NetworkBehaviour
     [SerializeField]
     private int id;
 
-    private List<int> playerIds;
-
     [SyncVar]
-    private int coin;
+    public int coin;
 
 	[SyncVar]
 	public float towerHealth;
@@ -28,15 +26,17 @@ public class TeamController : NetworkBehaviour
 
     void Start()
     {
-        playerIds = new List<int>();
-        coin = 100;
-        towerHealth = 100f;
 		isGameOver = 0;
     }
 
     public int GetId()
     {
         return id;
+    }
+    
+    public float GetTowerHealth()
+    {
+        return towerHealth;
     }
 
     public int GetCoin()
@@ -57,20 +57,13 @@ public class TeamController : NetworkBehaviour
     {
         if (coin - amount >= 0)
         {
-            coin -= amount;
+            if (isServer)
+            {
+                coin -= amount;
+            }
             return true;
         }
         return false;
-    }
-
-    public void CmdAddPlayer(int playerId)
-    {
-        playerIds.Add(playerId);
-    }
-
-    public bool HasPlayer(int playerId)
-    {
-        return playerIds.Contains(playerId);
     }
 
     [ClientCallback]
@@ -79,18 +72,26 @@ public class TeamController : NetworkBehaviour
         coin += amount;
     }
 
-    void Update()
+    
+    private void AddCoinPerSecond()
     {
+        if (!isServer) return;
+
         if (Time.time > nextActionTime)
         {
             nextActionTime += secondsToCoinIncrease;
             AddGold(1);
         }
+    }
+
+    void Update()
+    {
+        AddCoinPerSecond();
 
     }
 
-	[ClientCallback]
-	public void DeductTowerHealth(int damage)  {
+	[Command]
+	public void CmdDeductTowerHealth(int damage)  {
 		towerHealth = towerHealth - damage;
 		if (towerHealth <= 0) {
 			Debug.Log ("Tower health " + id + " is 0");
