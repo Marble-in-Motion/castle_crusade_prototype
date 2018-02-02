@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMotor : MonoBehaviour
+public class CrossbowMotor : MonoBehaviour
 {
-
-    [SerializeField]
-    private Camera cam;
 
     private Vector3 rotationX = Vector3.zero;
     private Vector3 rotationY = Vector3.zero;
@@ -36,9 +33,6 @@ public class PlayerMotor : MonoBehaviour
     void PerformRotation()
     {
         rb.MoveRotation(rb.rotation * Quaternion.Euler(rotationX));
-        if (cam != null)
-        {
-            cam.transform.Rotate(-rotationY);
-        }
+        transform.Rotate(-rotationY);
     }
 }
