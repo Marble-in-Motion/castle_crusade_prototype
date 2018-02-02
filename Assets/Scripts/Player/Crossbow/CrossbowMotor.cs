@@ -5,15 +5,13 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class CrossbowMotor : MonoBehaviour
 {
+    [SerializeField]
+    private Camera cam;
 
-    private Vector3 rotationX = Vector3.zero;
-    private Vector3 rotationY = Vector3.zero;
-
-    private Rigidbody rb;
+    private Vector3 mousePos;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
     }
 
     // Run every physics iteration
@@ -23,16 +21,16 @@ public class CrossbowMotor : MonoBehaviour
     }
 
     // Gets a rotational vector
-    public void Rotate(Vector3 x, Vector3 y)
+    public void Rotate(Vector3 mousePosition)
     {
-        this.rotationX = x;
-        this.rotationY = y;
+        mousePos = mousePosition;
+        mousePos.z = 10;
     }
 
     //Perform rotation
     void PerformRotation()
     {
-        rb.MoveRotation(rb.rotation * Quaternion.Euler(rotationX));
-        transform.Rotate(-rotationY);
+        Vector3 worldPos = cam.ScreenToWorldPoint(mousePos);
+        transform.LookAt(worldPos);
     }
 }

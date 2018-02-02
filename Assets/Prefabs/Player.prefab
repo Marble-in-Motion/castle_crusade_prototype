@@ -127,8 +127,8 @@ GameObject:
   - component: {fileID: 82424516034277872}
   - component: {fileID: 114557780150340212}
   - component: {fileID: 114221901756232252}
-  - component: {fileID: 120295665631643208}
   - component: {fileID: 54601132083190322}
+  - component: {fileID: 120719164041116164}
   m_Layer: 8
   m_Name: Crossbow
   m_TagString: Untagged
@@ -714,6 +714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515a106b86060094483165dbd4f56c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 20447019570799976}
 --- !u!114 &114264281485064352
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1018,7 +1019,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
---- !u!120 &120295665631643208
+--- !u!120 &120719164041116164
 LineRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1062,24 +1063,24 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 2
-        time: 0
-        value: 0.41975403
+        time: 0.008350372
+        value: 0.30246925
         inSlope: 0
         outSlope: 0
         tangentMode: 0
       - serializedVersion: 2
         time: 1
         value: 0
-        inSlope: 0.1539995
-        outSlope: 0.1539995
+        inSlope: 0
+        outSlope: 0
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 0
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.33823532, g: 0.2561635, b: 0.2561635, a: 1}
-      key1: {r: 0.33823532, g: 0.2561635, b: 0.2561635, a: 1}
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1111,7 +1112,7 @@ LineRenderer:
     textureMode: 0
     generateLightingData: 0
   m_UseWorldSpace: 1
-  m_Loop: 1
+  m_Loop: 0
 --- !u!124 &124152598032049766
 Behaviour:
   m_ObjectHideFlags: 1

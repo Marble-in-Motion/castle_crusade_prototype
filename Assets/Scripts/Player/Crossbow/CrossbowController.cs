@@ -77,14 +77,7 @@ public class CrossbowController : NetworkBehaviour {
 
     private void UpdateMovement()
     {
-        float yRot = Input.GetAxisRaw("Mouse X");
-        Vector3 x = new Vector3(0f, yRot, 0f) * lookSensitivity;
-
-
-        float xRot = Input.GetAxisRaw("Mouse Y");
-        Vector3 y = new Vector3(xRot, 0f, 0f) * lookSensitivity;
-
-        motor.Rotate(x, y);
+        motor.Rotate(Input.mousePosition);
     }
 
 }
