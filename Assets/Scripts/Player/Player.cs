@@ -15,14 +15,9 @@ public class Player : NetworkSetup
 
     private int id;
 
-    private PlayerMotor motor;
-
     private TeamController teamController;
 
     private SpawnController spawnController;
-
-    [SerializeField]
-    private float lookSensitivity = 3f;
 
     [SerializeField]
     private Behaviour[] componentsToDisable;
@@ -55,12 +50,11 @@ public class Player : NetworkSetup
         {
             // Player Initialisation
             gameController.InitialisePlayer(this);
-            motor = GetComponent<PlayerMotor>();
 			anim = GetComponent<Animator> ();
 
             // Camera Settings
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
 
             // Canvas Settings
             Canvas canvas = this.GetComponentInChildren<Canvas>();
@@ -96,7 +90,6 @@ public class Player : NetworkSetup
     {
         if (isLocalPlayer)
         {
-            UpdateMovement();
 
             // spawn npc command
             if (Input.GetKeyDown(KeyCode.Y))
@@ -141,18 +134,6 @@ public class Player : NetworkSetup
         }
     }
 
-
-    private void UpdateMovement()
-    {
-        float yRot = Input.GetAxisRaw("Mouse X");
-        Vector3 x = new Vector3(0f, yRot, 0f) * lookSensitivity;
-
-
-        float xRot = Input.GetAxisRaw("Mouse Y");
-        Vector3 y = new Vector3(xRot, 0f, 0f) * lookSensitivity;
-
-        motor.Rotate(x, y);
-    }
 
     [Command]
     private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)

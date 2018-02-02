@@ -2,14 +2,16 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public class PlayerShoot : NetworkBehaviour {
+public class CrossbowController : NetworkBehaviour {
 
 	public Bolt bolt;
 
-	[SerializeField]
-	private GameObject crossbow;
+    [SerializeField]
+    private float lookSensitivity = 3f;
 
-	[SerializeField]
+    CrossbowMotor motor;
+
+    [SerializeField]
 	private LayerMask mask;
 
 	private AudioSource shootAudio;
@@ -17,12 +19,14 @@ public class PlayerShoot : NetworkBehaviour {
 	private WaitForSeconds shotDuration = new WaitForSeconds(0.05f);
 
 	void Start () {
-		laserLine = GetComponent<LineRenderer> ();
-		shootAudio = GetComponent<AudioSource> ();
+        motor = GetComponent<CrossbowMotor>();
+		laserLine = GetComponent<LineRenderer>();
+		shootAudio = GetComponent<AudioSource>();
 		bolt = new Bolt ();
 	}
 
 	void Update () {
+        UpdateMovement();
 		if (Input.GetButtonDown("Fire1"))
 		{
 			Debug.Log ("Shot fired");
@@ -40,17 +44,17 @@ public class PlayerShoot : NetworkBehaviour {
 	[Client]
 	void Shoot()
 	{
-		laserLine.SetPosition(0, crossbow.transform.position);
+		laserLine.SetPosition(0, transform.position);
 		StartCoroutine(Wait());
 		RaycastHit hit;
-		if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, bolt.range, mask)) {
+		if (Physics.Raycast(transform.position, transform.forward, out hit, bolt.range, mask)) {
 			Debug.Log("4");
 			CmdPlayerShot(hit.collider.name, bolt.damage);
 			laserLine.SetPosition(1, hit.point);
 		} else {
 			//calculate max range of projectile
 			Debug.Log("5");
-			laserLine.SetPosition(1, crossbow.transform.position + crossbow.transform.forward * bolt.range);
+			laserLine.SetPosition(1, transform.position + transform.forward * bolt.range);
 		}
 	}
 
@@ -70,5 +74,10 @@ public class PlayerShoot : NetworkBehaviour {
 			target.transform.position = (target.transform.position /*- (normal of the hit)*/);
 		}
 	}
+
+    private void UpdateMovement()
+    {
+        motor.Rotate(Input.mousePosition);
+    }
 
 }

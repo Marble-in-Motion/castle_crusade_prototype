@@ -60,6 +60,7 @@ public class GameController : NetworkBehaviour
     {
         Debug.Log(player.GetId());
         player.transform.position = spawnPoints[player.GetId()].transform.position;
+        player.transform.rotation = spawnPoints[player.GetId()].transform.rotation;
     }
 
     private int CalculateTeamId(int playerId)
@@ -68,11 +69,10 @@ public class GameController : NetworkBehaviour
     }
 
 	public void GameIsOver() {
-		Debug.Log ("GAME IS OVER");
+		Debug.Log("GAME IS OVER");
 		gameOver = 1;
-		team1GameObject.GetComponent<TeamController> ().SetGameOver ();
-		team2GameObject.GetComponent<TeamController> ().SetGameOver ();
-		//tell other team controller the game is over.
+		team1GameObject.GetComponent<TeamController>().SetGameOver();
+		team2GameObject.GetComponent<TeamController>().SetGameOver();
 	}
 
 }
