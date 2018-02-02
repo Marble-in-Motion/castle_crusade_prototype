@@ -120,7 +120,7 @@ public class Player : NetworkSetup
 				CmdRequestOffensiveTroopSpawn(0, 4);
 			}
 
-            this.GetComponentInChildren<Text>().text = "Coin: " + teamController.GetCoin().ToString();
+            CurrencyText.text = "Coin: " + teamController.GetCoin().ToString();
 
 			float calc_Health = teamController.GetTowerHealth() / maxTowerHealth;
 			SetHealthBar (calc_Health);
