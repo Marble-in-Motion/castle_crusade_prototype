@@ -57,7 +57,10 @@ public class TeamController : NetworkBehaviour
     {
         if (coin - amount >= 0)
         {
-            coin -= amount;
+            if (isServer)
+            {
+                coin -= amount;
+            }
             return true;
         }
         return false;
