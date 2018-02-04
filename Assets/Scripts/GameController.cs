@@ -19,8 +19,8 @@ public class GameController : NetworkBehaviour
 
     private Camera sceneCamera;
 
-	[SyncVar]
-	private int gameOver;
+	//[SyncVar]
+	//private int gameOver;
 
 
     // Use this for initialization
@@ -28,7 +28,7 @@ public class GameController : NetworkBehaviour
     {
         sceneCamera = Camera.main;
         sceneCamera.gameObject.SetActive(true);
-		gameOver = 0;
+		//gameOver = 0;
 
     }
 
@@ -64,7 +64,7 @@ public class GameController : NetworkBehaviour
 
 	public void GameIsOver(int losingTeamId) {
 		Debug.Log("GAME IS OVER");
-		gameOver = 1;
+		//gameOver = 1;
 
         int team1GameOverValue;
         int team2GameOverValue;
@@ -80,7 +80,10 @@ public class GameController : NetworkBehaviour
             team2GameOverValue = 1;
         }
 		team1GameObject.GetComponent<TeamController>().SetGameOver(team1GameOverValue);
+        Debug.Log("team1 value = " + team1GameOverValue);
 		team2GameObject.GetComponent<TeamController>().SetGameOver(team2GameOverValue);
-	}
+        Debug.Log("team2 value = " + team2GameOverValue);
+
+    }
 
 }
