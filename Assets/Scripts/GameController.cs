@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class GameController : NetworkBehaviour
 {
@@ -70,7 +71,7 @@ public class GameController : NetworkBehaviour
         int team2GameOverValue;
         if (losingTeamId == 1)
         {
-            Debug.Log("1 lost");
+            //Debug.Log("1 lost");
             team1GameOverValue = 1;
             team2GameOverValue = 2;
         }
@@ -80,10 +81,25 @@ public class GameController : NetworkBehaviour
             team2GameOverValue = 1;
         }
 		team1GameObject.GetComponent<TeamController>().SetGameOver(team1GameOverValue);
-        Debug.Log("team1 value = " + team1GameOverValue);
+        //Debug.Log("team1 value = " + team1GameOverValue);
 		team2GameObject.GetComponent<TeamController>().SetGameOver(team2GameOverValue);
-        Debug.Log("team2 value = " + team2GameOverValue);
+        //Debug.Log("team2 value = " + team2GameOverValue);
+
+        //StartCoroutine(RestartGame());
 
     }
+
+    //IEnumerator RestartGame()
+    //{
+    //    // The Application loads the Scene in the background at the same time as the current Scene.
+    //    //This is particularly good for creating loading screens. You could also load the Scene by build //number.
+    //    AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("gamescene");
+
+    //    //Wait until the last operation fully loads to return anything
+    //    while (!asyncLoad.isDone)
+    //    {
+    //        yield return null;
+    //    }
+    //}
 
 }

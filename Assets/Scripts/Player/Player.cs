@@ -120,12 +120,12 @@ public class Player : NetworkSetup
 
 			gameOverValue = teamController.GetIsGameOver ();
 			if (gameOverValue == 1) {
-                Debug.Log("lose");
+                Debug.Log("Player " + id + " lost");
                 anim.SetTrigger ("GameOver");
 			}
             else if (gameOverValue == 2)
             {
-                Debug.Log("win");
+                Debug.Log("Player " + id + " won");
                 anim.SetTrigger("GameWin");
             }
         }
