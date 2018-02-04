@@ -32,12 +32,6 @@ public class GameController : NetworkBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void InitialisePlayer(Player player)
     {
         MovePlayerToSpawn(player);
@@ -68,11 +62,25 @@ public class GameController : NetworkBehaviour
         return (playerId % 2 == 0) ? TeamController.TEAM1 : TeamController.TEAM2;
     }
 
-	public void GameIsOver() {
+	public void GameIsOver(int losingTeamId) {
 		Debug.Log("GAME IS OVER");
 		gameOver = 1;
-		team1GameObject.GetComponent<TeamController>().SetGameOver();
-		team2GameObject.GetComponent<TeamController>().SetGameOver();
+
+        int team1GameOverValue;
+        int team2GameOverValue;
+        if (losingTeamId == 1)
+        {
+            Debug.Log("1 lost");
+            team1GameOverValue = 1;
+            team2GameOverValue = 2;
+        }
+        else
+        {
+            team1GameOverValue = 2;
+            team2GameOverValue = 1;
+        }
+		team1GameObject.GetComponent<TeamController>().SetGameOver(team1GameOverValue);
+		team2GameObject.GetComponent<TeamController>().SetGameOver(team2GameOverValue);
 	}
 
 }

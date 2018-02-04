@@ -22,11 +22,11 @@ public class TeamController : NetworkBehaviour
     private float secondsToCoinIncrease = 1.0f;
 
 	[SyncVar]
-	private int isGameOver;
+	private int gameOverValue;
 
     void Start()
     {
-		isGameOver = 0;
+		gameOverValue = 0;
     }
 
     public int GetId()
@@ -45,11 +45,11 @@ public class TeamController : NetworkBehaviour
     }
 
 	public int GetIsGameOver() {
-		return isGameOver;
+		return gameOverValue;
 	}
 
-	public void SetGameOver() {
-		isGameOver = 1;
+	public void SetGameOver(int gameOverValue) {
+		this.gameOverValue = gameOverValue;
 	}
 
     [ClientCallback]
@@ -101,6 +101,6 @@ public class TeamController : NetworkBehaviour
 		
 	private void TellGameControllerGameOver() {
 		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
-		gameController.GameIsOver();
+		gameController.GameIsOver(id);
 	}
 }
