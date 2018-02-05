@@ -119,11 +119,11 @@ public class Player : NetworkSetup
 			SetHealthBar (calc_Health);
 
 			gameOverValue = teamController.GetIsGameOver ();
-			if (gameOverValue == 1) {
+			if (gameOverValue == GameController.gameLost) {
                 Debug.Log("Player " + id + " lost");
                 anim.SetTrigger ("GameOver");
 			}
-            else if (gameOverValue == 2)
+            else if (gameOverValue == GameController.gameWon)
             {
                 Debug.Log("Player " + id + " won");
                 anim.SetTrigger("GameWin");

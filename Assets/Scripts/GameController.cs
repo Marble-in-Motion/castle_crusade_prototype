@@ -9,6 +9,10 @@ public class GameController : NetworkBehaviour
 
     public const string GAME_CONTROLLER_TAG = "GameController";
 
+    public const int gameInProgress = 0;
+    public const int gameWon = 0;
+    public const int gameLost = 0;
+
     [SerializeField]
     private List<GameObject> spawnPoints;
 
@@ -19,6 +23,8 @@ public class GameController : NetworkBehaviour
     private GameObject team2GameObject;
 
     private Camera sceneCamera;
+
+
 
 	//[SyncVar]
 	//private int gameOver;
@@ -69,16 +75,16 @@ public class GameController : NetworkBehaviour
 
         int team1GameOverValue;
         int team2GameOverValue;
-        if (losingTeamId == 1)
+
+        if (losingTeamId == TeamController.TEAM1)
         {
-            //Debug.Log("1 lost");
-            team1GameOverValue = 1;
-            team2GameOverValue = 2;
+            team1GameOverValue = gameLost;
+            team2GameOverValue = gameWon;
         }
         else
         {
-            team1GameOverValue = 2;
-            team2GameOverValue = 1;
+            team1GameOverValue = gameWon;
+            team2GameOverValue = gameLost;
         }
 		team1GameObject.GetComponent<TeamController>().SetGameOver(team1GameOverValue);
         //Debug.Log("team1 value = " + team1GameOverValue);
