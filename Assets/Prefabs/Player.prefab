@@ -123,7 +123,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4564397633229836}
-  - component: {fileID: 114264281485064352}
   - component: {fileID: 82424516034277872}
   - component: {fileID: 114557780150340212}
   - component: {fileID: 114221901756232252}
@@ -749,38 +748,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 20447019570799976}
---- !u!114 &114264281485064352
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1428021765519220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 20
-    i1: 51
-    i2: 233
-    i3: 180
-    i4: 244
-    i5: 88
-    i6: 107
-    i7: 84
-    i8: 88
-    i9: 233
-    i10: 206
-    i11: 89
-    i12: 254
-    i13: 30
-    i14: 85
-    i15: 155
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 1
 --- !u!114 &114415557017972020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -797,6 +764,14 @@ MonoBehaviour:
   - {fileID: 114557780150340212}
   - {fileID: 20447019570799976}
   - {fileID: 81044262596032106}
+  crossbow: {fileID: 1428021765519220}
+  bolt:
+    name: StandardBolt
+    damage: 20
+    range: 100
+  mask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &114557780150340212
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -808,14 +783,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b9753970bee8ea4d8945afb48e12d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bolt:
-    name: StandardBolt
-    damage: 20
-    range: 100
-  lookSensitivity: 3
-  mask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &114580449291712106
 MonoBehaviour:
   m_ObjectHideFlags: 1
