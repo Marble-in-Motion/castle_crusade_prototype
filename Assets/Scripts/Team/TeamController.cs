@@ -94,7 +94,6 @@ public class TeamController : NetworkBehaviour
 	public void CmdDeductTowerHealth(int damage)  {
 		towerHealth = towerHealth - damage;
 		if (towerHealth <= 0) {
-			Debug.Log ("Tower health " + id + " is 0");
 			TellGameControllerGameOver ();
 		}
 	}

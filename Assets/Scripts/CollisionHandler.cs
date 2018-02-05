@@ -13,7 +13,6 @@ public class CollisionHandler : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-		Debug.Log("COllision");
 		NPCDamage = 10;
 		teamController.GetComponent<TeamController>().CmdDeductTowerHealth(NPCDamage);
 		Destroy(other.gameObject);

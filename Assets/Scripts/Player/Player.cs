@@ -22,12 +22,21 @@ public class Player : NetworkSetup
     [SerializeField]
     private Behaviour[] componentsToDisable;
 
+	[SerializeField]
+	private GameObject crossbow;
+
     private Text CurrencyText;
 
 	private float maxTowerHealth = 100f;
 	private Image healthBar;
 
 	private int gameOverValue = GameController.gameInProgress;
+
+	public Bolt bolt;
+	private LineRenderer laserLine;
+
+	[SerializeField]
+	private LayerMask mask;
 
 	Animator anim;
 
@@ -46,6 +55,8 @@ public class Player : NetworkSetup
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
         teamController = gameController.GetTeamController(id);
 
+		bolt = new Bolt ();
+
         if (isLocalPlayer)
         {
             // Player Initialisation
@@ -53,8 +64,8 @@ public class Player : NetworkSetup
 			anim = GetComponent<Animator> ();
 
             // Camera Settings
-            //Cursor.visible = false;
-            //Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
 
             // Canvas Settings
             Canvas canvas = this.GetComponentInChildren<Canvas>();
@@ -112,6 +123,10 @@ public class Player : NetworkSetup
 			{
 				CmdRequestOffensiveTroopSpawn(0, 4);
 			}
+			else if (Input.GetButtonDown("Fire1"))
+			{
+				Shoot();
+			}
 
             CurrencyText.text = "Coin: " + teamController.GetCoin().ToString();
 
@@ -120,16 +135,45 @@ public class Player : NetworkSetup
 
 			gameOverValue = teamController.GetIsGameOver ();
 			if (gameOverValue == GameController.gameLost) {
-                Debug.Log("Player " + id + " lost");
                 anim.SetTrigger ("GameOver");
 			}
             else if (gameOverValue == GameController.gameWon)
             {
-                Debug.Log("Player " + id + " won");
                 anim.SetTrigger("GameWin");
             }
         }
     }
+
+	[Client]
+	void Shoot()
+	{
+		laserLine = crossbow.GetComponent<LineRenderer>();
+		laserLine.SetPosition(0, crossbow.transform.position);
+		StartCoroutine(crossbow.GetComponent<CrossbowController>().HandleShoot());
+		RaycastHit hit;
+		if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, bolt.range, mask)) {
+			CmdPlayerShot(hit.collider.name, bolt.damage);
+			laserLine.SetPosition(1, hit.point);
+		} else {
+			laserLine.SetPosition(1, crossbow.transform.position + crossbow.transform.forward * bolt.range);
+		}
+	}
+
+	[Command]
+	public void CmdPlayerShot(string id, float damage)
+	{
+		GameObject target = GameObject.Find(id);
+		if (target.GetComponent<NPCHealth> ()) {
+			target.GetComponent<NPCHealth>().DeductHealth(damage);
+			if (!target.GetComponent<NPCHealth>().IsAlive())
+			{
+				this.GetComponentInParent<Player>().CmdAddGold(10);
+			}
+		}
+		if (target.transform != null /*&& target.collider.tag == "NPC"*/) {
+			target.transform.position = (target.transform.position /*- (normal of the hit)*/);
+		}
+	}
 
 
     private void DisableNonLocalCompontents()
