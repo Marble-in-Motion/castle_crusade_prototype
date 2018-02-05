@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class GameController : NetworkBehaviour
 {
 
     public const string GAME_CONTROLLER_TAG = "GameController";
+
+    public const int gameInProgress = 0;
+    public const int gameWon = 0;
+    public const int gameLost = 0;
 
     [SerializeField]
     private List<GameObject> spawnPoints;
@@ -19,8 +24,10 @@ public class GameController : NetworkBehaviour
 
     private Camera sceneCamera;
 
-	[SyncVar]
-	private int gameOver;
+
+
+	//[SyncVar]
+	//private int gameOver;
 
 
     // Use this for initialization
@@ -28,13 +35,7 @@ public class GameController : NetworkBehaviour
     {
         sceneCamera = Camera.main;
         sceneCamera.gameObject.SetActive(true);
-		gameOver = 0;
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+		//gameOver = 0;
 
     }
 
@@ -68,11 +69,43 @@ public class GameController : NetworkBehaviour
         return (playerId % 2 == 0) ? TeamController.TEAM1 : TeamController.TEAM2;
     }
 
-	public void GameIsOver() {
+	public void GameIsOver(int losingTeamId) {
 		Debug.Log("GAME IS OVER");
-		gameOver = 1;
-		team1GameObject.GetComponent<TeamController>().SetGameOver();
-		team2GameObject.GetComponent<TeamController>().SetGameOver();
-	}
+		//gameOver = 1;
+
+        int team1GameOverValue;
+        int team2GameOverValue;
+
+        if (losingTeamId == TeamController.TEAM1)
+        {
+            team1GameOverValue = gameLost;
+            team2GameOverValue = gameWon;
+        }
+        else
+        {
+            team1GameOverValue = gameWon;
+            team2GameOverValue = gameLost;
+        }
+		team1GameObject.GetComponent<TeamController>().SetGameOver(team1GameOverValue);
+        //Debug.Log("team1 value = " + team1GameOverValue);
+		team2GameObject.GetComponent<TeamController>().SetGameOver(team2GameOverValue);
+        //Debug.Log("team2 value = " + team2GameOverValue);
+
+        //StartCoroutine(RestartGame());
+
+    }
+
+    //IEnumerator RestartGame()
+    //{
+    //    // The Application loads the Scene in the background at the same time as the current Scene.
+    //    //This is particularly good for creating loading screens. You could also load the Scene by build //number.
+    //    AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("gamescene");
+
+    //    //Wait until the last operation fully loads to return anything
+    //    while (!asyncLoad.isDone)
+    //    {
+    //        yield return null;
+    //    }
+    //}
 
 }

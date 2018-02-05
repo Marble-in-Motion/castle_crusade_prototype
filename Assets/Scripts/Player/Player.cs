@@ -27,7 +27,7 @@ public class Player : NetworkSetup
 	private float maxTowerHealth = 100f;
 	private Image healthBar;
 
-	private int gameOver = 0;
+	private int gameOverValue = 0;
 
 	Animator anim;
 
@@ -38,7 +38,7 @@ public class Player : NetworkSetup
 
     void Start()
     {
-		gameOver = 0;
+		gameOverValue = 0;
         id = FindObjectsOfType<Player>().Length - 1;
         RegisterModel(Player.PLAYER_TAG, GetId());
 
@@ -118,10 +118,16 @@ public class Player : NetworkSetup
 			float calc_Health = teamController.GetTowerHealth() / maxTowerHealth;
 			SetHealthBar (calc_Health);
 
-			gameOver = teamController.GetIsGameOver ();
-			if (gameOver == 1) {
-				anim.SetTrigger ("GameOver");
+			gameOverValue = teamController.GetIsGameOver ();
+			if (gameOverValue == GameController.gameLost) {
+                Debug.Log("Player " + id + " lost");
+                anim.SetTrigger ("GameOver");
 			}
+            else if (gameOverValue == GameController.gameWon)
+            {
+                Debug.Log("Player " + id + " won");
+                anim.SetTrigger("GameWin");
+            }
         }
     }
 
