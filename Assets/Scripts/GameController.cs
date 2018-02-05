@@ -10,8 +10,8 @@ public class GameController : NetworkBehaviour
     public const string GAME_CONTROLLER_TAG = "GameController";
 
     public const int gameInProgress = 0;
-    public const int gameWon = 0;
-    public const int gameLost = 0;
+    public const int gameLost = 1;
+    public const int gameWon = 2;
 
     [SerializeField]
     private List<GameObject> spawnPoints;

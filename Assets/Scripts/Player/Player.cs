@@ -27,7 +27,7 @@ public class Player : NetworkSetup
 	private float maxTowerHealth = 100f;
 	private Image healthBar;
 
-	private int gameOverValue = 0;
+	private int gameOverValue = GameController.gameInProgress;
 
 	Animator anim;
 
