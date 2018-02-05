@@ -65,7 +65,6 @@ public class Player : NetworkSetup
 
             // Camera Settings
             Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
 
             // Canvas Settings
             Canvas canvas = this.GetComponentInChildren<Canvas>();
