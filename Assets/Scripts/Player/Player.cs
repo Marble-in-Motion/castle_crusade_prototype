@@ -179,7 +179,7 @@ public class Player : NetworkSetup
 			target.GetComponent<NPCHealth>().DeductHealth(damage);
 			if (!target.GetComponent<NPCHealth>().IsAlive())
 			{
-				this.GetComponentInParent<Player>().CmdAddGold(10);
+				this.GetComponentInParent<Player>().CmdAddGold(5);
 			}
 		}
 		if (target.transform != null /*&& target.collider.tag == "NPC"*/) {
@@ -201,7 +201,7 @@ public class Player : NetworkSetup
     private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
     {
         int teamId = teamController.GetId();
-        bool successfulPurchase = teamController.SpendGold(5);
+        bool successfulPurchase = teamController.SpendGold(10);
         if (successfulPurchase) {
             spawnController.SpawnOffensive(troopId, spawnId, teamId);
         }
