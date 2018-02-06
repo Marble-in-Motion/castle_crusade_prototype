@@ -98,19 +98,17 @@ public class GameController : NetworkBehaviour
     {
         if (restart)
         {
+            GameObject[] troops = GameObject.FindGameObjectsWithTag(ENEMY_TAG);
+            for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
+
             if (Input.GetKeyDown(KeyCode.R))
             {
-                GameObject[] troops = GameObject.FindGameObjectsWithTag(ENEMY_TAG);
-                for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
-
                 
                 team1GameObject.GetComponent<TeamController>().SetGameOver(gameRestart);
                 team2GameObject.GetComponent<TeamController>().SetGameOver(gameRestart);
                 team1GameObject.GetComponent<TeamController>().Restart();
                 team2GameObject.GetComponent<TeamController>().Restart();
-
-   
-
+            
                 restart = false;
             }
         }
