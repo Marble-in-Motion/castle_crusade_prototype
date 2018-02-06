@@ -40,8 +40,6 @@ public class Player : NetworkSetup
 
 	public Animator anim;
 
-    private bool restart;
-
     public int GetId()
     {
         return id;
@@ -49,7 +47,6 @@ public class Player : NetworkSetup
 
     void Start()
     {
-        restart = false;
 		gameOverValue = 0;
         id = FindObjectsOfType<Player>().Length - 1;
         RegisterModel(Player.PLAYER_TAG, GetId());
