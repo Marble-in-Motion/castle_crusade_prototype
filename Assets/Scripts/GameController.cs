@@ -8,7 +8,9 @@ public class GameController : NetworkBehaviour
 {
 
     public const string GAME_CONTROLLER_TAG = "GameController";
+    public const string ENEMY_TAG = "NPCT1";
 
+    public const int gameRestart = -1;
     public const int gameInProgress = 0;
     public const int gameLost = 1;
     public const int gameWon = 2;
@@ -24,6 +26,8 @@ public class GameController : NetworkBehaviour
 
     private Camera sceneCamera;
 
+    private bool restart;
+
 
 
 	//[SyncVar]
@@ -35,7 +39,8 @@ public class GameController : NetworkBehaviour
     {
         sceneCamera = Camera.main;
         sceneCamera.gameObject.SetActive(true);
-		//gameOver = 0;
+        //gameOver = 0;
+        restart = false;
 
     }
 
@@ -85,21 +90,48 @@ public class GameController : NetworkBehaviour
 		team1GameObject.GetComponent<TeamController>().SetGameOver(team1GameOverValue);
 		team2GameObject.GetComponent<TeamController>().SetGameOver(team2GameOverValue);
 
-        //StartCoroutine(RestartGame());
+        GameRestart();
 
     }
 
-    //IEnumerator RestartGame()
-    //{
-    //    // The Application loads the Scene in the background at the same time as the current Scene.
-    //    //This is particularly good for creating loading screens. You could also load the Scene by build //number.
-    //    AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("gamescene");
+    public void GameRestart()
+    {
+        restart = true;
+    }
 
-    //    //Wait until the last operation fully loads to return anything
-    //    while (!asyncLoad.isDone)
-    //    {
-    //        yield return null;
-    //    }
-    //}
+    private void Update()
+    {
+        if (restart)
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                GameObject[] troops = GameObject.FindGameObjectsWithTag(ENEMY_TAG);
+                for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
+
+                
+                team1GameObject.GetComponent<TeamController>().SetGameOver(gameRestart);
+                team2GameObject.GetComponent<TeamController>().SetGameOver(gameRestart);
+                team1GameObject.GetComponent<TeamController>().Restart();
+                team2GameObject.GetComponent<TeamController>().Restart();
+
+                //GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+                //for (int i = 0; i < players.Length; i++)
+                //{
+                //    players[i].GetComponent<Player>().RestartState();
+                //    //Animator anim = players[i].GetComponent<Animator>();
+                //    //anim.ResetTrigger("GameWin");
+                //    //anim.ResetTrigger("GameOver");
+                //    //anim.SetTrigger("Restart");
+
+
+                //    Debug.Log("stopped animation");
+                //}
+
+
+                restart = false;
+            }
+        }
+    }
 
 }

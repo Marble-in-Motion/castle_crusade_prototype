@@ -38,7 +38,9 @@ public class Player : NetworkSetup
 	[SerializeField]
 	private LayerMask mask;
 
-	Animator anim;
+	public Animator anim;
+
+    private bool restart;
 
     public int GetId()
     {
@@ -47,6 +49,7 @@ public class Player : NetworkSetup
 
     void Start()
     {
+        restart = false;
 		gameOverValue = 0;
         id = FindObjectsOfType<Player>().Length - 1;
         RegisterModel(Player.PLAYER_TAG, GetId());
@@ -56,12 +59,13 @@ public class Player : NetworkSetup
         teamController = gameController.GetTeamController(id);
 
 		bolt = new Bolt ();
+        anim = GetComponent<Animator>();
+
 
         if (isLocalPlayer)
         {
             // Player Initialisation
             gameController.InitialisePlayer(this);
-			anim = GetComponent<Animator> ();
 
             // Camera Settings
             Cursor.visible = false;
@@ -134,11 +138,20 @@ public class Player : NetworkSetup
 
 			gameOverValue = teamController.GetIsGameOver ();
 			if (gameOverValue == GameController.gameLost) {
+                anim.ResetTrigger("Restart");
                 anim.SetTrigger ("GameOver");
 			}
             else if (gameOverValue == GameController.gameWon)
             {
+                anim.ResetTrigger("Restart");
                 anim.SetTrigger("GameWin");
+            }
+            else if (gameOverValue == GameController.gameRestart)
+            {
+                anim.ResetTrigger("GameWin");
+                anim.ResetTrigger("GameOver");
+                anim.SetTrigger("Restart");
+                //anim.ResetTrigger("Restart");
             }
         }
     }
@@ -204,4 +217,12 @@ public class Player : NetworkSetup
 	public void SetHealthBar(float calcHealth){
 		healthBar.transform.localScale = new Vector3(Mathf.Clamp(calcHealth,0f ,1f), healthBar.transform.localScale.y, healthBar.transform.localScale.z);
 	}
+
+    //public void RestartState( )
+    //{
+    //    //sets value restart = 1;
+    //        anim.ResetTrigger("GameWin");
+    //        anim.ResetTrigger("GameOver");
+    //        anim.SetTrigger("Restart");
+    //}
 }

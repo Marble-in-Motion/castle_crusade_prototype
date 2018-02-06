@@ -9,6 +9,9 @@ public class TeamController : NetworkBehaviour
     public const int TEAM1 = 1;
     public const int TEAM2 = 2;
 
+    public const float STARTING_HEALTH = 100.0f;
+    public const int STARTING_COIN = 100;
+
     [SerializeField]
     private int id;
 
@@ -102,4 +105,11 @@ public class TeamController : NetworkBehaviour
 		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
 		gameController.GameIsOver(id);
 	}
+
+    public void Restart()
+    {
+        //gameOverValue = GameController.gameInProgress;
+        towerHealth = STARTING_HEALTH;
+        coin = STARTING_COIN;
+    }
 }
