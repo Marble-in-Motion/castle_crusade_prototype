@@ -9,7 +9,7 @@ public class CrossbowController : MonoBehaviour {
 	[SerializeField]
 	public GameObject arrow;
 
-	private int speed = 100;
+	private int speed = 150;
 	private LineRenderer laserLine;
 
 	CrossbowMotor motor;
