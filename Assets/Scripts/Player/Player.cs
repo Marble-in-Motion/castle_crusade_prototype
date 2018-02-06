@@ -151,7 +151,6 @@ public class Player : NetworkSetup
                 anim.ResetTrigger("GameWin");
                 anim.ResetTrigger("GameOver");
                 anim.SetTrigger("Restart");
-                //anim.ResetTrigger("Restart");
             }
         }
     }
@@ -218,11 +217,5 @@ public class Player : NetworkSetup
 		healthBar.transform.localScale = new Vector3(Mathf.Clamp(calcHealth,0f ,1f), healthBar.transform.localScale.y, healthBar.transform.localScale.z);
 	}
 
-    //public void RestartState( )
-    //{
-    //    //sets value restart = 1;
-    //        anim.ResetTrigger("GameWin");
-    //        anim.ResetTrigger("GameOver");
-    //        anim.SetTrigger("Restart");
-    //}
+   
 }

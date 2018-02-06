@@ -29,11 +29,6 @@ public class GameController : NetworkBehaviour
     private bool restart;
 
 
-
-	//[SyncVar]
-	//private int gameOver;
-
-
     // Use this for initialization
     void Start()
     {
@@ -114,20 +109,7 @@ public class GameController : NetworkBehaviour
                 team1GameObject.GetComponent<TeamController>().Restart();
                 team2GameObject.GetComponent<TeamController>().Restart();
 
-                //GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-
-                //for (int i = 0; i < players.Length; i++)
-                //{
-                //    players[i].GetComponent<Player>().RestartState();
-                //    //Animator anim = players[i].GetComponent<Animator>();
-                //    //anim.ResetTrigger("GameWin");
-                //    //anim.ResetTrigger("GameOver");
-                //    //anim.SetTrigger("Restart");
-
-
-                //    Debug.Log("stopped animation");
-                //}
-
+   
 
                 restart = false;
             }

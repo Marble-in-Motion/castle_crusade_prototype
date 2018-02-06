@@ -108,7 +108,6 @@ public class TeamController : NetworkBehaviour
 
     public void Restart()
     {
-        //gameOverValue = GameController.gameInProgress;
         towerHealth = STARTING_HEALTH;
         coin = STARTING_COIN;
     }
