@@ -44,6 +44,11 @@ public class SpawnController : NetworkBehaviour
 		return newPos;
 	}
 
+    [ClientCallback]
+    private void CmdSetTag(string tag, GameObject troop)
+    {
+        troop.tag = tag;
+    } 
 
 	public void SpawnOffensive(int troopId, int spawnId, int teamId)
 	{
@@ -53,6 +58,9 @@ public class SpawnController : NetworkBehaviour
 
 		GameObject troop = Instantiate(troopPrefab, ApplyOffset(lane), Quaternion.identity) as GameObject;
 		troop.GetComponent<AIController>().target = targetTower;
-		NetworkServer.Spawn(troop);
+
+        troop.GetComponent<AIController>().tagName = "NPCS" + (spawnId + 1);
+
+        NetworkServer.Spawn(troop);
 	}
 }

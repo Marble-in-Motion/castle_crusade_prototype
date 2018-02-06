@@ -17,6 +17,11 @@ TagManager:
   - TroopSpawn
   - Bar
   - Coins
+  - NPCS1
+  - NPCS2
+  - NPCS3
+  - NPCS4
+  - NPCS5
   layers:
   - Default
   - TransparentFX
