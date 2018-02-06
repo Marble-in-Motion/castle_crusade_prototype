@@ -772,6 +772,7 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 4294967295
+  anim: {fileID: 0}
 --- !u!114 &114557780150340212
 MonoBehaviour:
   m_ObjectHideFlags: 1
