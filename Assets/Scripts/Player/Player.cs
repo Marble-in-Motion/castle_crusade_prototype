@@ -168,6 +168,7 @@ public class Player : NetworkSetup
 		} else {
 			laserLine.SetPosition(1, crossbow.transform.position + crossbow.transform.forward * bolt.range);
 		}
+		crossbow.GetComponent<CrossbowController> ().HandleArrow (laserLine.GetPosition (1));
 	}
 
 	[Command]
