@@ -11,7 +11,7 @@ public class TeamController : NetworkBehaviour
     public const int TEAM2 = 2;
 
     public const float STARTING_HEALTH = 100.0f;
-    public const int STARTING_COIN = 100;
+    public const int STARTING_COIN = 200;
 
     [SerializeField]
     private int id;
@@ -84,7 +84,7 @@ public class TeamController : NetworkBehaviour
         if (Time.time > nextActionTime)
         {
             nextActionTime += secondsToCoinIncrease;
-            AddGold(1);
+            AddGold(5);
         }
     }
 
