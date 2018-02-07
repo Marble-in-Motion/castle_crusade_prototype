@@ -100,7 +100,7 @@ public class Player : NetworkSetup
 			}
             else if (Input.GetKeyDown(KeyCode.Space))
             {
-                DestroyTroops();
+                CmdDestroyTroops(GetId(), teamController.GetId());
             }
             else if (Input.GetButtonDown("Fire1"))
 			{
@@ -131,10 +131,11 @@ public class Player : NetworkSetup
         return GameObject.FindGameObjectsWithTag(troopTag);
     }
 
-    private void DestroyTroops()
+    [Command]
+    private void CmdDestroyTroops(int id, int teamId)
     {
-        int targetTeamId = GetTargetId(teamController.GetId());
-        int lane = GetLaneId(GetId(), teamController.GetId());
+        int targetTeamId = GetTargetId(teamId);
+        int lane = GetLaneId(id, teamId);
         GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
         for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
     }
