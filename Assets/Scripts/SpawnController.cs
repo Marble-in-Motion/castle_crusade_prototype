@@ -59,7 +59,7 @@ public class SpawnController : NetworkBehaviour
 		GameObject troop = Instantiate(troopPrefab, ApplyOffset(lane), Quaternion.identity) as GameObject;
 		troop.GetComponent<AIController>().target = targetTower;
 
-        troop.GetComponent<AIController>().tagName = "NPCS" + (spawnId + 1);
+        troop.GetComponent<AIController>().tagName = "NPCT"+teamId+ "L" + (spawnId + 1);
 
         NetworkServer.Spawn(troop);
 	}
