@@ -10,10 +10,7 @@ public class GameController : NetworkBehaviour
     public const string GAME_CONTROLLER_TAG = "GameController";
     public const string ENEMY_TAG = "NPCT1";
 
-    public const int gameRestart = -1;
-    public const int gameInProgress = 0;
-    public const int gameLost = 1;
-    public const int gameWon = 2;
+    public enum GameState { GAME_RESTART, GAME_IN_PROGRESS, GAME_LOST, GAME_WON }
 
     [SerializeField]
     private List<GameObject> spawnPoints;
@@ -47,14 +44,9 @@ public class GameController : NetworkBehaviour
 
     public TeamController GetTeamController(int playerId)
     {
-        if (CalculateTeamId(playerId) == TeamController.TEAM1)
-        {
-            return team1GameObject.GetComponent<TeamController>();
-        }
-        else
-        {
-            return team2GameObject.GetComponent<TeamController>(); ;
-        }
+        return (CalculateTeamId(playerId) == TeamController.TEAM1)
+            ? team1GameObject.GetComponent<TeamController>()
+            : team2GameObject.GetComponent<TeamController>();
     }
 
     private void MovePlayerToSpawn(Player player)
@@ -69,24 +61,13 @@ public class GameController : NetworkBehaviour
     }
 
 	public void GameIsOver(int losingTeamId) {
-        int team1GameOverValue;
-        int team2GameOverValue;
+        GameState team1GameOverValue = (losingTeamId == TeamController.TEAM1) ? GameState.GAME_LOST : GameState.GAME_WON;
+        GameState team2GameOverValue = (losingTeamId == TeamController.TEAM2) ? GameState.GAME_LOST : GameState.GAME_WON; ;
 
-        if (losingTeamId == TeamController.TEAM1)
-        {
-            team1GameOverValue = gameLost;
-            team2GameOverValue = gameWon;
-        }
-        else
-        {
-            team1GameOverValue = gameWon;
-            team2GameOverValue = gameLost;
-        }
-		team1GameObject.GetComponent<TeamController>().SetGameOver(team1GameOverValue);
+        team1GameObject.GetComponent<TeamController>().SetGameOver(team1GameOverValue);
 		team2GameObject.GetComponent<TeamController>().SetGameOver(team2GameOverValue);
 
         GameRestart();
-
     }
 
     public void GameRestart()
@@ -103,9 +84,8 @@ public class GameController : NetworkBehaviour
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                
-                team1GameObject.GetComponent<TeamController>().SetGameOver(gameRestart);
-                team2GameObject.GetComponent<TeamController>().SetGameOver(gameRestart);
+                team1GameObject.GetComponent<TeamController>().SetGameOver(GameController.GameState.GAME_RESTART);
+                team2GameObject.GetComponent<TeamController>().SetGameOver(GameController.GameState.GAME_RESTART);
                 team1GameObject.GetComponent<TeamController>().Restart();
                 team2GameObject.GetComponent<TeamController>().Restart();
             

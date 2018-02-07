@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+
 public class TeamController : NetworkBehaviour
 {
 
@@ -25,7 +26,7 @@ public class TeamController : NetworkBehaviour
     private float secondsToCoinIncrease = 1.0f;
 
 	[SyncVar]
-	private int gameOverValue;
+	private GameController.GameState gameOverValue;
 
     void Start()
     {
@@ -47,11 +48,11 @@ public class TeamController : NetworkBehaviour
         return coin;
     }
 
-	public int GetIsGameOver() {
+	public GameController.GameState GetIsGameOver() {
 		return gameOverValue;
 	}
 
-	public void SetGameOver(int gameOverValue) {
+	public void SetGameOver(GameController.GameState gameOverValue) {
 		this.gameOverValue = gameOverValue;
 	}
 
