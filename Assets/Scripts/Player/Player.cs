@@ -20,6 +20,8 @@ public class Player : NetworkSetup
 
     private CanvasController canvasController;
 
+    private AIController aiController;
+
     [SerializeField]
     private Behaviour[] componentsToDisable;
 
@@ -108,10 +110,17 @@ public class Player : NetworkSetup
 			}
 
             canvasController.SetCurrencyText("Coin: " + teamController.GetCoin().ToString());
-
 			float calc_Health = teamController.GetTowerHealth() / maxTowerHealth;
             canvasController.SetHealthBar(calc_Health);
-            canvasController.SetGameOverValue(teamController.GetIsGameOver()); ;
+            canvasController.SetGameOverValue(teamController.GetIsGameOver());
+
+            GameObject[] troops = GetTroopsInLane(teamController.GetId(), GetLaneId(GetId(), teamController.GetId()));
+            Debug.Log(troops.Length);
+            for (int i = 0; i < troops.Length; i++) {
+                AIController ai = troops[i].GetComponent<AIController>();
+                Debug.Log(troops[i].name);
+                canvasController.SetSpartanDistance(troops[i].name, ai.GetDistanceRatioToTarget());
+            }
         }
     }
 

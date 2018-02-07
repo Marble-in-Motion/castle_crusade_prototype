@@ -9,29 +9,37 @@ public class AIController : NetworkBehaviour {
 
     public GameObject target;
 
+    private float spawnToTargetDistance;
+
     [SyncVar]
-    public String tagName;
+    private String tagName;
 
     void Start() {
         agent = GetComponent<NavMeshAgent>();
         this.tag = tagName;
         SetTarget();
+        spawnToTargetDistance = Vector3.Distance(transform.position, target.transform.position);
     }
-
-    void Update()
-    {
-        //Debug.Log(GetDistanceToTarget());
-    }
-
 
     private void SetTarget()
     {
         agent.SetDestination(target.transform.position);
     }
-	
-    public float GetDistanceToTarget()
+
+    public String GetTagName()
     {
-        return Vector3.Distance(transform.position, target.transform.position);
+        return tagName;
+    }
+
+    public void SetTagName(String tagName)
+    {
+        this.tagName = tagName;
+    }
+
+    public float GetDistanceRatioToTarget()
+    {
+        float currentDistanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+        return currentDistanceToTarget / spawnToTargetDistance;
     }
 
 }

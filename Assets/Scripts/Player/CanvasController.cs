@@ -18,6 +18,11 @@ namespace Assets.Scripts.Player
 
         [SerializeField]
         private Animator anim;
+
+        [SerializeField]
+        private Image troop;
+
+        private Dictionary<String, Image> troopSprites = new Dictionary<string, Image>();
         
         public void SetCurrencyText(string text)
         {
@@ -49,12 +54,28 @@ namespace Assets.Scripts.Player
             }
         }
 
-        private Dictionary<int, float> spartans = new Dictionary<int, float>();
-
-
-        public void SetSpartanDistance(int id, float distance)
+        public void SetSpartanDistance(string idTag, float ratio)
         {
-            spartans.Add(id, distance);
+            if (troopSprites.ContainsKey(idTag))
+            {
+                Image sprite = troopSprites[idTag];
+                Vector3 newLocaction = new Vector3(130 - (260 * ratio), sprite.transform.localPosition.y, sprite.transform.localPosition.z);
+                sprite.transform.localPosition = newLocaction;
+            } else
+            {
+                Image sprite = Instantiate(troop, transform) as Image;
+                troopSprites.Add(idTag, sprite);
+            } 
+        }
+
+        public void DestroySpartanSprite(string idTag)
+        {
+            if (troopSprites.ContainsKey(idTag))
+            {
+                Image sprite = troopSprites[idTag];
+                Destroy(sprite);
+                troopSprites.Remove(idTag);
+            }
         }
 
     }
