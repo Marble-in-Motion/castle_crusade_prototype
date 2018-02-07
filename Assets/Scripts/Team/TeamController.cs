@@ -98,7 +98,7 @@ public class TeamController : NetworkBehaviour
 	public void CmdDeductTowerHealth(int damage)  {
 		towerHealth = towerHealth - damage;
 		if (towerHealth <= 0) {
-			TellGameControllerGameOver ();
+			TellGameControllerGameOver();
 		}
 	}
 		
