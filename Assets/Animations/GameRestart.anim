@@ -29,7 +29,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: Camera/Canvas/GameOver image
+    path: GameOver image
     classID: 1
     script: {fileID: 0}
   - curve:
@@ -45,7 +45,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: Camera/Canvas/GameOver Text
+    path: GameWin image
     classID: 1
     script: {fileID: 0}
   - curve:
@@ -61,7 +61,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: Camera/Canvas/GameWin image
+    path: GameOver Text
     classID: 1
     script: {fileID: 0}
   - curve:
@@ -77,7 +77,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: Camera/Canvas/GameWin Text
+    path: GameWin Text
     classID: 1
     script: {fileID: 0}
   m_PPtrCurves: []
@@ -89,28 +89,28 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3883886307
+      path: 3130199914
       attribute: 2086281974
       script: {fileID: 0}
       typeID: 1
       customType: 0
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 3687648591
+      path: 3596530686
       attribute: 2086281974
       script: {fileID: 0}
       typeID: 1
       customType: 0
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1378629636
+      path: 1606387381
       attribute: 2086281974
       script: {fileID: 0}
       typeID: 1
       customType: 0
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1482480626
+      path: 2492923873
       attribute: 2086281974
       script: {fileID: 0}
       typeID: 1
@@ -151,7 +151,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: Camera/Canvas/GameOver image
+    path: GameOver image
     classID: 1
     script: {fileID: 0}
   - curve:
@@ -167,7 +167,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: Camera/Canvas/GameOver Text
+    path: GameWin image
     classID: 1
     script: {fileID: 0}
   - curve:
@@ -183,7 +183,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: Camera/Canvas/GameWin image
+    path: GameOver Text
     classID: 1
     script: {fileID: 0}
   - curve:
@@ -199,7 +199,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: Camera/Canvas/GameWin Text
+    path: GameWin Text
     classID: 1
     script: {fileID: 0}
   m_EulerEditorCurves: []

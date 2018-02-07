@@ -27,17 +27,10 @@ public class Player : NetworkSetup
 	private GameObject crossbow;
 
 	private float maxTowerHealth = 100f;
-	
-	private int gameOverValue = GameController.gameInProgress;
 
 	private Bolt bolt;
 
 	private LineRenderer laserLine;
-
-	[SerializeField]
-	private LayerMask mask;
-
-	public Animator anim;
 
     public int GetId()
     {
@@ -46,7 +39,6 @@ public class Player : NetworkSetup
 
     void Start()
     {
-		gameOverValue = 0;
         id = FindObjectsOfType<Player>().Length - 1;
         RegisterModel(Player.PLAYER_TAG, GetId());
 
@@ -55,7 +47,6 @@ public class Player : NetworkSetup
         teamController = gameController.GetTeamController(id);
 
 		bolt = new Bolt ();
-        anim = GetComponent<Animator>();
 
         if (isLocalPlayer)
         {
@@ -116,23 +107,7 @@ public class Player : NetworkSetup
 
 			float calc_Health = teamController.GetTowerHealth() / maxTowerHealth;
             canvasController.SetHealthBar(calc_Health);
-
-			gameOverValue = teamController.GetIsGameOver();
-			if (gameOverValue == GameController.gameLost) {
-                anim.ResetTrigger("Restart");
-                anim.SetTrigger ("GameOver");
-			}
-            else if (gameOverValue == GameController.gameWon)
-            {
-                anim.ResetTrigger("Restart");
-                anim.SetTrigger("GameWin");
-            }
-            else if (gameOverValue == GameController.gameRestart)
-            {
-                anim.ResetTrigger("GameWin");
-                anim.ResetTrigger("GameOver");
-                anim.SetTrigger("Restart");
-            }
+            canvasController.SetGameOverValue(teamController.GetIsGameOver()); ;
         }
     }
 
@@ -143,7 +118,7 @@ public class Player : NetworkSetup
 		laserLine.SetPosition(0, crossbow.transform.position);
 		StartCoroutine(crossbow.GetComponent<CrossbowController>().HandleShoot());
 		RaycastHit hit;
-		if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, bolt.range, mask)) {
+		if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, bolt.range)) {
 			CmdPlayerShot(hit.collider.name, bolt.damage);
 			laserLine.SetPosition(1, hit.point);
 		} else {

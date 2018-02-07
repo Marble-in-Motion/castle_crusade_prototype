@@ -55,7 +55,6 @@ GameObject:
   - component: {fileID: 114669750910296576}
   - component: {fileID: 114855324748939734}
   - component: {fileID: 114415557017972020}
-  - component: {fileID: 95702200568052530}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -92,6 +91,7 @@ GameObject:
   - component: {fileID: 114834824188580254}
   - component: {fileID: 114634213799549846}
   - component: {fileID: 114976158529466498}
+  - component: {fileID: 95106004043515364}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -693,13 +693,13 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!95 &95702200568052530
+--- !u!95 &95106004043515364
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1197108965690756}
+  m_GameObject: {fileID: 1359352569287186}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: ca35aef2a177b5c49809db9c6af3b74c, type: 2}
@@ -766,14 +766,6 @@ MonoBehaviour:
   - {fileID: 20447019570799976}
   - {fileID: 81044262596032106}
   crossbow: {fileID: 1428021765519220}
-  bolt:
-    name: StandardBolt
-    damage: 20
-    range: 100
-  mask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  anim: {fileID: 0}
 --- !u!114 &114557780150340212
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1063,6 +1055,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBar: {fileID: 114580449291712106}
   CurrencyText: {fileID: 114992888872638716}
+  anim: {fileID: 95106004043515364}
 --- !u!114 &114992888872638716
 MonoBehaviour:
   m_ObjectHideFlags: 1
