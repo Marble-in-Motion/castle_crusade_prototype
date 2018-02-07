@@ -12,16 +12,25 @@ public class AIController : NetworkBehaviour {
 
 
 
-    void Start () {
+    void Start() {
         agent = GetComponent<NavMeshAgent>();
         SetTarget();
+    }
+
+    void Update()
+    {
+        //Debug.Log(GetDistanceToTarget());
     }
 
 
     private void SetTarget()
     {
         agent.SetDestination(target.transform.position);
-     
     }
 	
+    public float GetDistanceToTarget()
+    {
+        return Vector3.Distance(transform.position, target.transform.position);
+    }
+
 }
