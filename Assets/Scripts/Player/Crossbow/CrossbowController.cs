@@ -17,7 +17,7 @@ public class CrossbowController : MonoBehaviour {
 	private AudioSource shootAudio;
 	private WaitForSeconds shotDuration = new WaitForSeconds(0.05f);
 
-	void Start () {
+	void Start() {
 		motor = GetComponent<CrossbowMotor>();
 		laserLine = GetComponent<LineRenderer>();
 		shootAudio = GetComponent<AudioSource>();

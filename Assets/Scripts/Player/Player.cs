@@ -4,13 +4,12 @@ using UnityEngine.Networking;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Assets.Scripts.Player;
 
 public class Player : NetworkSetup
 {
 
     public const string PLAYER_TAG = "Player";
-	public const string BAR_TAG = "Bar";
-	public const string COINS_TAG = "Coins";
 	private const string REMOTE_LAYER_NAME = "RemotePlayer";
 
     private int id;
@@ -19,20 +18,20 @@ public class Player : NetworkSetup
 
     private SpawnController spawnController;
 
+    private CanvasController canvasController;
+
     [SerializeField]
     private Behaviour[] componentsToDisable;
 
 	[SerializeField]
 	private GameObject crossbow;
 
-    private Text CurrencyText;
-
 	private float maxTowerHealth = 100f;
-	private Image healthBar;
-
+	
 	private int gameOverValue = GameController.gameInProgress;
 
-	public Bolt bolt;
+	private Bolt bolt;
+
 	private LineRenderer laserLine;
 
 	[SerializeField]
@@ -58,7 +57,6 @@ public class Player : NetworkSetup
 		bolt = new Bolt ();
         anim = GetComponent<Animator>();
 
-
         if (isLocalPlayer)
         {
             // Player Initialisation
@@ -68,25 +66,11 @@ public class Player : NetworkSetup
             Cursor.visible = false;
 
             // Canvas Settings
-            Canvas canvas = this.GetComponentInChildren<Canvas>();
+            Canvas canvas = GetComponentInChildren<Canvas>();
             canvas.planeDistance = 1;
             canvas.renderMode = RenderMode.ScreenSpaceCamera;
-            canvas.worldCamera = this.GetComponentInChildren<Camera>();
-            
-			Text[] texts = this.GetComponentsInChildren<Text>();
-			for(int i = 0; i < texts.Length; i++){
-				if (texts [i].tag == COINS_TAG) {
-					CurrencyText = texts [i];
-				}
-			}
-
-			Image[] images = this.GetComponentsInChildren<Image>();
-			for(int i = 0; i < images.Length; i++){
-				if (images [i].tag == BAR_TAG) {
-					healthBar = images [i];
-				}
-			}
-				
+            canvas.worldCamera = GetComponentInChildren<Camera>();
+            canvasController = canvas.GetComponent<CanvasController>();
         }
 
         if (!isLocalPlayer)
@@ -128,12 +112,12 @@ public class Player : NetworkSetup
 				Shoot();
 			}
 
-            CurrencyText.text = "Coin: " + teamController.GetCoin().ToString();
+            canvasController.SetCurrencyText("Coin: " + teamController.GetCoin().ToString());
 
 			float calc_Health = teamController.GetTowerHealth() / maxTowerHealth;
-			SetHealthBar (calc_Health);
+            canvasController.SetHealthBar(calc_Health);
 
-			gameOverValue = teamController.GetIsGameOver ();
+			gameOverValue = teamController.GetIsGameOver();
 			if (gameOverValue == GameController.gameLost) {
                 anim.ResetTrigger("Restart");
                 anim.SetTrigger ("GameOver");
@@ -165,7 +149,7 @@ public class Player : NetworkSetup
 		} else {
 			laserLine.SetPosition(1, crossbow.transform.position + crossbow.transform.forward * bolt.range);
 		}
-		crossbow.GetComponent<CrossbowController> ().HandleArrow (laserLine.GetPosition (1));
+		crossbow.GetComponent<CrossbowController>().HandleArrow(laserLine.GetPosition (1));
 	}
 
 	[Command]
@@ -206,14 +190,9 @@ public class Player : NetworkSetup
     }
 
     [Command]
-    public void CmdAddGold(int amount)
+    private void CmdAddGold(int amount)
     {
         teamController.AddGold(amount);
     }
 
-	public void SetHealthBar(float calcHealth){
-		healthBar.transform.localScale = new Vector3(Mathf.Clamp(calcHealth,0f ,1f), healthBar.transform.localScale.y, healthBar.transform.localScale.z);
-	}
-
-   
 }
