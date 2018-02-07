@@ -7,7 +7,6 @@ public class AIController : NetworkBehaviour {
 
     private NavMeshAgent agent;
 
-    //[SerializeField]
     public GameObject target;
 
     [SyncVar]

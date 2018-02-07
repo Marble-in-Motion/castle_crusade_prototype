@@ -8,7 +8,7 @@ public class GameController : NetworkBehaviour
 {
 
     public const string GAME_CONTROLLER_TAG = "GameController";
-    public const string ENEMY_TAG = "NPCT1";
+    public const string ENEMY_TAG = "NPCT{0}L{1}";
 
     public const int gameRestart = -1;
     public const int gameInProgress = 0;
@@ -94,12 +94,24 @@ public class GameController : NetworkBehaviour
         restart = true;
     }
 
+    private void DestroyAllTroops()
+    {
+        for (int team = 1; team <= 2; team++)
+        {
+            for (int lane = 1; lane <= 5; lane++)
+            {
+                GameObject[] troops = GameObject.FindGameObjectsWithTag(string.Format(ENEMY_TAG, team, lane));
+                for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
+            }
+        }
+    }
+
     private void Update()
     {
         if (restart)
         {
-            GameObject[] troops = GameObject.FindGameObjectsWithTag(ENEMY_TAG);
-            for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
+            DestroyAllTroops();
+            
 
             if (Input.GetKeyDown(KeyCode.R))
             {
