@@ -13,10 +13,6 @@ public class AIController : NetworkBehaviour {
     [SyncVar]
     public String tagName;
 
-    public int lane;
-
-    public int team;
-
     void Start() {
         agent = GetComponent<NavMeshAgent>();
         this.tag = tagName;
