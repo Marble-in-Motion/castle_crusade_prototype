@@ -49,5 +49,13 @@ namespace Assets.Scripts.Player
             }
         }
 
+        private Dictionary<int, float> spartans = new Dictionary<int, float>();
+
+
+        public void SetSpartanDistance(int id, float distance)
+        {
+            spartans.Add(id, distance);
+        }
+
     }
 }

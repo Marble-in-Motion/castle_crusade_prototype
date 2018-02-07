@@ -62,7 +62,7 @@ public class GameController : NetworkBehaviour
 
 	public void GameIsOver(int losingTeamId) {
         GameState team1GameOverValue = (losingTeamId == TeamController.TEAM1) ? GameState.GAME_LOST : GameState.GAME_WON;
-        GameState team2GameOverValue = (losingTeamId == TeamController.TEAM2) ? GameState.GAME_LOST : GameState.GAME_WON; ;
+        GameState team2GameOverValue = (losingTeamId == TeamController.TEAM2) ? GameState.GAME_LOST : GameState.GAME_WON;
 
         team1GameObject.GetComponent<TeamController>().SetGameOver(team1GameOverValue);
 		team2GameObject.GetComponent<TeamController>().SetGameOver(team2GameOverValue);
@@ -96,8 +96,8 @@ public class GameController : NetworkBehaviour
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                team1GameObject.GetComponent<TeamController>().SetGameOver(GameController.GameState.GAME_RESTART);
-                team2GameObject.GetComponent<TeamController>().SetGameOver(GameController.GameState.GAME_RESTART);
+                team1GameObject.GetComponent<TeamController>().SetGameOver(GameState.GAME_RESTART);
+                team2GameObject.GetComponent<TeamController>().SetGameOver(GameState.GAME_RESTART);
                 team1GameObject.GetComponent<TeamController>().Restart();
                 team2GameObject.GetComponent<TeamController>().Restart();
             
