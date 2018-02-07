@@ -1387,6 +1387,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1439812847354710, guid: e5b8afeca8c93e346953bf10e71e7b1a, type: 2}
+  tagName: 
+  lane: 0
+  team: 0
 --- !u!114 &114871128511097718
 MonoBehaviour:
   m_ObjectHideFlags: 1
