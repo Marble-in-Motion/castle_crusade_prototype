@@ -143,10 +143,15 @@ public class Player : NetworkSetup
     [Command]
     private void CmdDestroyTroops(int id, int teamId)
     {
-        int targetTeamId = GetTargetId(teamId);
-        int lane = GetLaneId(id, teamId);
-        GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
-        for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
+        bool successfulPurchase = teamController.SpendGold(50);
+        if (successfulPurchase)
+        {
+            int targetTeamId = GetTargetId(teamId);
+            int lane = GetLaneId(id, teamId);
+            GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
+            for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
+        }
+        
     }
 
 	[Client]
