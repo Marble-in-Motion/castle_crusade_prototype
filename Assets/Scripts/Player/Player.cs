@@ -115,15 +115,27 @@ public class Player : NetworkSetup
         }
     }
 
-
-    public void DestroyTroops()
+    private int GetTargetId(int teamId)
     {
-        
-        int attackId = (teamController.GetId() == 1) ? 2 : 1;
-        int lane = (teamController.GetId() == 1) ? (id/2) + 1 : (id - 1)/2 + 1;
-        String destroyTag = String.Format("NPCT{0}L{1}", attackId, lane);
-        Debug.Log(destroyTag);
-        GameObject[] troops = GameObject.FindGameObjectsWithTag(destroyTag);
+        return (teamController.GetId() == TeamController.TEAM1) ? TeamController.TEAM2 : TeamController.TEAM1;
+    }
+
+    private int GetLaneId(int playerId, int teamId)
+    {
+        return (teamId == TeamController.TEAM1) ? (playerId / 2) + 1 : (playerId - 1) / 2 + 1;
+    }
+
+    private GameObject[] GetTroopsInLane(int targetTeamId, int lane)
+    {
+        String troopTag = String.Format("NPCT{0}L{1}", targetTeamId, lane);
+        return GameObject.FindGameObjectsWithTag(troopTag);
+    }
+
+    private void DestroyTroops()
+    {
+        int targetTeamId = GetTargetId(teamController.GetId());
+        int lane = GetLaneId(GetId(), teamController.GetId());
+        GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
         for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
     }
 
