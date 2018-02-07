@@ -98,7 +98,11 @@ public class Player : NetworkSetup
 			{
 				CmdRequestOffensiveTroopSpawn(0, 4);
 			}
-			else if (Input.GetButtonDown("Fire1"))
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                DestroyTroops();
+            }
+            else if (Input.GetButtonDown("Fire1"))
 			{
 				Shoot();
 			}
@@ -109,6 +113,18 @@ public class Player : NetworkSetup
             canvasController.SetHealthBar(calc_Health);
             canvasController.SetGameOverValue(teamController.GetIsGameOver()); ;
         }
+    }
+
+
+    public void DestroyTroops()
+    {
+        
+        int attackId = (teamController.GetId() == 1) ? 2 : 1;
+        int lane = (teamController.GetId() == 1) ? (id/2) + 1 : (id - 1)/2 + 1;
+        String destroyTag = String.Format("NPCT{0}L{1}", attackId, lane);
+        Debug.Log(destroyTag);
+        GameObject[] troops = GameObject.FindGameObjectsWithTag(destroyTag);
+        for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
     }
 
 	[Client]
