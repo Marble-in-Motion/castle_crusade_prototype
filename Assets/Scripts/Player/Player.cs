@@ -147,7 +147,7 @@ public class Player : NetworkSetup
     [Command]
     private void CmdDestroyTroops(int id, int teamId)
     {
-        bool successfulPurchase = teamController.SpendGold(50);
+        bool successfulPurchase = teamController.SpendGold(100);
         if (successfulPurchase)
         {
             int targetTeamId = GetTargetId(teamId);
