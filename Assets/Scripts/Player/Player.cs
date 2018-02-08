@@ -100,6 +100,11 @@ public class Player : NetworkSetup
 			{
 				CmdRequestOffensiveTroopSpawn(0, 4);
 			}
+            else if (Input.GetKeyDown(KeyCode.Return))
+            {
+                //Debug.Log("Test");
+                CmdRequestOffensiveTroopSpawn(0, GetLaneId(GetId(), teamController.GetId()) - 1);
+            }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
                 CmdDestroyTroops(GetId(), teamController.GetId());
@@ -115,7 +120,6 @@ public class Player : NetworkSetup
             canvasController.SetGameOverValue(teamController.GetIsGameOver());
 
             GameObject[] troops = GetTroopsInLane(teamController.GetId(), GetLaneId(GetId(), teamController.GetId()));
-            Debug.Log(troops.Length);
             for (int i = 0; i < troops.Length; i++) {
                 AIController ai = troops[i].GetComponent<AIController>();
                 Debug.Log(troops[i].name);
