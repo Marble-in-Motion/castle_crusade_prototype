@@ -1321,7 +1321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162a684e0304cf3498093c398747a6a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialHealth: 100
+  initialHealth: 200
 --- !u!114 &114498984607916292
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1387,9 +1387,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1439812847354710, guid: e5b8afeca8c93e346953bf10e71e7b1a, type: 2}
-  tagName: 
-  lane: 0
-  team: 0
 --- !u!114 &114871128511097718
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1763,7 +1760,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.2
-  m_Speed: 8
+  m_Speed: 12
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
