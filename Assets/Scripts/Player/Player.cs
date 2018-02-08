@@ -166,7 +166,7 @@ public class Player : NetworkSetup
 		StartCoroutine(crossbow.GetComponent<CrossbowController>().HandleShoot());
 		RaycastHit hit;
 		if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, bolt.range)) {
-			CmdPlayerShot(hit.collider.name, bolt.damage);
+			CmdPlayerShot(hit.collider.name, bolt.damage, this.transform.position);
 			laserLine.SetPosition(1, hit.point);
 		} else {
 			laserLine.SetPosition(1, crossbow.transform.position + crossbow.transform.forward * bolt.range);
@@ -175,11 +175,11 @@ public class Player : NetworkSetup
 	}
 
 	[Command]
-	public void CmdPlayerShot(string id, float damage)
+	public void CmdPlayerShot(string id, float damage, Vector3 crossbowPosition)
 	{
 		GameObject target = GameObject.Find(id);
 		if (target.GetComponent<NPCHealth> ()) {
-			target.GetComponent<NPCHealth>().DeductHealth(damage);
+			target.GetComponent<NPCHealth>().DeductHealth(damage, crossbow.GetComponent<CrossbowController>().GetArrowSpeed(),crossbowPosition);
 			if (!target.GetComponent<NPCHealth>().IsAlive())
 			{
 				this.GetComponentInParent<Player>().CmdAddGold(5);

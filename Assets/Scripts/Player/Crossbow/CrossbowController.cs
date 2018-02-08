@@ -40,6 +40,11 @@ public class CrossbowController : MonoBehaviour {
 		rb.velocity = speed*direction;
 	}
 
+    public int GetArrowSpeed()
+    {
+        return speed;
+    }
+
 	void Update () {
 		UpdateMovement();
 	}
