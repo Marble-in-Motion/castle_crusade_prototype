@@ -110,6 +110,11 @@ public class Player : NetworkSetup
                 //Debug.Log("Test");
                 CmdRequestOffensiveTroopSpawn(1, GetLaneId(GetId(), teamController.GetId()) - 1);
             }
+            else if (Input.GetKeyDown(KeyCode.Slash))
+            {
+                //Debug.Log("Test");
+                CmdRequestOffensiveTroopSpawn(2, GetLaneId(GetId(), teamController.GetId()) - 1);
+            }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
                 CmdDestroyTroops(GetId(), teamController.GetId());
@@ -214,6 +219,7 @@ public class Player : NetworkSetup
         {
             case 0: cost = 10;break;
             case 1: cost = 30; break;
+            case 2: cost = 30; break;
         }
         bool successfulPurchase = teamController.SpendGold(cost);
         if (successfulPurchase) {
