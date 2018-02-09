@@ -61,8 +61,8 @@ public class Player : NetworkSetup
             // Canvas Settings
             Canvas canvas = GetComponentInChildren<Canvas>();
             canvas.planeDistance = 1;
-            canvas.renderMode = RenderMode.ScreenSpaceCamera;
-            canvas.worldCamera = GetComponentInChildren<Camera>();
+            //canvas.renderMode = RenderMode.ScreenSpaceCamera;
+            //canvas.worldCamera = GetComponentInChildren<Camera>();
             canvasController = canvas.GetComponent<CanvasController>();
         }
 
