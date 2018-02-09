@@ -105,6 +105,11 @@ public class Player : NetworkSetup
                 //Debug.Log("Test");
                 CmdRequestOffensiveTroopSpawn(0, GetLaneId(GetId(), teamController.GetId()) - 1);
             }
+            else if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                //Debug.Log("Test");
+                CmdRequestOffensiveTroopSpawn(1, GetLaneId(GetId(), teamController.GetId()) - 1);
+            }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
                 CmdDestroyTroops(GetId(), teamController.GetId());
@@ -204,7 +209,13 @@ public class Player : NetworkSetup
     private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
     {
         int teamId = teamController.GetId();
-        bool successfulPurchase = teamController.SpendGold(10);
+        int cost = 0;
+        switch (troopId)
+        {
+            case 0: cost = 10;break;
+            case 1: cost = 30; break;
+        }
+        bool successfulPurchase = teamController.SpendGold(cost);
         if (successfulPurchase) {
             spawnController.SpawnOffensive(troopId, spawnId, teamId);
         }

@@ -36648,6 +36648,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   troopPrefabs:
   - {fileID: 1596017570374888, guid: cfb5c651f84c0564794f704215e73551, type: 2}
+  - {fileID: 1213076705821156, guid: f88d83afa5830ed4e8b0923d77187a76, type: 2}
   spawnLocations:
   - {fileID: 1196651617040014, guid: c211a44a3739ded4c9c5e08ffc272db7, type: 2}
   - {fileID: 1992934012861020, guid: 343576193bb64894ebe55065c9d64c8c, type: 2}
@@ -69888,6 +69889,7 @@ MonoBehaviour:
   m_SpawnPrefabs:
   - {fileID: 1596017570374888, guid: cfb5c651f84c0564794f704215e73551, type: 2}
   - {fileID: 1939600107179848, guid: 391ae649d8ca048c18bfd5958698588f, type: 2}
+  - {fileID: 1213076705821156, guid: f88d83afa5830ed4e8b0923d77187a76, type: 2}
   m_CustomConfig: 1
   m_MaxConnections: 12
   m_ConnectionConfig:
