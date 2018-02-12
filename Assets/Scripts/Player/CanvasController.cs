@@ -65,8 +65,8 @@ namespace Assets.Scripts.Player
 				RectTransform rt = (RectTransform) attackBar.transform;
 				float width = rt.rect.width;
 
-				Vector3 newLocation = new Vector3((attackBar.transform.localPosition.x) + ((1-ratio) * width), sprite.transform.localPosition.y, sprite.transform.localPosition.z);
-                sprite.transform.localPosition = newLocation;
+				float xLoc = (troop.transform.localPosition.x - width / 2) + ((1 - ratio) * width);
+				sprite.transform.localPosition = new Vector3(xLoc, sprite.transform.localPosition.y, sprite.transform.localPosition.z);
             } else
             {
                 Image sprite = Instantiate(troop, attackBar.transform) as Image;
