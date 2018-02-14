@@ -122,7 +122,6 @@ public class Player : NetworkSetup
             GameObject[] troops = GetTroopsInLane(teamController.GetId(), GetLaneId(GetId(), teamController.GetId()));
             for (int i = 0; i < troops.Length; i++) {
                 AIController ai = troops[i].GetComponent<AIController>();
-                Debug.Log(troops[i].name);
                 canvasController.SetSpartanDistance(troops[i].name, ai.GetDistanceRatioToTarget());
             }
         }

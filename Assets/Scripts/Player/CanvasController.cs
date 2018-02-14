@@ -65,7 +65,7 @@ namespace Assets.Scripts.Player
 				RectTransform rt = (RectTransform) attackBar.transform;
 				float width = rt.rect.width;
 
-				float xLoc = (troop.transform.localPosition.x - width / 2) + ((1 - ratio) * width);
+				float xLoc = (troop.transform.localPosition.x - width / 2) + (ratio * width);
 				sprite.transform.localPosition = new Vector3(xLoc, sprite.transform.localPosition.y, sprite.transform.localPosition.z);
             } else
             {
