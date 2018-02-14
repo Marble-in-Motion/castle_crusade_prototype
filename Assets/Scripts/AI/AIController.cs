@@ -7,24 +7,24 @@ public class AIController : NetworkBehaviour {
 
     private NavMeshAgent agent;
 
-    public GameObject target;
+	[SerializeField]
+	private Transform[] targets;
 
-    private float spawnToTargetDistance;
+	[SyncVar]
+	private int targetIndex;
 
     [SyncVar]
     private String tagName;
 
-    void Start() {
-        agent = GetComponent<NavMeshAgent>();
-        this.tag = tagName;
-        SetTarget();
-        spawnToTargetDistance = Vector3.Distance(transform.position, target.transform.position);
-    }
+	private float spawnToTargetDistance;
 
-    private void SetTarget()
-    {
-        agent.SetDestination(target.transform.position);
-    }
+    void Start() {
+        this.tag = tagName;
+		agent = GetComponent<NavMeshAgent>();
+		Transform target = targets[targetIndex].transform;
+		agent.SetDestination(target.position);
+		spawnToTargetDistance = Vector3.Distance(transform.position, target.position);   
+	}
 
     public String GetTagName()
     {
@@ -36,10 +36,15 @@ public class AIController : NetworkBehaviour {
         this.tagName = tagName;
     }
 
+	public void SetTargetIndex(int targetIndex){
+		this.targetIndex = targetIndex;
+	}
+
     public float GetDistanceRatioToTarget()
-    {
-        float currentDistanceToTarget = Vector3.Distance(transform.position, target.transform.position);
-        return currentDistanceToTarget / spawnToTargetDistance;
+	{
+		float currentDistanceToTarget = Vector3.Distance (transform.position, targets[targetIndex].position);
+		float temp = 1 - (currentDistanceToTarget / spawnToTargetDistance);
+		return temp;
     }
 
 }

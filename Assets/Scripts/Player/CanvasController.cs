@@ -13,6 +13,9 @@ namespace Assets.Scripts.Player
         [SerializeField]
         private Image healthBar;
 
+		[SerializeField]
+		private GameObject attackBar;
+
         [SerializeField]
         private Text CurrencyText;
 
@@ -59,11 +62,14 @@ namespace Assets.Scripts.Player
             if (troopSprites.ContainsKey(idTag))
             {
                 Image sprite = troopSprites[idTag];
-                Vector3 newLocaction = new Vector3(130 - (260 * ratio), sprite.transform.localPosition.y, sprite.transform.localPosition.z);
-                sprite.transform.localPosition = newLocaction;
+				RectTransform rt = (RectTransform) attackBar.transform;
+				float width = rt.rect.width;
+
+				float xLoc = (troop.transform.localPosition.x - width / 2) + (ratio * width);
+				sprite.transform.localPosition = new Vector3(xLoc, sprite.transform.localPosition.y, sprite.transform.localPosition.z);
             } else
             {
-                Image sprite = Instantiate(troop, transform) as Image;
+                Image sprite = Instantiate(troop, attackBar.transform) as Image;
                 troopSprites.Add(idTag, sprite);
             } 
         }
