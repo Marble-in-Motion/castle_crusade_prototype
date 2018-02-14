@@ -29,6 +29,7 @@ public class NPCHealth : NetworkBehaviour {
     {
         float wait = CalculateFlightTime(boltSpeed, crossBowPosition) ;
         yield return new WaitForSeconds(wait);
+        //0.2 needed because troops are moving towards you. Fix!!!!!
         Destroy(gameObject);
     }
 

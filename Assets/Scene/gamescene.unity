@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45135415, g: 0.50093925, b: 0.5728291, a: 1}
+  m_IndirectSpecularColor: {r: 0.45135373, g: 0.5009382, b: 0.57282805, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -36646,8 +36646,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e55ae349fa09054eb34bb2b9656accc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  troopPrefab: {fileID: 1596017570374888, guid: cfb5c651f84c0564794f704215e73551,
-    type: 2}
+  troopPrefabs:
+  - {fileID: 1596017570374888, guid: cfb5c651f84c0564794f704215e73551, type: 2}
+  - {fileID: 1213076705821156, guid: f88d83afa5830ed4e8b0923d77187a76, type: 2}
+  - {fileID: 1032452943399488, guid: 8bf74795e78c54f49aa4ce7d5f52065c, type: 2}
   spawnLocations:
   - {fileID: 1196651617040014, guid: c211a44a3739ded4c9c5e08ffc272db7, type: 2}
   - {fileID: 1992934012861020, guid: 343576193bb64894ebe55065c9d64c8c, type: 2}
@@ -69873,7 +69875,7 @@ MonoBehaviour:
   m_NetworkPort: 7777
   m_ServerBindToIP: 0
   m_ServerBindAddress: 
-  m_NetworkAddress: localhost
+  m_NetworkAddress: 192.168.0.8
   m_DontDestroyOnLoad: 1
   m_RunInBackground: 1
   m_ScriptCRCCheck: 1
@@ -69888,6 +69890,8 @@ MonoBehaviour:
   m_SpawnPrefabs:
   - {fileID: 1596017570374888, guid: cfb5c651f84c0564794f704215e73551, type: 2}
   - {fileID: 1939600107179848, guid: 391ae649d8ca048c18bfd5958698588f, type: 2}
+  - {fileID: 1213076705821156, guid: f88d83afa5830ed4e8b0923d77187a76, type: 2}
+  - {fileID: 1032452943399488, guid: 8bf74795e78c54f49aa4ce7d5f52065c, type: 2}
   m_CustomConfig: 1
   m_MaxConnections: 12
   m_ConnectionConfig:

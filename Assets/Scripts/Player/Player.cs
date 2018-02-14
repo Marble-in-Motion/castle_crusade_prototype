@@ -61,8 +61,8 @@ public class Player : NetworkSetup
             // Canvas Settings
             Canvas canvas = GetComponentInChildren<Canvas>();
             canvas.planeDistance = 1;
-            //canvas.renderMode = RenderMode.ScreenSpaceCamera;
-            //canvas.worldCamera = GetComponentInChildren<Camera>();
+            canvas.renderMode = RenderMode.ScreenSpaceCamera;
+            canvas.worldCamera = GetComponentInChildren<Camera>();
             canvasController = canvas.GetComponent<CanvasController>();
         }
 
@@ -105,6 +105,16 @@ public class Player : NetworkSetup
                 //Debug.Log("Test");
                 CmdRequestOffensiveTroopSpawn(0, GetLaneId(GetId(), teamController.GetId()) - 1);
             }
+            else if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                //Debug.Log("Test");
+                CmdRequestOffensiveTroopSpawn(1, GetLaneId(GetId(), teamController.GetId()) - 1);
+            }
+            else if (Input.GetKeyDown(KeyCode.Slash))
+            {
+                //Debug.Log("Test");
+                CmdRequestOffensiveTroopSpawn(2, GetLaneId(GetId(), teamController.GetId()) - 1);
+            }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
                 CmdDestroyTroops(GetId(), teamController.GetId());
@@ -122,6 +132,7 @@ public class Player : NetworkSetup
             GameObject[] troops = GetTroopsInLane(teamController.GetId(), GetLaneId(GetId(), teamController.GetId()));
             for (int i = 0; i < troops.Length; i++) {
                 AIController ai = troops[i].GetComponent<AIController>();
+                Debug.Log(troops[i].name);
                 canvasController.SetSpartanDistance(troops[i].name, ai.GetDistanceRatioToTarget());
             }
         }
@@ -203,7 +214,14 @@ public class Player : NetworkSetup
     private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
     {
         int teamId = teamController.GetId();
-        bool successfulPurchase = teamController.SpendGold(10);
+        int cost = 0;
+        switch (troopId)
+        {
+            case 0: cost = 10;break;
+            case 1: cost = 30; break;
+            case 2: cost = 30; break;
+        }
+        bool successfulPurchase = teamController.SpendGold(cost);
         if (successfulPurchase) {
             spawnController.SpawnOffensive(troopId, spawnId, teamId);
         }
