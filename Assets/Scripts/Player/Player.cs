@@ -61,8 +61,8 @@ public class Player : NetworkSetup
             // Canvas Settings
             Canvas canvas = GetComponentInChildren<Canvas>();
             canvas.planeDistance = 1;
-            //canvas.renderMode = RenderMode.ScreenSpaceCamera;
-            //canvas.worldCamera = GetComponentInChildren<Camera>();
+            canvas.renderMode = RenderMode.ScreenSpaceCamera;
+            canvas.worldCamera = GetComponentInChildren<Camera>();
             canvasController = canvas.GetComponent<CanvasController>();
         }
 
@@ -132,6 +132,7 @@ public class Player : NetworkSetup
             GameObject[] troops = GetTroopsInLane(teamController.GetId(), GetLaneId(GetId(), teamController.GetId()));
             for (int i = 0; i < troops.Length; i++) {
                 AIController ai = troops[i].GetComponent<AIController>();
+                Debug.Log(troops[i].name);
                 canvasController.SetSpartanDistance(troops[i].name, ai.GetDistanceRatioToTarget());
             }
         }
