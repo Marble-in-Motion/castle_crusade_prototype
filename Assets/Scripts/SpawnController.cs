@@ -10,7 +10,7 @@ public class SpawnController : NetworkBehaviour
 
 	//troops
 	[SerializeField]
-	private GameObject[] troopPrefabs;
+	private GameObject troopPrefab;
 
 	//spawn location - lanes
 	[SerializeField]
@@ -19,11 +19,6 @@ public class SpawnController : NetworkBehaviour
 	//targets
 	[SerializeField]
 	private GameObject[] towers;
-
-	private GameObject GetTroopFromId(int troopId)
-	{
-		return troopPrefabs[troopId];
-	}
 
 	private GameObject GetSpawnFromId(int spawnId, int teamId)
 	{
@@ -43,18 +38,17 @@ public class SpawnController : NetworkBehaviour
 		Vector3 newPos = lane.transform.position + offset;
 		return newPos;
 	}
-
-
+		
 	public void SpawnOffensive(int troopId, int spawnId, int teamId)
 	{
-		GameObject troopPrefab = GetTroopFromId(troopId);
 		GameObject lane = GetSpawnFromId(spawnId, teamId);
 		GameObject targetTower = GetTargetTower(teamId);
 
 		GameObject troop = Instantiate(troopPrefab, ApplyOffset(lane), Quaternion.identity) as GameObject;
-        troop.GetComponent<AIController>().target = targetTower;
-        troop.GetComponent<AIController>().SetTagName(string.Format("NPCT{0}L{1}", teamId, spawnId + 1));
-
+		troop.GetComponent<AIController>().SetTagName(string.Format("NPCT{0}L{1}", teamId, spawnId + 1));
+		int opponentTeamIndex = (teamId == 1) ? 2 : 1;
+		Debug.Log (opponentTeamIndex);
+		troop.GetComponent<AIController>().SetTargetIndex(opponentTeamIndex - 1);
         NetworkServer.Spawn(troop);
 	}
 }
