@@ -7,31 +7,23 @@ public class AIController : NetworkBehaviour {
 
     private NavMeshAgent agent;
 
-	public Transform[] targets;
+	[SerializeField]
+	private Transform[] targets;
 
 	[SyncVar]
-	private Transform target;
-
-    private float spawnToTargetDistance;
+	private int targetIndex;
 
     [SyncVar]
     private String tagName;
 
+	private float spawnToTargetDistance;
+
     void Start() {
         this.tag = tagName;
 		agent = GetComponent<NavMeshAgent>();
-
-    }
-
-    public void SetTarget(GameObject targetTower)
-    {
-		for (int i = 0; i < targets.Length; i++) {
-			if (targetTower.transform == targets [i]) {
-				target = targets [i].transform;
-				agent.SetDestination(target.position);
-				spawnToTargetDistance = Vector3.Distance(transform.position, target.position);
-			}
-		}
+		Transform target = targets[targetIndex].transform;
+		agent.SetDestination(target.position);
+		spawnToTargetDistance = Vector3.Distance(transform.position, target.position);   
 	}
 
     public String GetTagName()
@@ -44,16 +36,15 @@ public class AIController : NetworkBehaviour {
         this.tagName = tagName;
     }
 
+	public void SetTargetIndex(int targetIndex){
+		this.targetIndex = targetIndex;
+	}
+
     public float GetDistanceRatioToTarget()
-	{	if (target != null) {
-			Debug.Log ("target is not null");
-			float currentDistanceToTarget = Vector3.Distance (transform.position, target.position);
-			float temp = 1 - (currentDistanceToTarget / spawnToTargetDistance);
-			return temp;
-		} else {
-			Debug.Log ("target is null");
-		}
-		return 0;
+	{
+		float currentDistanceToTarget = Vector3.Distance (transform.position, targets[targetIndex].position);
+		float temp = 1 - (currentDistanceToTarget / spawnToTargetDistance);
+		return temp;
     }
 
 }
