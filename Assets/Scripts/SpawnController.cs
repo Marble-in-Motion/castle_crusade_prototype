@@ -10,7 +10,7 @@ public class SpawnController : NetworkBehaviour
 
 	//troops
 	[SerializeField]
-	private GameObject troopPrefab;
+	private GameObject [] troopPrefabs;
 
 	//spawn location - lanes
 	[SerializeField]
@@ -44,7 +44,7 @@ public class SpawnController : NetworkBehaviour
 		GameObject lane = GetSpawnFromId(spawnId, teamId);
 		GameObject targetTower = GetTargetTower(teamId);
 
-		GameObject troop = Instantiate(troopPrefab, ApplyOffset(lane), Quaternion.identity) as GameObject;
+		GameObject troop = Instantiate(troopPrefabs[troopId], ApplyOffset(lane), Quaternion.identity) as GameObject;
 		troop.GetComponent<AIController>().SetTagName(string.Format("NPCT{0}L{1}", teamId, spawnId + 1));
 		int opponentTeamIndex = (teamId == 1) ? 2 : 1;
 		Debug.Log (opponentTeamIndex);
