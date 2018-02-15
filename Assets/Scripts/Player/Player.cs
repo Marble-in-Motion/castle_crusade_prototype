@@ -11,6 +11,9 @@ public class Player : NetworkSetup
 
     public const string PLAYER_TAG = "Player";
 	private const string REMOTE_LAYER_NAME = "RemotePlayer";
+	private const float CLOSE_DISTANCE = 0.5f;
+	private const int NUM_TROOPS_FOR_WARNING = 3;
+	private const float KLAXON_FIRE_TIME = 5.0f;
 
     private int id;
 
@@ -28,11 +31,18 @@ public class Player : NetworkSetup
 	[SerializeField]
 	private GameObject crossbow;
 
+	[SerializeField]
+	private GameObject AudioGameObject;
+
+	private AudioManager audioManager;
+
 	private float maxTowerHealth = 100f;
 
 	private Bolt bolt;
 
 	private LineRenderer laserLine;
+
+	private float nextActionTime = 0.0f;
 
     public int GetId()
     {
@@ -70,6 +80,9 @@ public class Player : NetworkSetup
             Canvas canvas = GetComponentInChildren<Canvas>();
             canvas.planeDistance = 1;
             canvasController = canvas.GetComponent<CanvasController>();
+
+			//get audio manager
+			audioManager = AudioGameObject.GetComponent<AudioManager>();
         }
 
         if (!isLocalPlayer)
@@ -138,13 +151,29 @@ public class Player : NetworkSetup
             canvasController.SetHealthBar(calc_Health);
             canvasController.SetGameOverValue(teamController.GetIsGameOver());
 
-            GameObject[] troops = GetTroopsInLane(teamController.GetId(), GetLaneId(GetId(), teamController.GetId()));
+            GameObject[] myTroops = GetTroopsInLane(teamController.GetId(), GetLaneId(GetId(), teamController.GetId()));
 			Dictionary<String, float> troopLocs = new Dictionary<string, float>();
-            for (int i = 0; i < troops.Length; i++) {
-                AIController ai = troops[i].GetComponent<AIController>();
-				troopLocs.Add (troops [i].name, ai.GetDistanceRatioToTarget ());
+            for (int i = 0; i < myTroops.Length; i++) {
+                AIController ai = myTroops[i].GetComponent<AIController>();
+				troopLocs.Add (myTroops [i].name, ai.GetDistanceRatioToTarget ());
             }
 			canvasController.SetSpartanDistances (troopLocs);
+
+			GameObject[] enemyTroops = GetTroopsInLane(GetTargetId(teamController.GetId()), GetLaneId(GetId(), GetTargetId(teamController.GetId())));
+			int numCloseTroops = 0;
+
+			for (int i = 0; i < enemyTroops.Length; i++) {
+				AIController enemyTroopsAi = enemyTroops [i].GetComponent<AIController> ();
+				float distanceRatioToTarget = enemyTroopsAi.GetDistanceRatioToTarget ();
+				if (distanceRatioToTarget > CLOSE_DISTANCE) {
+					numCloseTroops++;
+				}
+				if ((numCloseTroops >= NUM_TROOPS_FOR_WARNING) && (Time.time > nextActionTime)) {
+					nextActionTime = Time.time + KLAXON_FIRE_TIME;
+					audioManager.PlaySound ("klaxon");
+				}
+			}
+				
         }
     }
 
