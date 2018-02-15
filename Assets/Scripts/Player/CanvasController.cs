@@ -57,21 +57,38 @@ namespace Assets.Scripts.Player
             }
         }
 
-        public void SetSpartanDistance(string idTag, float ratio)
+		public void SetSpartanDistances(Dictionary<string, float> troopLocs)
         {
-            if (troopSprites.ContainsKey(idTag))
-            {
-                Image sprite = troopSprites[idTag];
-				RectTransform rt = (RectTransform) attackBar.transform;
-				float width = rt.rect.width;
+			//Go through and update sprite locations or delete them
+			List<string> spritesToDelete = new List<string>();
+			foreach(KeyValuePair<string, Image> sprite in troopSprites)
+			{
+				if (troopLocs.ContainsKey(sprite.Key)) 
+				{
+					Image spriteImg = troopSprites[sprite.Key];
+					RectTransform rt = (RectTransform) attackBar.transform;
+					float width = rt.rect.width;
 
-				float xLoc = (troop.transform.localPosition.x - width / 2) + (ratio * (width - 10));
-				sprite.transform.localPosition = new Vector3(xLoc, sprite.transform.localPosition.y, sprite.transform.localPosition.z);
-            } else
-            {
-                Image sprite = Instantiate(troop, attackBar.transform) as Image;
-                troopSprites.Add(idTag, sprite);
-            } 
+					float ratio = troopLocs [sprite.Key];
+
+					float xLoc = (troop.transform.localPosition.x - width / 2) + (ratio * (width-10));
+					spriteImg.transform.localPosition = new Vector3(xLoc, spriteImg.transform.localPosition.y, spriteImg.transform.localPosition.z);
+					troopLocs.Remove (sprite.Key);
+				} else
+				{
+					spritesToDelete.Add (sprite.Key);
+				} 
+			}
+			//Remove sprite locations from dictionary
+			foreach(string sprite in spritesToDelete) {
+				DestroySpartanSprite (sprite);
+			}
+			//Initialise new sprites
+			foreach (KeyValuePair<string, float> troopLoc in troopLocs) {
+				Image spriteImg = Instantiate(troop, attackBar.transform) as Image;
+				troopSprites.Add(troopLoc.Key, spriteImg);
+			}
+
         }
 
         public void DestroySpartanSprite(string idTag)
