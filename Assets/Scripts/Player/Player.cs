@@ -127,10 +127,12 @@ public class Player : NetworkSetup
             canvasController.SetGameOverValue(teamController.GetIsGameOver());
 
             GameObject[] troops = GetTroopsInLane(teamController.GetId(), GetLaneId(GetId(), teamController.GetId()));
+			Dictionary<String, float> troopLocs = new Dictionary<string, float>();
             for (int i = 0; i < troops.Length; i++) {
                 AIController ai = troops[i].GetComponent<AIController>();
-                canvasController.SetSpartanDistance(troops[i].name, ai.GetDistanceRatioToTarget());
+				troopLocs.Add (troops [i].name, ai.GetDistanceRatioToTarget ());
             }
+			canvasController.SetSpartanDistances (troopLocs);
         }
     }
 
@@ -188,6 +190,9 @@ public class Player : NetworkSetup
 	public void CmdPlayerShot(string id, float damage, Vector3 crossbowPosition)
 	{
 		GameObject target = GameObject.Find(id);
+		if (target == null) {
+			return;
+		}
 		if (target.GetComponent<NPCHealth> ()) {
 			target.GetComponent<NPCHealth>().DeductHealth(damage, crossbow.GetComponent<CrossbowController>().GetArrowSpeed(),crossbowPosition);
 			if (!target.GetComponent<NPCHealth>().IsAlive())
