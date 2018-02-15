@@ -42,7 +42,6 @@ public class SpawnController : NetworkBehaviour
 	public void SpawnOffensive(int troopId, int spawnId, int teamId)
 	{
 		GameObject lane = GetSpawnFromId(spawnId, teamId);
-		GameObject targetTower = GetTargetTower(teamId);
 
 		GameObject troop = Instantiate(troopPrefabs[troopId], ApplyOffset(lane), Quaternion.identity) as GameObject;
 		troop.GetComponent<AIController>().SetTagName(string.Format("NPCT{0}L{1}", teamId, spawnId + 1));
