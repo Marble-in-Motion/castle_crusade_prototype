@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 114669750910296576}
   - component: {fileID: 114855324748939734}
   - component: {fileID: 114415557017972020}
+  - component: {fileID: 114560486156499292}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -859,6 +860,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arrow: {fileID: 1939600107179848, guid: 391ae649d8ca048c18bfd5958698588f, type: 2}
+--- !u!114 &114560486156499292
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1197108965690756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10d3dc2cc22bf84dac8ad3b915d1cf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputsToRecord:
+  - inputType: 2
+    inputName: y
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  recordMouseEvents: 1
+  syncRecordLocations: 0
+  autoSyncLocationRate: 1
+  snapToSyncedLocation: 1
+  recordingFrameRate: 30
+  _mode: 1
 --- !u!114 &114576981814274084
 MonoBehaviour:
   m_ObjectHideFlags: 1
