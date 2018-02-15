@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Networking;
 
 public class NPCHealth : NetworkBehaviour {
 
-	//    public const float ARROW_START_DELAY = 0.2f;
+    private const float ARROW_START_DELAY = 0.2f;
 
 	[SerializeField]
 	private float initialHealth;
@@ -21,8 +22,9 @@ public class NPCHealth : NetworkBehaviour {
 	{
 		Vector3 troopPostion = this.transform.position;
 		float distance = Vector3.Distance(troopPostion, crossBowPosition);
-		float flightTime = distance / boltSpeed;
-		return flightTime; //- ARROW_START_DELAY;
+        Debug.Log(this.GetComponentInParent<NavMeshAgent>().speed);
+		float flightTime = distance / (boltSpeed - this.GetComponentInParent<NavMeshAgent>().speed) - ARROW_START_DELAY;
+		return flightTime;
 	}
 
 	IEnumerator DeathDelay(int boltSpeed, Vector3 crossBowPosition)
