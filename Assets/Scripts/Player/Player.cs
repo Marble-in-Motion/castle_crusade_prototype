@@ -39,6 +39,14 @@ public class Player : NetworkSetup
         return id;
     }
 
+    private InputVCR vcr;
+
+    void Awake()
+    {
+        vcr = GetComponent<InputVCR>();
+        vcr.NewRecording();
+    }
+
     void Start()
     {
         id = FindObjectsOfType<Player>().Length - 1;
@@ -48,7 +56,7 @@ public class Player : NetworkSetup
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
         teamController = gameController.GetTeamController(id);
 
-		bolt = new Bolt ();
+        bolt = new Bolt();
 
         if (isLocalPlayer)
         {
@@ -61,8 +69,6 @@ public class Player : NetworkSetup
             // Canvas Settings
             Canvas canvas = GetComponentInChildren<Canvas>();
             canvas.planeDistance = 1;
-            //canvas.renderMode = RenderMode.ScreenSpaceCamera;
-            //canvas.worldCamera = GetComponentInChildren<Camera>();
             canvasController = canvas.GetComponent<CanvasController>();
         }
 
@@ -119,7 +125,13 @@ public class Player : NetworkSetup
             else if (Input.GetButtonDown("Fire1"))
 			{
 				Shoot();
-			}
+			} else if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                String path = "exports/";
+                String fullPath = String.Format("{0}{1}_player{2}.json", path, DateTime.Now.Ticks, GetId());
+                System.IO.File.WriteAllText(fullPath, vcr.GetRecording().ToString());
+                Debug.Log("File written");
+            }
 
             canvasController.SetCurrencyText("Coin: " + teamController.GetCoin().ToString());
 			float calc_Health = teamController.GetTowerHealth() / maxTowerHealth;
