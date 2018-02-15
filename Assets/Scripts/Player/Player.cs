@@ -150,19 +150,23 @@ public class Player : NetworkSetup
         return GameObject.FindGameObjectsWithTag(troopTag);
     }
 
-    [Command]
-    private void CmdDestroyTroops(int id, int teamId)
-    {
-        bool successfulPurchase = teamController.SpendGold(100);
-        if (successfulPurchase)
-        {
-            int targetTeamId = GetTargetId(teamId);
-            int lane = GetLaneId(id, teamId);
-            GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
-            for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
-        }
-        
-    }
+	[ClientRpc]
+	void RpcShootVolley(GameObject[] troops) {
+		StartCoroutine(crossbow.GetComponent<CrossbowController> ().HandleVolley (troops));
+	}
+
+	[Command]
+	private void CmdDestroyTroops(int id, int teamId)
+	{
+		bool successfulPurchase = teamController.SpendGold(100);
+		if (successfulPurchase)
+		{
+			int targetTeamId = GetTargetId(teamId);
+			int lane = GetLaneId(id, teamId);
+			GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
+			RpcShootVolley (troops);
+		}
+	}
 
 	[Client]
 	void Shoot()
