@@ -34,7 +34,7 @@ namespace Assets.Scripts.Player
 
         public void SetHealthBar(float calcHealth)
         {
-            healthBar.transform.localScale = new Vector3(Mathf.Clamp(calcHealth, 0f, 1f), healthBar.transform.localScale.y, healthBar.transform.localScale.z);            
+            healthBar.transform.localScale = new Vector3(healthBar.transform.localScale.x, Mathf.Clamp(calcHealth, 0f, 1f), healthBar.transform.localScale.z);            
         }
 
         public void SetGameOverValue(GameController.GameState gameOverValue)
@@ -65,7 +65,7 @@ namespace Assets.Scripts.Player
 				RectTransform rt = (RectTransform) attackBar.transform;
 				float width = rt.rect.width;
 
-				float xLoc = (troop.transform.localPosition.x - width / 2) + (ratio * width);
+				float xLoc = (troop.transform.localPosition.x - width / 2) + (ratio * (width - 10));
 				sprite.transform.localPosition = new Vector3(xLoc, sprite.transform.localPosition.y, sprite.transform.localPosition.z);
             } else
             {
