@@ -102,8 +102,15 @@ public class Player : NetworkSetup
 			}
             else if (Input.GetKeyDown(KeyCode.Return))
             {
-                //Debug.Log("Test");
                 CmdRequestOffensiveTroopSpawn(0, GetLaneId(GetId(), teamController.GetId()) - 1);
+            }
+            else if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                CmdRequestOffensiveTroopSpawn(1, GetLaneId(GetId(), teamController.GetId()) - 1);
+            }
+            else if (Input.GetKeyDown(KeyCode.Slash))
+            {
+                CmdRequestOffensiveTroopSpawn(2, GetLaneId(GetId(), teamController.GetId()) - 1);
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -202,8 +209,17 @@ public class Player : NetworkSetup
     [Command]
     private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
     {
+        int cost = 0;
+        switch (troopId)
+        {
+            case 0: cost = 10;break;
+            case 1: cost = 40; break;
+            case 2: cost = 40; break;
+
+
+        }
         int teamId = teamController.GetId();
-        bool successfulPurchase = teamController.SpendGold(10);
+        bool successfulPurchase = teamController.SpendGold(cost);
         if (successfulPurchase) {
             spawnController.SpawnOffensive(troopId, spawnId, teamId);
         }
