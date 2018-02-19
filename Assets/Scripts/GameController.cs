@@ -42,12 +42,20 @@ public class GameController : NetworkBehaviour
         sceneCamera.gameObject.SetActive(false);
     }
 
-    public TeamController GetTeamController(int playerId)
+    public TeamController GetMyTeamController(int playerId)
     {
         return (CalculateTeamId(playerId) == TeamController.TEAM1)
             ? team1GameObject.GetComponent<TeamController>()
             : team2GameObject.GetComponent<TeamController>();
     }
+
+	public TeamController GetOpponentTeamController(int playerId)
+	{
+		return (CalculateTeamId(playerId) == TeamController.TEAM1)
+			? team2GameObject.GetComponent<TeamController>()
+			: team1GameObject.GetComponent<TeamController>();
+	}
+
 
     private void MovePlayerToSpawn(Player player)
     {

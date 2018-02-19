@@ -17,7 +17,9 @@ public class Player : NetworkSetup
 
     private int id;
 
-    private TeamController teamController;
+    private TeamController myTeamController;
+
+	private TeamController opponentsTeamController;
 
     private SpawnController spawnController;
 
@@ -35,8 +37,6 @@ public class Player : NetworkSetup
 	private GameObject AudioGameObject;
 
 	private AudioManager audioManager;
-
-	private float maxTowerHealth = 100f;
 
 	private Bolt bolt;
 
@@ -64,7 +64,8 @@ public class Player : NetworkSetup
 
         spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
-        teamController = gameController.GetTeamController(id);
+        myTeamController = gameController.GetMyTeamController(id);
+		opponentsTeamController = gameController.GetOpponentTeamController (id);
 
         bolt = new Bolt();
 
@@ -121,19 +122,19 @@ public class Player : NetworkSetup
 			}
             else if (Input.GetKeyDown(KeyCode.Return))
             {
-                CmdRequestOffensiveTroopSpawn(0, GetLaneId(GetId(), teamController.GetId()) - 1);
+                CmdRequestOffensiveTroopSpawn(0, GetLaneId(GetId(), myTeamController.GetId()) - 1);
             }
             else if (Input.GetKeyDown(KeyCode.Backspace))
             {
-                CmdRequestOffensiveTroopSpawn(1, GetLaneId(GetId(), teamController.GetId()) - 1);
+                CmdRequestOffensiveTroopSpawn(1, GetLaneId(GetId(), myTeamController.GetId()) - 1);
             }
             else if (Input.GetKeyDown(KeyCode.Slash))
             {
-                CmdRequestOffensiveTroopSpawn(2, GetLaneId(GetId(), teamController.GetId()) - 1);
+                CmdRequestOffensiveTroopSpawn(2, GetLaneId(GetId(), myTeamController.GetId()) - 1);
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
-                CmdDestroyTroops(GetId(), teamController.GetId());
+                CmdDestroyTroops(GetId(), myTeamController.GetId());
             }
             else if (Input.GetButtonDown("Fire1"))
 			{
@@ -146,12 +147,12 @@ public class Player : NetworkSetup
                 Debug.Log("File written");
             }
 
-            canvasController.SetCurrencyText("Coin: " + teamController.GetCoin().ToString());
-			float calc_Health = teamController.GetTowerHealth() / maxTowerHealth;
+            canvasController.SetCurrencyText("Coin: " + myTeamController.GetCoin().ToString());
+			float calc_Health = myTeamController.GetTowerHealth() / myTeamController.GetInitialTowerHealth();
             canvasController.SetHealthBar(calc_Health);
-            canvasController.SetGameOverValue(teamController.GetIsGameOver());
+            canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
 
-            GameObject[] myTroops = GetTroopsInLane(teamController.GetId(), GetLaneId(GetId(), teamController.GetId()));
+            GameObject[] myTroops = GetTroopsInLane(myTeamController.GetId(), GetLaneId(GetId(), myTeamController.GetId()));
 			Dictionary<String, float> troopLocs = new Dictionary<string, float>();
             for (int i = 0; i < myTroops.Length; i++) {
                 AIController ai = myTroops[i].GetComponent<AIController>();
@@ -159,7 +160,7 @@ public class Player : NetworkSetup
             }
 			canvasController.SetSpartanDistances (troopLocs);
 
-			GameObject[] enemyTroops = GetTroopsInLane(GetTargetId(teamController.GetId()), GetLaneId(GetId(), GetTargetId(teamController.GetId())));
+			GameObject[] enemyTroops = GetTroopsInLane(opponentsTeamController.GetId(), GetLaneId(GetId(), opponentsTeamController.GetId()));
 			int numCloseTroops = 0;
 
 			for (int i = 0; i < enemyTroops.Length; i++) {
@@ -170,44 +171,40 @@ public class Player : NetworkSetup
 				}
 				if ((numCloseTroops >= NUM_TROOPS_FOR_WARNING) && (Time.time > nextActionTime)) {
 					nextActionTime = Time.time + KLAXON_FIRE_TIME;
-					audioManager.PlaySound ("klaxon");
+					audioManager.PlaySound("klaxon");
 				}
 			}
-				
         }
-    }
-
-    private int GetTargetId(int teamId)
-    {
-        return (teamController.GetId() == TeamController.TEAM1) ? TeamController.TEAM2 : TeamController.TEAM1;
     }
 
     private int GetLaneId(int playerId, int teamId)
     {
-        return (teamId == TeamController.TEAM1) ? (playerId / 2) + 1 : (playerId - 1) / 2 + 1;
+        return (teamId == TeamController.TEAM1)
+			? (playerId / 2) + 1
+			: (playerId - 1) / 2 + 1;
     }
 
-    private GameObject[] GetTroopsInLane(int targetTeamId, int lane)
+    private GameObject[] GetTroopsInLane(int teamId, int lane)
     {
-        String troopTag = String.Format("NPCT{0}L{1}", targetTeamId, lane);
+		String troopTag = String.Format("NPCT{0}L{1}", teamId, lane);
         return GameObject.FindGameObjectsWithTag(troopTag);
     }
 
 	[ClientRpc]
 	void RpcShootVolley(GameObject[] troops) {
-		StartCoroutine(crossbow.GetComponent<CrossbowController> ().HandleVolley (troops));
+		StartCoroutine(crossbow.GetComponent<CrossbowController> ().HandleVolley(troops));
 	}
 
 	[Command]
 	private void CmdDestroyTroops(int id, int teamId)
 	{
-		bool successfulPurchase = teamController.SpendGold(100);
+		bool successfulPurchase = myTeamController.SpendGold(100);
 		if (successfulPurchase)
 		{
-			int targetTeamId = GetTargetId(teamId);
+			int targetTeamId = opponentsTeamController.GetId ();
 			int lane = GetLaneId(id, teamId);
 			GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
-			RpcShootVolley (troops);
+			RpcShootVolley(troops);
 		}
 	}
 
@@ -262,14 +259,14 @@ public class Player : NetworkSetup
         int cost = 0;
         switch (troopId)
         {
-            case 0: cost = 10;break;
+            case 0: cost = 10; break;
             case 1: cost = 40; break;
             case 2: cost = 40; break;
 
 
         }
-        int teamId = teamController.GetId();
-        bool successfulPurchase = teamController.SpendGold(cost);
+        int teamId = myTeamController.GetId();
+        bool successfulPurchase = myTeamController.SpendGold(cost);
         if (successfulPurchase) {
             spawnController.SpawnOffensive(troopId, spawnId, teamId);
         }
@@ -279,7 +276,7 @@ public class Player : NetworkSetup
     [Command]
     private void CmdAddGold(int amount)
     {
-        teamController.AddGold(amount);
+        myTeamController.AddGold(amount);
     }
 
 }
