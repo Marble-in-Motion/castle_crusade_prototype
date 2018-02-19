@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 public class NPCHealth : NetworkBehaviour {
 
     private const float ARROW_START_DELAY = 0.2f;
+    private const string DEATH_TRIGGER = "RoundKick"; 
 
 	[SerializeField]
 	private float initialHealth;
@@ -46,7 +47,7 @@ public class NPCHealth : NetworkBehaviour {
     [ClientRpc]
     private void RpcTriggerDeath()
     {
-        GetComponent<Animator>().SetTrigger("RoundKick");
+        GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
     }
 
     public float GetHealth() {

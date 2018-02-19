@@ -48,9 +48,5 @@ public class AIController : NetworkBehaviour {
 		return temp;
     }
 
-    public void TriggerDeath() {
-        Debug.Log("death called");
-        GetComponent<Animator>().SetTrigger("RoundKick");
-    }
 
 }
