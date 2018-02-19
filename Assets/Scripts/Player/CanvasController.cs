@@ -11,7 +11,10 @@ namespace Assets.Scripts.Player
     {
 
         [SerializeField]
-        private Image healthBar;
+        private Image myHealthBar;
+
+		[SerializeField]
+		private Image opponentsHealthBar;
 
 		[SerializeField]
 		private GameObject attackBar;
@@ -32,10 +35,14 @@ namespace Assets.Scripts.Player
             CurrencyText.text = text;
         }
 
-        public void SetHealthBar(float calcHealth)
+        public void SetHealthBar(float health)
         {
-            healthBar.transform.localScale = new Vector3(healthBar.transform.localScale.x, Mathf.Clamp(calcHealth, 0f, 1f), healthBar.transform.localScale.z);            
+			myHealthBar.transform.localScale = new Vector3(myHealthBar.transform.localScale.x, Mathf.Clamp(health, 0f, 1f), myHealthBar.transform.localScale.z);
         }
+
+		public void SetOpponentsHealthBar(float health) {
+			opponentsHealthBar.transform.localScale = new Vector3(Mathf.Clamp(health, 0f, 1f), opponentsHealthBar.transform.localScale.y, opponentsHealthBar.transform.localScale.z);
+		}
 
         public void SetGameOverValue(GameController.GameState gameOverValue)
         {

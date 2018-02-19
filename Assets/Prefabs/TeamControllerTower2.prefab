@@ -85,5 +85,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
-  coin: 100
+  coin: 200
   towerHealth: 100
