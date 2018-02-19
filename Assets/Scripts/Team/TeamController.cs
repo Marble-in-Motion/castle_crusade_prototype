@@ -40,13 +40,17 @@ public class TeamController : NetworkBehaviour
         return id;
     }
     
-    public float GetTowerHealth()
+	private float GetTowerHealth()
     {
         return towerHealth;
     }
 
-	public float GetInitialTowerHealth() {
+	private float GetInitialTowerHealth() {
 		return initialTowerHealth;
+	}
+
+	public float GetTowerHealthRatio(){
+		return GetTowerHealth() / GetInitialTowerHealth();
 	}
 
     public int GetCoin()

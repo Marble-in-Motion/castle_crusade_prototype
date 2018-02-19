@@ -147,10 +147,10 @@ public class Player : NetworkSetup
                 Debug.Log("File written");
             }
 
-            canvasController.SetCurrencyText("Coin: " + myTeamController.GetCoin().ToString());
-			float calc_Health = myTeamController.GetTowerHealth() / myTeamController.GetInitialTowerHealth();
-            canvasController.SetHealthBar(calc_Health);
-            canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
+            canvasController.SetCurrencyText(myTeamController.GetCoin().ToString());
+			canvasController.SetHealthBar(myTeamController.GetTowerHealthRatio());
+			canvasController.SetOpponentsHealthBar(opponentsTeamController.GetTowerHealthRatio());
+			canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
 
             GameObject[] myTroops = GetTroopsInLane(myTeamController.GetId(), GetLaneId(GetId(), myTeamController.GetId()));
 			Dictionary<String, float> troopLocs = new Dictionary<string, float>();
