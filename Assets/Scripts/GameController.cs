@@ -9,7 +9,7 @@ public class GameController : NetworkBehaviour
 
     public const string GAME_CONTROLLER_TAG = "GameController";
     public const string ENEMY_TAG = "NPCT{0}L{1}";
-    private const float COIN_INCREASE_INTERVAL = 5;
+    private const float COIN_INCREASE_INTERVAL = 15;
 
     public enum GameState { GAME_RESTART, GAME_IN_PROGRESS, GAME_LOST, GAME_WON }
 
@@ -100,14 +100,20 @@ public class GameController : NetworkBehaviour
         }
     }
 
-    private void Update()
+    [Command]
+    private void CmdCheckTime()
     {
-        if(Time.time > coinIncreaseTime)
+        if (Time.time > coinIncreaseTime)
         {
             coinIncreaseTime = Time.time + COIN_INCREASE_INTERVAL;
             team1GameObject.GetComponent<TeamController>().CmdIncreaseCoinPerInterval(1);
             team2GameObject.GetComponent<TeamController>().CmdIncreaseCoinPerInterval(1);
         }
+    }
+
+    private void Update()
+    {
+        CmdCheckTime();   
         if (restart)
         {
             DestroyAllTroops();
