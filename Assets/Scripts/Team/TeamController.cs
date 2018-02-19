@@ -29,6 +29,9 @@ public class TeamController : NetworkBehaviour
 	[SyncVar]
 	private GameController.GameState gameOverValue;
 
+    [SyncVar]
+    private int coinsPerSecond = 5; 
+
     void Start()
     {
 		gameOverValue = 0;
@@ -39,8 +42,21 @@ public class TeamController : NetworkBehaviour
     {
         return id;
     }
-    
-	private float GetTowerHealth()
+
+    [Command]
+    public void CmdIncreaseCoinPerInterval(int increase)
+    {
+        coinsPerSecond += increase;
+    }
+
+    [Command]
+    public void CmdResetCoinPerInterval()
+    {
+        coinsPerSecond = 5;
+    }
+
+
+    private float GetTowerHealth()
     {
         return towerHealth;
     }
@@ -94,7 +110,7 @@ public class TeamController : NetworkBehaviour
         if (Time.time > nextActionTime)
         {
             nextActionTime += secondsToCoinIncrease;
-            AddGold(5);
+            AddGold(coinsPerSecond);
         }
     }
 
