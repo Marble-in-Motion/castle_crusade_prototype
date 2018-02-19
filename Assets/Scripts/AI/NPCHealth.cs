@@ -38,12 +38,18 @@ public class NPCHealth : NetworkBehaviour {
 		currentHealth -= damage;
 
 		if (!IsAlive ()) {
-            GetComponent<AIController>().TriggerDeath();
+            RpcTriggerDeath();
 			StartCoroutine(DeathDelay(boltSpeed, crossBowPosition));
 		}
 	}
 
-	public float GetHealth() {
+    [ClientRpc]
+    private void RpcTriggerDeath()
+    {
+        GetComponent<Animator>().SetTrigger("RoundKick");
+    }
+
+    public float GetHealth() {
 		return currentHealth;
 	}
 
