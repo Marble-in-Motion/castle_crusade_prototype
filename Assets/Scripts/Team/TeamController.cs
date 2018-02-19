@@ -22,6 +22,7 @@ public class TeamController : NetworkBehaviour
 	[SyncVar]
 	public float towerHealth;
 
+	private float initialTowerHealth;
 	private float nextActionTime = 0.0f;
     private float secondsToCoinIncrease = 1.0f;
 
@@ -31,6 +32,7 @@ public class TeamController : NetworkBehaviour
     void Start()
     {
 		gameOverValue = 0;
+		initialTowerHealth = towerHealth;
     }
 
     public int GetId()
@@ -42,6 +44,10 @@ public class TeamController : NetworkBehaviour
     {
         return towerHealth;
     }
+
+	public float GetInitialTowerHealth() {
+		return initialTowerHealth;
+	}
 
     public int GetCoin()
     {
