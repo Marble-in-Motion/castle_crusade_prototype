@@ -7,7 +7,8 @@ using UnityEngine.Networking;
 public class NPCHealth : NetworkBehaviour {
 
     private const float ARROW_START_DELAY = 0.2f;
-    private const string DEATH_TRIGGER = "RoundKick"; 
+    private const string DEATH_TRIGGER = "Die";
+    private const float ANIM_WAIT = 5.0f;
 
 	[SerializeField]
 	private float initialHealth;
@@ -31,6 +32,7 @@ public class NPCHealth : NetworkBehaviour {
 	IEnumerator DeathDelay(int boltSpeed, Vector3 crossBowPosition)
 	{
 		float wait = CalculateFlightTime(boltSpeed, crossBowPosition) ;
+        wait = wait + ANIM_WAIT;
 		yield return new WaitForSeconds(wait);
 		Destroy(gameObject);
 	}
@@ -48,6 +50,8 @@ public class NPCHealth : NetworkBehaviour {
     private void RpcTriggerDeath()
     {
         GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
+        Destroy(GetComponent<BoxCollider>());
+        Destroy(GetComponent<NavMeshAgent>());
     }
 
     public float GetHealth() {
@@ -57,5 +61,4 @@ public class NPCHealth : NetworkBehaviour {
 	public bool IsAlive() {
 		return this.currentHealth > 0;
 	}
-
 }
