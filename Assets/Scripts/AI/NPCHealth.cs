@@ -41,15 +41,14 @@ public class NPCHealth : NetworkBehaviour {
 		currentHealth -= damage;
 
 		if (!IsAlive ()) {
-            if (isServer)
-            {
+            if (isClient) {
                 TriggerDeath();
             }
             else
             {
                 RpcTriggerDeath();
             }
-			StartCoroutine(DeathDelay(boltSpeed, crossBowPosition));
+            StartCoroutine(DeathDelay(boltSpeed, crossBowPosition));
 		}
 	}
 
