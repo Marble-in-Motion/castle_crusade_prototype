@@ -14,7 +14,6 @@ public class Player : NetworkSetup
 	private const float CLOSE_DISTANCE = 0.5f;
 	private const int NUM_TROOPS_FOR_WARNING = 3;
 	private const float KLAXON_FIRE_TIME = 5.0f;
-    private const float COOL_DOWN = 30;
 
     private int id;
 
@@ -38,8 +37,6 @@ public class Player : NetworkSetup
 	private GameObject AudioGameObject;
 
 	private AudioManager audioManager;
-
-	private Bolt bolt;
 
 	private LineRenderer laserLine;
 
@@ -69,8 +66,6 @@ public class Player : NetworkSetup
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
         myTeamController = gameController.GetMyTeamController(id);
 		opponentsTeamController = gameController.GetOpponentTeamController (id);
-
-        bolt = new Bolt();
 
         if (isLocalPlayer)
         {
@@ -140,7 +135,7 @@ public class Player : NetworkSetup
                 if (Time.time > endOfCoolDown)
                 {
                     CmdDestroyTroops(GetId(), myTeamController.GetId());
-                    endOfCoolDown = Time.time + COOL_DOWN;
+                    endOfCoolDown = Time.time + Params.DESTROY_COOL_DOWN;
                 }
             }
             else if (Input.GetButtonDown("Fire1"))
@@ -205,7 +200,7 @@ public class Player : NetworkSetup
 	[Command]
 	private void CmdDestroyTroops(int id, int teamId)
 	{
-		bool successfulPurchase = myTeamController.SpendGold(100);
+		bool successfulPurchase = myTeamController.SpendGold(Params.DESTROY_COST);
 		if (successfulPurchase)
 		{
 			int targetTeamId = opponentsTeamController.GetId ();
@@ -222,11 +217,11 @@ public class Player : NetworkSetup
 		laserLine.SetPosition(0, crossbow.transform.position);
 		StartCoroutine(crossbow.GetComponent<CrossbowController>().HandleShoot());
 		RaycastHit hit;
-		if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, bolt.range)) {
-			CmdPlayerShot(hit.collider.name, bolt.damage, this.transform.position);
+		if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, Params.Bolt.RANGE)) {
+			CmdPlayerShot(hit.collider.name, Params.Bolt.DAMAGE, this.transform.position);
 			laserLine.SetPosition(1, hit.point);
 		} else {
-			laserLine.SetPosition(1, crossbow.transform.position + crossbow.transform.forward * bolt.range);
+			laserLine.SetPosition(1, crossbow.transform.position + crossbow.transform.forward * Params.Bolt.RANGE);
 		}
 		crossbow.GetComponent<CrossbowController>().HandleArrow(laserLine.GetPosition (1));
 	}
@@ -242,7 +237,7 @@ public class Player : NetworkSetup
 			target.GetComponent<NPCHealth>().DeductHealth(damage, crossbow.GetComponent<CrossbowController>().GetArrowSpeed(),crossbowPosition);
 			if (!target.GetComponent<NPCHealth>().IsAlive())
 			{
-				this.GetComponentInParent<Player>().CmdAddGold(5);
+				this.GetComponentInParent<Player>().CmdAddGold(Params.NPC_REWARD[ target.GetComponentInParent<AIController>().GetTroopType()]);
 			}
 		}
 		if (target.transform != null /*&& target.collider.tag == "NPC"*/) {
@@ -263,15 +258,7 @@ public class Player : NetworkSetup
     [Command]
     private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
     {
-        int cost = 0;
-        switch (troopId)
-        {
-            case 0: cost = 10; break;
-            case 1: cost = 40; break;
-            case 2: cost = 40; break;
-
-
-        }
+		int cost = Params.NPC_COST [troopId];
         int teamId = myTeamController.GetId();
         bool successfulPurchase = myTeamController.SpendGold(cost);
         if (successfulPurchase) {

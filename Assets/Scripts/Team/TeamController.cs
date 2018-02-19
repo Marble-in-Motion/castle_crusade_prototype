@@ -10,8 +10,6 @@ public class TeamController : NetworkBehaviour
     public const int TEAM1 = 1;
     public const int TEAM2 = 2;
 
-    public const float STARTING_HEALTH = 100.0f;
-    public const int STARTING_COIN = 200;
 
     [SerializeField]
     private int id;
@@ -20,22 +18,20 @@ public class TeamController : NetworkBehaviour
     public int coin;
 
 	[SyncVar]
-	public float towerHealth;
+	private float towerHealth;
 
-	private float initialTowerHealth;
 	private float nextActionTime = 0.0f;
-    private float secondsToCoinIncrease = 1.0f;
 
 	[SyncVar]
 	private GameController.GameState gameOverValue;
 
     [SyncVar]
-    private int coinsPerSecond = 5; 
+    private int coinsPerSecond = Params.STARTING_COIN_INCREASE_AMOUNT; 
 
     void Start()
     {
 		gameOverValue = 0;
-		initialTowerHealth = towerHealth;
+		towerHealth = Params.STARTING_TOWER_HEALTH;
     }
 
     public int GetId()
@@ -61,12 +57,8 @@ public class TeamController : NetworkBehaviour
         return towerHealth;
     }
 
-	private float GetInitialTowerHealth() {
-		return initialTowerHealth;
-	}
-
 	public float GetTowerHealthRatio(){
-		return GetTowerHealth() / GetInitialTowerHealth();
+		return GetTowerHealth() / Params.STARTING_TOWER_HEALTH;
 	}
 
     public int GetCoin()
@@ -109,7 +101,7 @@ public class TeamController : NetworkBehaviour
 
         if (Time.time > nextActionTime)
         {
-            nextActionTime += secondsToCoinIncrease;
+			nextActionTime += Params.COIN_DELAY;
             AddGold(coinsPerSecond);
         }
     }
@@ -135,7 +127,7 @@ public class TeamController : NetworkBehaviour
 
     public void Restart()
     {
-        towerHealth = STARTING_HEALTH;
-        coin = STARTING_COIN;
+        towerHealth = Params.STARTING_TOWER_HEALTH;
+        coin = Params.STARTING_COIN;
     }
 }

@@ -37,6 +37,7 @@ namespace Assets.Scripts.Player
 
         public void SetHealthBar(float health)
         {
+			Debug.Log (myHealthBar == null);
 			myHealthBar.transform.localScale = new Vector3(myHealthBar.transform.localScale.x, Mathf.Clamp(health, 0f, 1f), myHealthBar.transform.localScale.z);
         }
 

@@ -5,8 +5,7 @@ using System.Collections.Generic;
 
 public class CrossbowController : MonoBehaviour {
 
-	//    [SerializeField]
-	//    private float lookSensitivity = 3f;
+
 	[SerializeField]
 	public GameObject arrow;
 
@@ -25,7 +24,6 @@ public class CrossbowController : MonoBehaviour {
 		shootAudio = GetComponent<AudioSource>();
 		laserLine.enabled = true;
 	}
-
 
 	public IEnumerator HandleShoot() {
 		shootAudio.Play();
