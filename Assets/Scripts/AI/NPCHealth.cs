@@ -57,14 +57,14 @@ public class NPCHealth : NetworkBehaviour {
     {
         GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
         Destroy(GetComponent<BoxCollider>());
-        Destroy(GetComponent<NavMeshAgent>());
+        GetComponent<NavMeshAgent>().speed = 0;
     }
 
     private void TriggerDeath()
     {
         GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
         Destroy(GetComponent<BoxCollider>());
-        Destroy(GetComponent<NavMeshAgent>());
+        GetComponent<NavMeshAgent>().speed = 0;
     }
 
     public float GetHealth() {
