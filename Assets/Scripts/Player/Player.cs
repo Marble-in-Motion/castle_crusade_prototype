@@ -14,6 +14,7 @@ public class Player : NetworkSetup
 	private const float CLOSE_DISTANCE = 0.5f;
 	private const int NUM_TROOPS_FOR_WARNING = 3;
 	private const float KLAXON_FIRE_TIME = 5.0f;
+    private const float COOL_DOWN = 30;
 
     private int id;
 
@@ -44,6 +45,8 @@ public class Player : NetworkSetup
 
 	private float nextActionTime = 0.0f;
 
+    private float endOfCoolDown;
+
     public int GetId()
     {
         return id;
@@ -61,7 +64,7 @@ public class Player : NetworkSetup
     {
         id = FindObjectsOfType<Player>().Length - 1;
         RegisterModel(Player.PLAYER_TAG, GetId());
-
+        endOfCoolDown = Time.time;
         spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
         myTeamController = gameController.GetMyTeamController(id);
@@ -134,7 +137,11 @@ public class Player : NetworkSetup
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
-                CmdDestroyTroops(GetId(), myTeamController.GetId());
+                if (Time.time > endOfCoolDown)
+                {
+                    CmdDestroyTroops(GetId(), myTeamController.GetId());
+                    endOfCoolDown = Time.time + COOL_DOWN;
+                }
             }
             else if (Input.GetButtonDown("Fire1"))
 			{
