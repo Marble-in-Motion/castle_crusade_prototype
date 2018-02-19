@@ -10,14 +10,11 @@ public class NPCHealth : NetworkBehaviour {
     private const string DEATH_TRIGGER = "Die";
     private const float ANIM_WAIT = 5.0f;
 
-	[SerializeField]
-	private float initialHealth;
-
 	[SyncVar]
 	private float currentHealth;
 
 	void Start() {
-		currentHealth = initialHealth;
+		currentHealth = Params.NPC_HEALTH[ this.GetComponentInParent<AIController> ().GetTroopType ()];
 	}
 
 	private float CalculateFlightTime(int boltSpeed, Vector3 crossBowPosition)

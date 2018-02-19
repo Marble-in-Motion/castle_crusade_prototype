@@ -45,6 +45,7 @@ public class SpawnController : NetworkBehaviour
 
 		GameObject troop = Instantiate(troopPrefabs[troopId], ApplyOffset(lane), Quaternion.identity) as GameObject;
 		troop.GetComponent<AIController>().SetTagName(string.Format("NPCT{0}L{1}", teamId, spawnId + 1));
+		troop.GetComponent<AIController> ().SetTroopType (troopId);
 		int opponentTeamIndex = (teamId == 1) ? 2 : 1;
 
 		troop.GetComponent<AIController>().SetTargetIndex(opponentTeamIndex - 1);

@@ -16,17 +16,21 @@ public class AIController : NetworkBehaviour {
     [SyncVar]
     private String tagName;
 
+	[SyncVar]
+	private int troopType;
+
 	private float spawnToTargetDistance;
 
     void Start() {
         GetComponent<Animator>().SetTrigger("Run");
         tag = tagName;
 		agent = GetComponent<NavMeshAgent>();
+		agent.speed = Params.NPC_SPEED [troopType];
 		Transform target = targets[targetIndex].transform;
 		agent.SetDestination(target.position);
 		spawnToTargetDistance = Vector3.Distance(transform.position, target.position);   
 	}
-
+		
     public String GetTagName()
     {
         return tagName;
@@ -36,6 +40,16 @@ public class AIController : NetworkBehaviour {
     {
         this.tagName = tagName;
     }
+
+	public int GetTroopType()
+	{
+		return troopType;
+	}
+
+	public void SetTroopType(int type)
+	{
+		this.troopType = type;
+	}
 
 	public void SetTargetIndex(int targetIndex){
 		this.targetIndex = targetIndex;
