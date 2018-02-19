@@ -19,7 +19,8 @@ public class AIController : NetworkBehaviour {
 	private float spawnToTargetDistance;
 
     void Start() {
-        this.tag = tagName;
+        GetComponent<Animator>().SetTrigger("Run");
+        tag = tagName;
 		agent = GetComponent<NavMeshAgent>();
 		Transform target = targets[targetIndex].transform;
 		agent.SetDestination(target.position);
@@ -46,5 +47,6 @@ public class AIController : NetworkBehaviour {
 		float temp = 1 - (currentDistanceToTarget / spawnToTargetDistance);
 		return temp;
     }
+
 
 }

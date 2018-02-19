@@ -7,6 +7,8 @@ using UnityEngine.Networking;
 public class NPCHealth : NetworkBehaviour {
 
     private const float ARROW_START_DELAY = 0.2f;
+    private const string DEATH_TRIGGER = "Die";
+    private const float ANIM_WAIT = 5.0f;
 
 	[SerializeField]
 	private float initialHealth;
@@ -30,6 +32,7 @@ public class NPCHealth : NetworkBehaviour {
 	IEnumerator DeathDelay(int boltSpeed, Vector3 crossBowPosition)
 	{
 		float wait = CalculateFlightTime(boltSpeed, crossBowPosition) ;
+        wait = wait + ANIM_WAIT;
 		yield return new WaitForSeconds(wait);
 		Destroy(gameObject);
 	}
@@ -38,16 +41,38 @@ public class NPCHealth : NetworkBehaviour {
 		currentHealth -= damage;
 
 		if (!IsAlive ()) {
+            if (isServer)
+            {
+                TriggerDeath();
+            }
+            else
+            {
+                RpcTriggerDeath();
+            }
 			StartCoroutine(DeathDelay(boltSpeed, crossBowPosition));
 		}
 	}
 
-	public float GetHealth() {
+    [ClientRpc]
+    private void RpcTriggerDeath()
+    {
+        GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
+        Destroy(GetComponent<BoxCollider>());
+        Destroy(GetComponent<NavMeshAgent>());
+    }
+
+    private void TriggerDeath()
+    {
+        GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
+        Destroy(GetComponent<BoxCollider>());
+        Destroy(GetComponent<NavMeshAgent>());
+    }
+
+    public float GetHealth() {
 		return currentHealth;
 	}
 
 	public bool IsAlive() {
 		return this.currentHealth > 0;
 	}
-
 }
