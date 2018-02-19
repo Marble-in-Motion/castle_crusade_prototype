@@ -262,7 +262,7 @@ public class Player : NetworkSetup
         int cost = 0;
         switch (troopId)
         {
-            case 0: cost = 10;break;
+            case 0: cost = 10; break;
             case 1: cost = 40; break;
             case 2: cost = 40; break;
 

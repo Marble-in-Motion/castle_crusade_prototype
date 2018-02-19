@@ -38,6 +38,7 @@ public class NPCHealth : NetworkBehaviour {
 		currentHealth -= damage;
 
 		if (!IsAlive ()) {
+            GetComponent<AIController>().TriggerDeath();
 			StartCoroutine(DeathDelay(boltSpeed, crossBowPosition));
 		}
 	}
