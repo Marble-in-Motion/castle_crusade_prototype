@@ -22,7 +22,14 @@ public class AIController : NetworkBehaviour {
 	private float spawnToTargetDistance;
 
     void Start() {
-        GetComponent<Animator>().SetTrigger("Run");
+        if(GetComponent<Animation>() != null)
+        {
+            GetComponent<Animation>().Play("run");
+        }
+        else
+        {
+            GetComponent<Animator>().SetTrigger("Run");
+        }
         tag = tagName;
 		agent = GetComponent<NavMeshAgent>();
 		agent.speed = Params.NPC_SPEED [troopType];
