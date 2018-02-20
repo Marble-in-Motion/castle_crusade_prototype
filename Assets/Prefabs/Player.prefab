@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 224886177930834304}
   - component: {fileID: 222126707145058666}
   - component: {fileID: 114992888872638716}
+  - component: {fileID: 114583689212760392}
   m_Layer: 5
   m_Name: CurrencyText
   m_TagString: Coins
@@ -1151,6 +1152,20 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114583689212760392
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1395907064218960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 0}
+  m_EffectDistance: {x: 0, y: 0}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114587412877996866
 MonoBehaviour:
   m_ObjectHideFlags: 1
