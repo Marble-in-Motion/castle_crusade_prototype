@@ -2006,8 +2006,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.1031499, y: 1.8940071, z: 1.5805672}
-  m_Center: {x: 0.089488894, y: 0.8970035, z: -0.3071723}
+  m_Size: {x: 1.5705609, y: 1.8940071, z: 2.1680748}
+  m_Center: {x: 0.03699376, y: 0.8970035, z: -0.013418477}
 --- !u!95 &95409402804414774
 Animator:
   serializedVersion: 3
@@ -2036,7 +2036,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162a684e0304cf3498093c398747a6a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialHealth: 200
 --- !u!114 &114381403125601362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2533,7 +2532,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.2
-  m_Speed: 3
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

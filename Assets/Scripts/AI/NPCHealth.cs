@@ -38,13 +38,7 @@ public class NPCHealth : NetworkBehaviour {
 		currentHealth -= damage;
 
 		if (!IsAlive ()) {
-            if (isClient) {
-                TriggerDeath();
-            }
-            else
-            {
-                RpcTriggerDeath();
-            }
+            RpcTriggerDeath();
             StartCoroutine(DeathDelay(boltSpeed, crossBowPosition));
 		}
 	}
@@ -52,16 +46,18 @@ public class NPCHealth : NetworkBehaviour {
     [ClientRpc]
     private void RpcTriggerDeath()
     {
-        GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
-        Destroy(GetComponent<BoxCollider>());
-        GetComponent<NavMeshAgent>().speed = 0;
-    }
+        if (GetComponent<Animation>() != null)
+        {
+            GetComponent<Animation>().Play("die");
+        }
+        else
+        {
+            GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
 
-    private void TriggerDeath()
-    {
-        GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
+        }
         Destroy(GetComponent<BoxCollider>());
-        GetComponent<NavMeshAgent>().speed = 0;
+        Destroy(GetComponent<NavMeshAgent>());
+        //GetComponent<NavMeshAgent>().speed = 0;
     }
 
     public float GetHealth() {
