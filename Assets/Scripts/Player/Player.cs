@@ -95,8 +95,7 @@ public class Player : NetworkSetup
     void Update()
     {
         if (isLocalPlayer)
-        {
-
+		{
             // spawn npc command
             if (Input.GetKeyDown(KeyCode.Y))
             {
@@ -138,7 +137,13 @@ public class Player : NetworkSetup
                     endOfCoolDown = Time.time + Params.DESTROY_COOL_DOWN;
                 }
             }
-            else if (Input.GetButtonDown("Fire1"))
+			else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+				crossbow.GetComponent<CrossbowMotor> ().moveLeft ();
+			}
+			else if (Input.GetKeyDown(KeyCode.RightArrow)) {
+				crossbow.GetComponent<CrossbowMotor> ().moveRight();
+			}
+			else if (Input.GetKeyDown(KeyCode.S))
 			{
 				Shoot();
 			} else if (Input.GetKeyDown(KeyCode.Delete))
@@ -162,7 +167,7 @@ public class Player : NetworkSetup
             }
 			canvasController.SetSpartanDistances (troopLocs);
 
-			GameObject[] enemyTroops = GetTroopsInLane(opponentsTeamController.GetId(), GetLaneId(GetId(), opponentsTeamController.GetId()));
+			GameObject[] enemyTroops = FindEnemyTroopsInLane();
 			int numCloseTroops = 0;
 
 			for (int i = 0; i < enemyTroops.Length; i++) {
@@ -178,6 +183,12 @@ public class Player : NetworkSetup
 			}
         }
     }
+
+	public GameObject[] FindEnemyTroopsInLane ()
+	{
+		Debug.Log ("finding troops");
+		return GetTroopsInLane (opponentsTeamController.GetId (), GetLaneId (GetId (), opponentsTeamController.GetId ()));
+	}
 
     private int GetLaneId(int playerId, int teamId)
     {
