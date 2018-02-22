@@ -10,27 +10,72 @@ public class CrossbowMotor : MonoBehaviour
 
     private Vector3 mousePos;
 
+	private int activePath;
+
     void Start()
     {
     }
 
+	void Update()
+	{
+		lookAtTroop ();
+	}
+
     // Run every physics iteration
-    void FixedUpdate()
-    {
-        PerformRotation();
-    }
+//    void FixedUpdate()
+//    {
+//        PerformRotation();
+//    }
+//
+//    // Gets a rotational vector
+//    public void Rotate(Vector3 mousePosition)
+//    {
+//        mousePos = mousePosition;
+//        mousePos.z = 10;
+//    }
+//
+//    //Perform rotation
+//    void PerformRotation()
+//    {
+//        Vector3 worldPos = cam.ScreenToWorldPoint(mousePos);
+//        transform.LookAt(worldPos);
+//    }
 
-    // Gets a rotational vector
-    public void Rotate(Vector3 mousePosition)
-    {
-        mousePos = mousePosition;
-        mousePos.z = 10;
-    }
+	void lookAtTroop(){
+		GameObject[] troopsInLane = this.GetComponentInParent<Player> ().FindEnemyTroopsInLane ();
+		if (troopsInLane.Length != 0) {
+			GameObject nearestTroop = findNearestTroop (troopsInLane);
+			transform.LookAt(nearestTroop.transform.position);
+		}
+	}
 
-    //Perform rotation
-    void PerformRotation()
-    {
-        Vector3 worldPos = cam.ScreenToWorldPoint(mousePos);
-        transform.LookAt(worldPos);
-    }
+	GameObject findNearestTroop(GameObject[] troopsInLane){
+		float minDist=float.MaxValue;
+		GameObject nearestTroop = null;
+
+		for (int i = 0; i < troopsInLane.Length; i++) {
+			GameObject tempTroop = troopsInLane [i];
+			float tempDistance = Vector3.Distance (tempTroop.transform.position, transform.position);
+			if (tempDistance < minDist) {
+				minDist = tempDistance;
+				nearestTroop = tempTroop;
+			}
+		}
+		return nearestTroop;
+	}
+
+	public void moveRight()
+	{
+		if (activePath != 2) {
+			activePath += 1;
+		}
+	}
+
+	public void moveLeft()
+	{
+		if (activePath != 0) {
+			activePath -= 1;
+		}
+	}
+
 }

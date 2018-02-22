@@ -12,14 +12,11 @@ public class CrossbowController : MonoBehaviour {
 	private int speed = 150;
 	private LineRenderer laserLine;
 
-	CrossbowMotor motor;
-
 	private AudioSource shootAudio;
 	private WaitForSeconds singleShotDuration = new WaitForSeconds(0.05f);
 	private WaitForSeconds volleyShotDuration = new WaitForSeconds(0.0025f);
 
 	void Start() {
-		motor = GetComponent<CrossbowMotor>();
 		laserLine = GetComponent<LineRenderer>();
 		shootAudio = GetComponent<AudioSource>();
 		laserLine.enabled = true;
@@ -64,12 +61,5 @@ public class CrossbowController : MonoBehaviour {
 	}
 
 	void Update () {
-		UpdateMovement();
 	}
-
-	private void UpdateMovement()
-	{
-		motor.Rotate(Input.mousePosition);
-	}
-
 }
