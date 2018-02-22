@@ -30,20 +30,24 @@ public class SpawnController : NetworkBehaviour
 		return (teamId == TeamController.TEAM1) ? towers[1] : towers[0];
 	}
 
-	private Vector3 ApplyOffset(GameObject lane) {
-		float xOffset = Random.Range (-maxOffset, maxOffset);
-		Vector3 offset = new Vector3 (xOffset, 0, 0);
-		float yRot = lane.transform.rotation.y * Mathf.Rad2Deg;
-		offset = Quaternion.Euler(0,yRot,0) * offset;
-		Vector3 newPos = lane.transform.position + offset;
-		return newPos;
-	}
+	private Vector3 ApplyOffset(GameObject lane, GameObject target) {
+        float theta = Random.Range(-36, 36);
+
+        GameObject newSpawn = new GameObject();
+        newSpawn.transform.position = lane.transform.position;
+        newSpawn.transform.RotateAround(target.transform.position, Vector3.up, theta);
+
+        Vector3 v = newSpawn.transform.position;
+        Destroy(newSpawn);
+        return v;
+    }
 		
 	public void SpawnOffensive(int troopId, int spawnId, int teamId)
 	{
 		GameObject lane = GetSpawnFromId(spawnId, teamId);
-
-		GameObject troop = Instantiate(troopPrefabs[troopId], ApplyOffset(lane), Quaternion.identity) as GameObject;
+        GameObject target = GetTargetTower(teamId);
+  
+		GameObject troop = Instantiate(troopPrefabs[troopId], ApplyOffset(lane, target), Quaternion.identity) as GameObject;
 		troop.GetComponent<AIController>().SetTagName(string.Format("NPCT{0}L{1}", teamId, spawnId + 1));
 		troop.GetComponent<AIController> ().SetTroopType (troopId);
 		int opponentTeamIndex = (teamId == 1) ? 2 : 1;
