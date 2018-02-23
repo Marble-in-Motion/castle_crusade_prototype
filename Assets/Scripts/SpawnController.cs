@@ -42,16 +42,16 @@ public class SpawnController : NetworkBehaviour
         return v;
   }
 
-	private float calculateTheta(int path){
+	private float calculateAngle(int path) {
 		float theta = 0;
 		int pathWidth = 14;
-		switch(path){
+		switch (path) {
 			case 0:
 					theta = Random.Range(-maxOffset, -maxOffset + pathWidth);
-				break;
+					break;
 			case 1:
 					theta = Random.Range(-maxOffset + 2*pathWidth , -maxOffset + 3*pathWidth);
-				break;
+					break;
 			case 2:
 					theta = Random.Range(-maxOffset + 4*pathWidth, -maxOffset + 5*pathWidth);
 					break;
@@ -68,9 +68,9 @@ public class SpawnController : NetworkBehaviour
     GameObject target = GetTargetTower(teamId);
 
 		int path = Random.Range(0, numberOfPaths);
-		float theta = calculateTheta(path);
+		float angle = calculateAngle(path);
 
-		GameObject troop = Instantiate(troopPrefabs[troopId], ApplyOffset(lane, target, theta), Quaternion.identity) as GameObject;
+		GameObject troop = Instantiate(troopPrefabs[troopId], ApplyOffset(lane, target, angle), Quaternion.identity) as GameObject;
 		troop.GetComponent<AIController>().SetTagName(string.Format("NPCT{0}L{1}", teamId, spawnId + 1));
 		troop.GetComponent<AIController> ().SetTroopType (troopId);
 		troop.GetComponent<AIController>().SetPath(path);

@@ -45,7 +45,9 @@ public class CrossbowMotor : MonoBehaviour
 		GameObject[] troopsInLane = this.GetComponentInParent<Player> ().FindEnemyTroopsInLane ();
 		if (troopsInLane.Length != 0) {
 			GameObject nearestTroop = findNearestTroop (troopsInLane);
-      if(nearestTroop != null) transform.LookAt(nearestTroop.transform.position);
+      if(nearestTroop != null) {
+        transform.LookAt(nearestTroop.transform.position);
+      }
 		}
 	}
 
