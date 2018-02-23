@@ -19,6 +19,22 @@ public class AIController : NetworkBehaviour {
 	[SyncVar]
 	private int troopType;
 
+  [SyncVar]
+  private int path;
+
+  public void SetPath(int path)
+  {
+    if(path >= 0 && path <= 2)
+    {
+      this.path = path;
+    }
+  }
+
+  public int GetPath()
+  {
+    return path;
+  }
+
 	private float spawnToTargetDistance;
 
     void Start() {
@@ -35,9 +51,9 @@ public class AIController : NetworkBehaviour {
 		agent.speed = Params.NPC_SPEED [troopType];
 		Transform target = targets[targetIndex].transform;
 		agent.SetDestination(target.position);
-		spawnToTargetDistance = Vector3.Distance(transform.position, target.position);   
+		spawnToTargetDistance = Vector3.Distance(transform.position, target.position);
 	}
-		
+
     public String GetTagName()
     {
         return tagName;
