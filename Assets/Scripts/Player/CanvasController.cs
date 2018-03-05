@@ -28,6 +28,9 @@ namespace Assets.Scripts.Player
         [SerializeField]
         private Image troop;
 
+        [SerializeField]
+        private GameObject miniMapView;
+
         private Dictionary<String, Image> troopSprites = new Dictionary<string, Image>();
         
         public void SetCurrencyText(string text)
@@ -43,6 +46,11 @@ namespace Assets.Scripts.Player
 		public void SetOpponentsHealthBar(float health) {
 			opponentsHealthBar.transform.localScale = new Vector3(Mathf.Clamp(health, 0f, 1f), opponentsHealthBar.transform.localScale.y, opponentsHealthBar.transform.localScale.z);
 		}
+
+        public void SetRenderTexture(RenderTexture texture)
+        {
+            miniMapView.GetComponent<RawImage>().texture = texture;
+        }
 
         public void SetGameOverValue(GameController.GameState gameOverValue)
         {

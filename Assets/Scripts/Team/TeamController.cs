@@ -22,6 +22,9 @@ public class TeamController : NetworkBehaviour
 
 	private float nextActionTime = 0.0f;
 
+    [SerializeField]
+    private RenderTexture renderTexture;
+
 	[SyncVar]
 	private GameController.GameState gameOverValue;
 
@@ -64,6 +67,11 @@ public class TeamController : NetworkBehaviour
     public int GetCoin()
     {
         return coin;
+    }
+
+    public RenderTexture GetRenderTexture()
+    {
+        return renderTexture;
     }
 
 	public GameController.GameState GetIsGameOver() {

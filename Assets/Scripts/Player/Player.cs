@@ -65,7 +65,7 @@ public class Player : NetworkSetup
         spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
         myTeamController = gameController.GetMyTeamController(id);
-		opponentsTeamController = gameController.GetOpponentTeamController (id);
+		opponentsTeamController = gameController.GetOpponentTeamController(id);
 
         if (isLocalPlayer)
         {
@@ -79,9 +79,10 @@ public class Player : NetworkSetup
             Canvas canvas = GetComponentInChildren<Canvas>();
             canvas.planeDistance = 1;
             canvasController = canvas.GetComponent<CanvasController>();
+            canvasController.SetRenderTexture(opponentsTeamController.GetRenderTexture());
 
-			//get audio manager
-			audioManager = AudioGameObject.GetComponent<AudioManager>();
+            //get audio manager
+            audioManager = AudioGameObject.GetComponent<AudioManager>();
         }
 
         if (!isLocalPlayer)
@@ -91,6 +92,7 @@ public class Player : NetworkSetup
         }
 
     }
+   
 
     void Update()
     {
