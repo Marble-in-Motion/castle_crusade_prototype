@@ -12,13 +12,28 @@ public class CrossbowMotor : MonoBehaviour
 
 	private int activePath;
 
+	private SpawnController spawnController;
+
+	private List<Vector3> defaultTargets = new List<Vector3>();
+
     void Start()
     {
+		spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
+		SetDefaultTargets ();
     }
 
 	void Update()
 	{
 		lookAtTroop ();
+	}
+
+	private void SetDefaultTargets()
+	{
+		int teamId = this.GetComponentInParent<Player> ().GetTeamId ();
+		int spawnId = this.GetComponentInParent<Player> ().GetSpawnId(true) - 1;
+		for (int i = 0; i < 3; i++) {
+			defaultTargets.Add(spawnController.calculateSpawn(i, spawnId, teamId));
+		}
 	}
 
     // Run every physics iteration
@@ -43,11 +58,13 @@ public class CrossbowMotor : MonoBehaviour
 
 	void lookAtTroop(){
 		GameObject[] troopsInLane = this.GetComponentInParent<Player> ().FindEnemyTroopsInLane ();
-		if (troopsInLane.Length != 0) {
-			GameObject nearestTroop = findNearestTroop (troopsInLane);
-      if(nearestTroop != null) {
-        transform.LookAt(nearestTroop.transform.position);
-      }
+		GameObject nearestTroop = findNearestTroop (troopsInLane);
+		if (nearestTroop != null) {
+			transform.LookAt (nearestTroop.transform.position);
+		} else {
+			int teamId = this.GetComponentInParent<Player> ().GetTeamId ();
+			int spawnId = this.GetComponentInParent<Player> ().GetSpawnId(true) - 1;
+			transform.LookAt (defaultTargets[activePath]);
 		}
 	}
 
@@ -56,14 +73,14 @@ public class CrossbowMotor : MonoBehaviour
 		GameObject nearestTroop = null;
 
 		for (int i = 0; i < troopsInLane.Length; i++) {
-      if(troopsInLane[i].GetComponent<AIController> ().GetPath() == activePath){
-        GameObject tempTroop = troopsInLane [i];
-  			float tempDistance = Vector3.Distance (tempTroop.transform.position, transform.position);
-  			if (tempDistance < minDist) {
-  				minDist = tempDistance;
-  				nearestTroop = tempTroop;
-  			}
-      }
+			if(troopsInLane[i].GetComponent<AIController> ().GetPath() == activePath && troopsInLane[i].GetComponent<NPCHealth> ().IsAlive()){
+        		GameObject tempTroop = troopsInLane [i];
+  				float tempDistance = Vector3.Distance (tempTroop.transform.position, transform.position);
+  				if (tempDistance < minDist) {
+  					minDist = tempDistance;
+  					nearestTroop = tempTroop;
+  				}
+      		}
 		}
 		return nearestTroop;
 	}

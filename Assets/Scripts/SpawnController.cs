@@ -31,7 +31,8 @@ public class SpawnController : NetworkBehaviour
 		return (teamId == TeamController.TEAM1) ? towers[1] : towers[0];
 	}
 
-	private Vector3 ApplyOffset(GameObject lane, GameObject target, float theta) {
+	private Vector3 ApplyOffset(GameObject lane, GameObject target, float theta)
+	{
 
         GameObject newSpawn = new GameObject();
         newSpawn.transform.position = lane.transform.position;
@@ -40,9 +41,10 @@ public class SpawnController : NetworkBehaviour
         Vector3 v = newSpawn.transform.position;
         Destroy(newSpawn);
         return v;
-  }
+  	}
 
-	private float calculateAngle(int path) {
+	private float calculateAngle(int path)
+	{
 		float theta = 0;
 		int pathWidth = 14;
 		switch (path) {
@@ -61,16 +63,22 @@ public class SpawnController : NetworkBehaviour
 		return theta;
 	}
 
+	public Vector3 calculateSpawn(int path, int spawnId, int teamId)
+	{
+		GameObject lane = GetSpawnFromId(spawnId, teamId);
+		GameObject target = GetTargetTower(teamId);
+
+		float angle = calculateAngle(path);
+		return ApplyOffset (lane, target, angle);
+	}
+
 
 	public void SpawnOffensive(int troopId, int spawnId, int teamId)
 	{
-		GameObject lane = GetSpawnFromId(spawnId, teamId);
-    GameObject target = GetTargetTower(teamId);
-
 		int path = Random.Range(0, numberOfPaths);
-		float angle = calculateAngle(path);
+		Vector3 spawn = calculateSpawn (path, spawnId, teamId);
 
-		GameObject troop = Instantiate(troopPrefabs[troopId], ApplyOffset(lane, target, angle), Quaternion.identity) as GameObject;
+		GameObject troop = Instantiate(troopPrefabs[troopId], spawn, Quaternion.identity) as GameObject;
 		troop.GetComponent<AIController>().SetTagName(string.Format("NPCT{0}L{1}", teamId, spawnId + 1));
 		troop.GetComponent<AIController> ().SetTroopType (troopId);
 		troop.GetComponent<AIController>().SetPath(path);
