@@ -81,8 +81,8 @@ public class Player : NetworkSetup
             canvasController = canvas.GetComponent<CanvasController>();
             canvasController.SetRenderTexture(opponentsTeamController.GetRenderTexture());
 
-			//get audio manager
-			audioManager = AudioGameObject.GetComponent<AudioManager>();
+            //get audio manager
+            audioManager = AudioGameObject.GetComponent<AudioManager>();
         }
 
         if (!isLocalPlayer)
@@ -92,6 +92,7 @@ public class Player : NetworkSetup
         }
 
     }
+   
 
     void Update()
     {

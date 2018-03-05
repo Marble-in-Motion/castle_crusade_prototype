@@ -606,9 +606,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ae8ec33a4b69b43a87598a0f2e45b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SyncVarDirtyBits: 0
+  m_LastSendTime: 0
+  m_SyncVarGuard: 0
+  m_MyView: {fileID: 0}
   id: 1
   coin: 200
+  towerHealth: 0
+  nextActionTime: 0
   renderTexture: {fileID: 8400000, guid: 1a2d9d8eea0b1f34bbe478a9384f3d1d, type: 2}
+  gameOverValue: 0
+  coinsPerSecond: 5
 --- !u!114 &114305577602490256
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -621,6 +629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamController: {fileID: 1588656123406458}
+  NPCDamage: 0
 --- !u!114 &114358297015721738
 MonoBehaviour:
   m_ObjectHideFlags: 1
