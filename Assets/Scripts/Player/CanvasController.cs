@@ -72,6 +72,10 @@ namespace Assets.Scripts.Player
             }
         }
 
+		public void SetArrowCooldown() {
+			anim.SetTrigger ("Cooldown");
+		}
+
 		public void SetSpartanDistances(Dictionary<string, float> troopLocs)
         {
 			//Go through and update sprite locations or delete them
