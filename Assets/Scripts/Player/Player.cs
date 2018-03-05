@@ -142,7 +142,7 @@ public class Player : NetworkSetup
             {
                 if (Time.time > endOfCoolDown)
                 {
-                    CmdDestroyTroops(GetId(), myTeamController.GetId());
+					CmdDestroyTroops(GetId(), GetTeamId());
                     endOfCoolDown = Time.time + Params.DESTROY_COOL_DOWN;
                 }
             }
@@ -168,7 +168,7 @@ public class Player : NetworkSetup
 			canvasController.SetOpponentsHealthBar(opponentsTeamController.GetTowerHealthRatio());
 			canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
 
-			GameObject[] myTroops = GetTroopsInLane(myTeamController.GetId(), GetSpawnId(false));
+			GameObject[] myTroops = GetTroopsInLane(GetTeamId(), GetSpawnId(false));
 			Dictionary<String, float> troopLocs = new Dictionary<string, float>();
             for (int i = 0; i < myTroops.Length; i++) {
                 AIController ai = myTroops[i].GetComponent<AIController>();
@@ -195,7 +195,7 @@ public class Player : NetworkSetup
 
 	public int GetSpawnId(bool localSpawn)
 	{
-		return localSpawn ? GetLaneId (GetId (), myTeamController.GetId ()) : GetLaneId (GetId (), opponentsTeamController.GetId ());
+		return localSpawn ? GetLaneId (GetId (), GetTeamId()) : GetLaneId (GetId (), opponentsTeamController.GetId ());
 	}
 
 	public GameObject[] FindEnemyTroopsInLane ()
@@ -283,7 +283,7 @@ public class Player : NetworkSetup
     private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
     {
 		int cost = Params.NPC_COST [troopId];
-        int teamId = myTeamController.GetId();
+		int teamId = GetTeamId();
         bool successfulPurchase = myTeamController.SpendGold(cost);
         if (successfulPurchase) {
             spawnController.SpawnOffensive(troopId, spawnId, teamId);
