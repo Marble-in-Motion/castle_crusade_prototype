@@ -6,7 +6,8 @@ using UnityEngine.Networking;
 public class SpawnController : NetworkBehaviour
 {
 	public const string SPAWN_CONTROLLER_TAG = "SpawnController";
-	public const int maxOffset = 30;
+	public const int maxOffset = 35;
+	public const int numberOfPaths = 3;
 
 	//troops
 	[SerializeField]
@@ -30,22 +31,51 @@ public class SpawnController : NetworkBehaviour
 		return (teamId == TeamController.TEAM1) ? towers[1] : towers[0];
 	}
 
-	private Vector3 ApplyOffset(GameObject lane) {
-		float xOffset = Random.Range (-maxOffset, maxOffset);
-		Vector3 offset = new Vector3 (xOffset, 0, 0);
-		float yRot = lane.transform.rotation.y * Mathf.Rad2Deg;
-		offset = Quaternion.Euler(0,yRot,0) * offset;
-		Vector3 newPos = lane.transform.position + offset;
-		return newPos;
+	private Vector3 ApplyOffset(GameObject lane, GameObject target, float theta) {
+
+        GameObject newSpawn = new GameObject();
+        newSpawn.transform.position = lane.transform.position;
+        newSpawn.transform.RotateAround(target.transform.position, Vector3.up, theta);
+
+        Vector3 v = newSpawn.transform.position;
+        Destroy(newSpawn);
+        return v;
+  }
+
+	private float calculateAngle(int path) {
+		float theta = 0;
+		int pathWidth = 14;
+		switch (path) {
+			case 0:
+					theta = Random.Range(-maxOffset, -maxOffset + pathWidth);
+					break;
+			case 1:
+					theta = Random.Range(-maxOffset + 2*pathWidth , -maxOffset + 3*pathWidth);
+					break;
+			case 2:
+					theta = Random.Range(-maxOffset + 4*pathWidth, -maxOffset + 5*pathWidth);
+					break;
+			default:
+					break;
+		}
+		return theta;
 	}
-		
+
+
 	public void SpawnOffensive(int troopId, int spawnId, int teamId)
 	{
 		GameObject lane = GetSpawnFromId(spawnId, teamId);
+    GameObject target = GetTargetTower(teamId);
 
-		GameObject troop = Instantiate(troopPrefabs[troopId], ApplyOffset(lane), Quaternion.identity) as GameObject;
+		int path = Random.Range(0, numberOfPaths);
+		float angle = calculateAngle(path);
+
+		GameObject troop = Instantiate(troopPrefabs[troopId], ApplyOffset(lane, target, angle), Quaternion.identity) as GameObject;
 		troop.GetComponent<AIController>().SetTagName(string.Format("NPCT{0}L{1}", teamId, spawnId + 1));
 		troop.GetComponent<AIController> ().SetTroopType (troopId);
+		troop.GetComponent<AIController>().SetPath(path);
+
+
 		int opponentTeamIndex = (teamId == 1) ? 2 : 1;
 
 		troop.GetComponent<AIController>().SetTargetIndex(opponentTeamIndex - 1);
