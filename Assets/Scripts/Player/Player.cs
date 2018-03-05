@@ -16,6 +16,7 @@ public class Player : NetworkSetup
 	private const float KLAXON_FIRE_TIME = 5.0f;
 
     private int id;
+	private int teamId;
 
     private TeamController myTeamController;
 
@@ -48,6 +49,11 @@ public class Player : NetworkSetup
     {
         return id;
     }
+
+	public int GetTeamId()
+	{
+		return teamId;
+	}
 
     private InputVCR vcr;
 
@@ -121,15 +127,15 @@ public class Player : NetworkSetup
 			}
             else if (Input.GetKeyDown(KeyCode.Return))
             {
-                CmdRequestOffensiveTroopSpawn(0, GetLaneId(GetId(), myTeamController.GetId()) - 1);
+				CmdRequestOffensiveTroopSpawn(0, GetSpawnId(false) - 1);
             }
             else if (Input.GetKeyDown(KeyCode.Backspace))
             {
-                CmdRequestOffensiveTroopSpawn(1, GetLaneId(GetId(), myTeamController.GetId()) - 1);
+				CmdRequestOffensiveTroopSpawn(1, GetSpawnId(false) - 1);
             }
             else if (Input.GetKeyDown(KeyCode.Slash))
             {
-                CmdRequestOffensiveTroopSpawn(2, GetLaneId(GetId(), myTeamController.GetId()) - 1);
+				CmdRequestOffensiveTroopSpawn(2, GetSpawnId(false) - 1);
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -161,7 +167,7 @@ public class Player : NetworkSetup
 			canvasController.SetOpponentsHealthBar(opponentsTeamController.GetTowerHealthRatio());
 			canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
 
-            GameObject[] myTroops = GetTroopsInLane(myTeamController.GetId(), GetLaneId(GetId(), myTeamController.GetId()));
+			GameObject[] myTroops = GetTroopsInLane(myTeamController.GetId(), GetSpawnId(false));
 			Dictionary<String, float> troopLocs = new Dictionary<string, float>();
             for (int i = 0; i < myTroops.Length; i++) {
                 AIController ai = myTroops[i].GetComponent<AIController>();
@@ -186,10 +192,14 @@ public class Player : NetworkSetup
         }
     }
 
+	public int GetSpawnId(bool localSpawn)
+	{
+		return localSpawn ? GetLaneId (GetId (), myTeamController.GetId ()) : GetLaneId (GetId (), opponentsTeamController.GetId ());
+	}
+
 	public GameObject[] FindEnemyTroopsInLane ()
 	{
-		Debug.Log ("finding troops");
-		return GetTroopsInLane (opponentsTeamController.GetId (), GetLaneId (GetId (), opponentsTeamController.GetId ()));
+		return GetTroopsInLane (opponentsTeamController.GetId (), GetSpawnId(true));
 	}
 
     private int GetLaneId(int playerId, int teamId)
@@ -217,7 +227,7 @@ public class Player : NetworkSetup
 		if (successfulPurchase)
 		{
 			int targetTeamId = opponentsTeamController.GetId ();
-			int lane = GetLaneId(id, teamId);
+			int lane = GetSpawnId(true);
 			GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
 			RpcShootVolley(troops);
 		}
