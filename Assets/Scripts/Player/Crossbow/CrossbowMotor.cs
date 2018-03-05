@@ -19,6 +19,7 @@ public class CrossbowMotor : MonoBehaviour
     void Start()
     {
 		spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
+		activePath = 1;
 		SetDefaultTargets ();
     }
 
@@ -31,7 +32,7 @@ public class CrossbowMotor : MonoBehaviour
 	{
 		int teamId = this.GetComponentInParent<Player> ().GetTeamId ();
 		int spawnId = this.GetComponentInParent<Player> ().GetSpawnId(true) - 1;
-		for (int i = 0; i < 3; i++) {
+		for (int i = 2; i >= 0; i--) {
 			defaultTargets.Add(spawnController.calculateSpawn(i, spawnId, teamId));
 		}
 	}
@@ -88,6 +89,7 @@ public class CrossbowMotor : MonoBehaviour
 		if (activePath != 2) {
 			activePath += 1;
 		}
+		Debug.Log ("moving right: " + activePath);
 	}
 
 	public void moveLeft()
@@ -95,6 +97,7 @@ public class CrossbowMotor : MonoBehaviour
 		if (activePath != 0) {
 			activePath -= 1;
 		}
+		Debug.Log ("moving left: " + activePath);
 	}
 
 }
