@@ -31,7 +31,8 @@ public class CrossbowMotor : MonoBehaviour
 	private void SetDefaultTargets()
 	{
 		int teamId = this.GetComponentInParent<Player> ().GetTeamId ();
-		int spawnId = this.GetComponentInParent<Player> ().GetSpawnId(true) - 1;
+		int spawnId = this.GetComponentInParent<Player> ().GetSpawnId(false);
+		Debug.Log ("spawnID: " + spawnId);
 		for (int i = 2; i >= 0; i--) {
 			defaultTargets.Add(spawnController.calculateSpawn(i, spawnId, teamId));
 		}
