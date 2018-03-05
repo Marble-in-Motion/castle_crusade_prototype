@@ -72,6 +72,7 @@ public class Player : NetworkSetup
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
         myTeamController = gameController.GetMyTeamController(id);
 		opponentsTeamController = gameController.GetOpponentTeamController(id);
+		teamId = myTeamController.GetId ();
 
         if (isLocalPlayer)
         {

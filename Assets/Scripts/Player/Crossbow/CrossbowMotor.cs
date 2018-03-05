@@ -62,8 +62,6 @@ public class CrossbowMotor : MonoBehaviour
 		if (nearestTroop != null) {
 			transform.LookAt (nearestTroop.transform.position);
 		} else {
-			int teamId = this.GetComponentInParent<Player> ().GetTeamId ();
-			int spawnId = this.GetComponentInParent<Player> ().GetSpawnId(true) - 1;
 			transform.LookAt (defaultTargets[activePath]);
 		}
 	}
