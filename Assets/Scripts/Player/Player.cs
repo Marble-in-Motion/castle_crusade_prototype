@@ -135,11 +135,11 @@ public class Player : NetworkSetup
             {
                 CmdRequestOffensiveTroopSpawn(0, GetSpawnId() - 1);
             }
-            else if (Input.GetKeyDown(KeyCode.Backspace))
+			else if (Input.GetKeyDown(KeyCode.Slash))
             {
                 CmdRequestOffensiveTroopSpawn(1, GetSpawnId() - 1);
             }
-            else if (Input.GetKeyDown(KeyCode.Slash))
+            else if (Input.GetKeyDown(KeyCode.Backspace))
             {
                 CmdRequestOffensiveTroopSpawn(2, GetSpawnId() - 1);
             }
