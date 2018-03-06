@@ -10,9 +10,6 @@ public class TeamController : NetworkBehaviour
     public const int TEAM1 = 1;
     public const int TEAM2 = 2;
 
-    [SyncVar]
-    private bool arrowCooldown;
-
     [SerializeField]
     private int id;
 
@@ -41,7 +38,6 @@ public class TeamController : NetworkBehaviour
 
     void Start()
     {
-        arrowCooldown = false;
 		gameOverValue = 0;
 		towerHealth = Params.STARTING_TOWER_HEALTH;
         if (isServer)
@@ -56,19 +52,12 @@ public class TeamController : NetworkBehaviour
     public void CmdUpdateCoolDown()
     {
         endOfCoolDown = Time.time + Params.DESTROY_COOL_DOWN;
-        arrowCooldown = true;
     }
 
-    public float getEndOfCoolDown()
+    public float GetEndOfCoolDown()
     {
         return endOfCoolDown;
     }
-
-    public bool GetArrowCooldown()
-    {
-        return arrowCooldown;
-    }
-
 
     public int GetId()
     {
@@ -102,7 +91,7 @@ public class TeamController : NetworkBehaviour
         return coin;
     }
 
-    public float getCurrentTime()
+    public float GetCurrentTime()
     {
         //CmdUpdateCurrentTime();
         return currentTime;

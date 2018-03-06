@@ -18,7 +18,7 @@ public class Player : NetworkSetup
     private int id;
     private int teamId;
 
-    private bool coolDownAnimReset;
+    private bool cooldownAnimReset;
 
     private TeamController myTeamController;
 
@@ -77,7 +77,7 @@ public class Player : NetworkSetup
         myTeamController = gameController.GetMyTeamController(id);
         opponentsTeamController = gameController.GetOpponentTeamController(id);
         teamId = myTeamController.GetId();
-        coolDownAnimReset = true;
+        cooldownAnimReset = true;
 
         if (isLocalPlayer)
         {
@@ -145,7 +145,7 @@ public class Player : NetworkSetup
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
-                if (myTeamController.getCurrentTime() > myTeamController.getEndOfCoolDown())
+                if (myTeamController.GetCurrentTime() > myTeamController.GetEndOfCoolDown())
                 {
                     CmdDestroyTroops(GetId(), GetTeamId());
 					
@@ -176,14 +176,14 @@ public class Player : NetworkSetup
             canvasController.SetOpponentsHealthBar(opponentsTeamController.GetTowerHealthRatio());
             canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
 
-            if( myTeamController.getEndOfCoolDown() > myTeamController.getCurrentTime() && coolDownAnimReset)
+            if( myTeamController.GetEndOfCoolDown() > myTeamController.GetCurrentTime() && cooldownAnimReset)
             {
                 canvasController.SetArrowCooldown();
-                coolDownAnimReset = false;
+                cooldownAnimReset = false;
             }
-            else if (myTeamController.getEndOfCoolDown() <= myTeamController.getCurrentTime())
+            else if (myTeamController.GetEndOfCoolDown() <= myTeamController.GetCurrentTime())
             {
-                coolDownAnimReset = true;
+                cooldownAnimReset = true;
             }
             
 
