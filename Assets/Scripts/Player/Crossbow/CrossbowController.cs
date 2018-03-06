@@ -37,8 +37,11 @@ public class CrossbowController : MonoBehaviour {
 		Vector3 volleyLoc = new Vector3 (transform.position.x, transform.position.y + 2f, transform.position.z);
 		List<Vector3> troopLocs = new List<Vector3> ();
 		for (int i = 0; i < troops.Length; i++) {
-			troopLocs.Add(troops[i].transform.position);
-			troops[i].GetComponent<NPCHealth>().DeductHealth(troops[i].GetComponent<NPCHealth>().GetHealth(), speed, volleyLoc); 
+            if (troops[i].GetComponent<NPCHealth>().IsAlive())
+            {
+                troopLocs.Add(troops[i].transform.position);
+                troops[i].GetComponent<NPCHealth>().DeductHealth(troops[i].GetComponent<NPCHealth>().GetHealth(), speed, volleyLoc);
+            }
 		}
 		foreach(Vector3 loc in troopLocs) {
 			yield return volleyShotDuration;
