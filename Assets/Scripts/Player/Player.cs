@@ -68,6 +68,10 @@ public class Player : NetworkSetup
 
     void Start()
     {
+		NetworkManagerHUD hud = FindObjectOfType<NetworkManagerHUD>();
+		if( hud != null )
+			hud.showGUI = false;
+		
         id = FindObjectsOfType<Player>().Length - 1;
         RegisterModel(Player.PLAYER_TAG, GetId());
         spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
