@@ -43,8 +43,6 @@ public class Player : NetworkSetup
 
     private float nextActionTime = 0.0f;
 
-    private float endOfCoolDown;
-
     public int GetId()
     {
         return id;
@@ -72,7 +70,6 @@ public class Player : NetworkSetup
     {
         id = FindObjectsOfType<Player>().Length - 1;
         RegisterModel(Player.PLAYER_TAG, GetId());
-        endOfCoolDown = Time.time;
         spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
         myTeamController = gameController.GetMyTeamController(id);
@@ -145,11 +142,11 @@ public class Player : NetworkSetup
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
-                if (Time.time > myTeamController.getEndOfCoolDown())
+                Debug.Log("Current:" + myTeamController.getCurrentTime());
+                Debug.Log("End:" + myTeamController.getEndOfCoolDown());
+                if (myTeamController.getCurrentTime() > myTeamController.getEndOfCoolDown())
                 {
                     CmdDestroyTroops(GetId(), GetTeamId());
-                    
-
 					canvasController.SetArrowCooldown ();
                 }
             }
