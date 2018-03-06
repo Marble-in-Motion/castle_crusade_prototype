@@ -29,12 +29,31 @@ public class TeamController : NetworkBehaviour
 	private GameController.GameState gameOverValue;
 
     [SyncVar]
-    private int coinsPerSecond = Params.STARTING_COIN_INCREASE_AMOUNT; 
+    private int coinsPerSecond = Params.STARTING_COIN_INCREASE_AMOUNT;
+
+    [SyncVar]
+    private float endOfCoolDown;
 
     void Start()
     {
 		gameOverValue = 0;
 		towerHealth = Params.STARTING_TOWER_HEALTH;
+        if (isServer)
+        {
+            endOfCoolDown = Time.time;
+        }
+        
+    }
+
+    [Command]
+    public void CmdUpdateCoolDown()
+    {
+        endOfCoolDown = Time.time + Params.DESTROY_COOL_DOWN;
+    }
+
+    public float getEndOfCoolDown()
+    {
+        return endOfCoolDown;
     }
 
     public int GetId()

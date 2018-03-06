@@ -145,10 +145,10 @@ public class Player : NetworkSetup
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
-                if (Time.time > endOfCoolDown)
+                if (Time.time > myTeamController.getEndOfCoolDown())
                 {
                     CmdDestroyTroops(GetId(), GetTeamId());
-                    endOfCoolDown = Time.time + Params.DESTROY_COOL_DOWN;
+                    
 
 					canvasController.SetArrowCooldown ();
                 }
@@ -244,6 +244,7 @@ public class Player : NetworkSetup
         {
             int targetTeamId = opponentsTeamController.GetId();
             int lane = GetSpawnId();
+            myTeamController.CmdUpdateCoolDown();
             GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
             RpcShootVolley(troops);
         }
