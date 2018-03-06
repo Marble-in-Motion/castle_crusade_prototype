@@ -189,16 +189,6 @@ public class Player : NetworkSetup
             {
                 cooldownAnimReset = true;
             }
-            
-
-            GameObject[] myTroops = GetTroopsInLane(GetTeamId(), GetSpawnId());
-            Dictionary<String, float> troopLocs = new Dictionary<string, float>();
-            for (int i = 0; i < myTroops.Length; i++)
-            {
-                AIController ai = myTroops[i].GetComponent<AIController>();
-                troopLocs.Add(myTroops[i].name, ai.GetDistanceRatioToTarget());
-            }
-            canvasController.SetSpartanDistances(troopLocs);
 
             GameObject[] enemyTroops = FindEnemyTroopsInLane();
             int numCloseTroops = 0;
