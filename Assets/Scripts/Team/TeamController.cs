@@ -92,13 +92,6 @@ public class TeamController : NetworkBehaviour
         return coin;
     }
 
-    [Command]
-    public void CmdUpdateCurrentTime()
-    {
-        currentTime =  Time.time;
-        Debug.Log("test:" + currentTime);
-    }
-
     public float getCurrentTime()
     {
         //CmdUpdateCurrentTime();

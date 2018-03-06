@@ -142,8 +142,6 @@ public class Player : NetworkSetup
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
-                Debug.Log("Current:" + myTeamController.getCurrentTime());
-                Debug.Log("End:" + myTeamController.getEndOfCoolDown());
                 if (myTeamController.getCurrentTime() > myTeamController.getEndOfCoolDown())
                 {
                     CmdDestroyTroops(GetId(), GetTeamId());
