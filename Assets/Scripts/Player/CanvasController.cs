@@ -26,13 +26,8 @@ namespace Assets.Scripts.Player
         private Animator anim;
 
         [SerializeField]
-        private Image troop;
-
-        [SerializeField]
         private GameObject miniMapView;
-
-        private Dictionary<String, Image> troopSprites = new Dictionary<string, Image>();
-        
+		        
         public void SetCurrencyText(string text)
         {
             CurrencyText.text = text;
@@ -75,50 +70,6 @@ namespace Assets.Scripts.Player
 		public void SetArrowCooldown() {
 			anim.SetTrigger ("Cooldown");
 		}
-
-		public void SetSpartanDistances(Dictionary<string, float> troopLocs)
-        {
-			//Go through and update sprite locations or delete them
-			List<string> spritesToDelete = new List<string>();
-			foreach(KeyValuePair<string, Image> sprite in troopSprites)
-			{
-				if (troopLocs.ContainsKey(sprite.Key)) 
-				{
-					Image spriteImg = troopSprites[sprite.Key];
-					RectTransform rt = (RectTransform) attackBar.transform;
-					float width = rt.rect.width;
-
-					float ratio = troopLocs [sprite.Key];
-
-					float xLoc = (troop.transform.localPosition.x - width / 2) + (ratio * (width-10));
-					spriteImg.transform.localPosition = new Vector3(xLoc, spriteImg.transform.localPosition.y, spriteImg.transform.localPosition.z);
-					troopLocs.Remove (sprite.Key);
-				} else
-				{
-					spritesToDelete.Add (sprite.Key);
-				} 
-			}
-			//Remove sprite locations from dictionary
-			foreach(string sprite in spritesToDelete) {
-				DestroySpartanSprite (sprite);
-			}
-			//Initialise new sprites
-			foreach (KeyValuePair<string, float> troopLoc in troopLocs) {
-				Image spriteImg = Instantiate(troop, attackBar.transform) as Image;
-				troopSprites.Add(troopLoc.Key, spriteImg);
-			}
-
-        }
-
-        public void DestroySpartanSprite(string idTag)
-        {
-            if (troopSprites.ContainsKey(idTag))
-            {
-                Image sprite = troopSprites[idTag];
-                Destroy(sprite);
-                troopSprites.Remove(idTag);
-            }
-        }
 
     }
 }
