@@ -18,6 +18,8 @@ public class Player : NetworkSetup
     private int id;
     private int teamId;
 
+    private bool coolDownAnimReset;
+
     private TeamController myTeamController;
 
     private TeamController opponentsTeamController;
@@ -75,6 +77,7 @@ public class Player : NetworkSetup
         myTeamController = gameController.GetMyTeamController(id);
         opponentsTeamController = gameController.GetOpponentTeamController(id);
         teamId = myTeamController.GetId();
+        coolDownAnimReset = true;
 
         if (isLocalPlayer)
         {
@@ -145,7 +148,7 @@ public class Player : NetworkSetup
                 if (myTeamController.getCurrentTime() > myTeamController.getEndOfCoolDown())
                 {
                     CmdDestroyTroops(GetId(), GetTeamId());
-					canvasController.SetArrowCooldown ();
+					
                 }
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -172,6 +175,17 @@ public class Player : NetworkSetup
             canvasController.SetHealthBar(myTeamController.GetTowerHealthRatio());
             canvasController.SetOpponentsHealthBar(opponentsTeamController.GetTowerHealthRatio());
             canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
+
+            if( myTeamController.getEndOfCoolDown() > myTeamController.getCurrentTime() && coolDownAnimReset)
+            {
+                canvasController.SetArrowCooldown();
+                coolDownAnimReset = false;
+            }
+            else if (myTeamController.getEndOfCoolDown() <= myTeamController.getCurrentTime())
+            {
+                coolDownAnimReset = true;
+            }
+            
 
             GameObject[] myTroops = GetTroopsInLane(GetTeamId(), GetSpawnId());
             Dictionary<String, float> troopLocs = new Dictionary<string, float>();
@@ -237,9 +251,11 @@ public class Player : NetworkSetup
         bool successfulPurchase = myTeamController.SpendGold(Params.DESTROY_COST);
         if (successfulPurchase)
         {
+            
             int targetTeamId = opponentsTeamController.GetId();
             int lane = GetSpawnId();
             myTeamController.CmdUpdateCoolDown();
+            //canvasController.SetArrowCooldown();
             GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
             RpcShootVolley(troops);
         }
