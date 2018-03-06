@@ -149,6 +149,8 @@ public class Player : NetworkSetup
                 {
                     CmdDestroyTroops(GetId(), GetTeamId());
                     endOfCoolDown = Time.time + Params.DESTROY_COOL_DOWN;
+
+					canvasController.SetArrowCooldown ();
                 }
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
