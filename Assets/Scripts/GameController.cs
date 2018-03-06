@@ -99,9 +99,10 @@ public class GameController : NetworkBehaviour
         }
     }
 
-    [Command]
-    private void CmdCheckTime()
+    private void CheckTime()
     {
+        if (!isServer) return;
+
         if (Time.time > coinIncreaseTime)
         {
             coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
@@ -112,7 +113,7 @@ public class GameController : NetworkBehaviour
 
     private void Update()
     {
-        CmdCheckTime();   
+        CheckTime();   
         if (restart)
         {
             DestroyAllTroops();

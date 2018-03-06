@@ -10,7 +10,6 @@ public class TeamController : NetworkBehaviour
     public const int TEAM1 = 1;
     public const int TEAM2 = 2;
 
-
     [SerializeField]
     private int id;
 
@@ -55,7 +54,7 @@ public class TeamController : NetworkBehaviour
         endOfCoolDown = Time.time + Params.DESTROY_COOL_DOWN;
     }
 
-    public float getEndOfCoolDown()
+    public float GetEndOfCoolDown()
     {
         return endOfCoolDown;
     }
@@ -92,7 +91,7 @@ public class TeamController : NetworkBehaviour
         return coin;
     }
 
-    public float getCurrentTime()
+    public float GetCurrentTime()
     {
         //CmdUpdateCurrentTime();
         return currentTime;
