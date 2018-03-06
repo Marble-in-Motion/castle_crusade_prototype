@@ -14,7 +14,7 @@ public class Params {
 	public static int DESTROY_COST = 100;
 	public static int[] NPC_COST = {10,40,40};
 	public static float[] NPC_HEALTH = {200f,100f,800f};
-	public static float[] NPC_SPEED = {12f,16f,6f};
+	public static float[] NPC_SPEED = {12f,16f,12f};
 	public static int[] NPC_REWARD = {5,20,20};
 
 	public class Bolt
