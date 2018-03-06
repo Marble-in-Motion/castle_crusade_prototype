@@ -34,6 +34,9 @@ public class TeamController : NetworkBehaviour
     [SyncVar]
     private float endOfCoolDown;
 
+    [SyncVar]
+    private float currentTime;
+
     void Start()
     {
 		gameOverValue = 0;
@@ -41,6 +44,7 @@ public class TeamController : NetworkBehaviour
         if (isServer)
         {
             endOfCoolDown = Time.time;
+            currentTime = Time.time;
         }
         
     }
@@ -86,6 +90,12 @@ public class TeamController : NetworkBehaviour
     public int GetCoin()
     {
         return coin;
+    }
+
+    public float getCurrentTime()
+    {
+        //CmdUpdateCurrentTime();
+        return currentTime;
     }
 
     public RenderTexture GetRenderTexture()
@@ -136,7 +146,10 @@ public class TeamController : NetworkBehaviour
     void Update()
     {
         AddCoinPerSecond();
-
+        if (isServer)
+        {
+            currentTime = Time.time;
+        }
     }
 
 	[Command]
