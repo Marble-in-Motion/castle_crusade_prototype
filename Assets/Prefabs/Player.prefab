@@ -544,6 +544,7 @@ GameObject:
   - component: {fileID: 20447019570799976}
   - component: {fileID: 124152598032049766}
   - component: {fileID: 81044262596032106}
+  - component: {fileID: 45013232348161074}
   m_Layer: 8
   m_Name: Camera
   m_TagString: Untagged
@@ -575,7 +576,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197108965690756}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 323.31927, y: 632.8494, z: 516.6103}
+  m_LocalPosition: {x: 696.99817, y: 890.88403, z: 475.79926}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4790891279096880}
@@ -867,6 +868,14 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1642492057449770}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!45 &45013232348161074
+Skybox:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1954113982036324}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 2100000, guid: 2bd8959f5fbd3644aa33af1a155fc147, type: 2}
 --- !u!54 &54601132083190322
 Rigidbody:
   m_ObjectHideFlags: 1
