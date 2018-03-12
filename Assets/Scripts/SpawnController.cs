@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 public class SpawnController : NetworkBehaviour
 {
 	public const string SPAWN_CONTROLLER_TAG = "SpawnController";
-	public const int maxOffset = 35;
+	public const int maxOffset = 25;
 	public const int numberOfPaths = 3;
 
 	//troops
@@ -46,7 +46,7 @@ public class SpawnController : NetworkBehaviour
 	private float calculateAngle(int path)
 	{
 		float theta = 0;
-		int pathWidth = 14;
+		int pathWidth = 10;
 		switch (path) {
 			case 0:
 					theta = Random.Range(-maxOffset, -maxOffset + pathWidth);
