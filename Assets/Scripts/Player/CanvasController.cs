@@ -16,9 +16,6 @@ namespace Assets.Scripts.Player
 		[SerializeField]
 		private Image opponentsHealthBar;
 
-		[SerializeField]
-		private GameObject attackBar;
-
         [SerializeField]
         private Text CurrencyText;
 
@@ -35,7 +32,7 @@ namespace Assets.Scripts.Player
 
         public void SetHealthBar(float health)
         {
-			myHealthBar.transform.localScale = new Vector3(myHealthBar.transform.localScale.x, Mathf.Clamp(health, 0f, 1f), myHealthBar.transform.localScale.z);
+			myHealthBar.transform.localScale = new Vector3(Mathf.Clamp(health, 0f, 1f), myHealthBar.transform.localScale.y, myHealthBar.transform.localScale.z);
         }
 
 		public void SetOpponentsHealthBar(float health) {

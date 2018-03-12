@@ -14,7 +14,7 @@ public class TeamController : NetworkBehaviour
     private int id;
 
     [SyncVar]
-    public int coin;
+	private int coin = Params.STARTING_COIN;
 
 	[SyncVar]
 	private float towerHealth;
