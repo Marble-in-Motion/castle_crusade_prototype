@@ -27753,7 +27753,7 @@ Prefab:
         type: 2}
       propertyPath: spawnPoints.Array.data[0]
       value: 
-      objectReference: {fileID: 718027148}
+      objectReference: {fileID: 1081331411}
     - target: {fileID: 114902761845413668, guid: 5160414700beea447b402921bb1b1092,
         type: 2}
       propertyPath: spawnPoints.Array.data[1]
@@ -33429,6 +33429,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1079232702}
   m_Mesh: {fileID: 4300400, guid: e4a081b22537529408d010d988743948, type: 3}
+--- !u!1 &1081331411 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1944883984068370, guid: c738f34b9b7288147b29b5c1766d24e7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1212516696}
 --- !u!1 &1081954578
 GameObject:
   m_ObjectHideFlags: 0
