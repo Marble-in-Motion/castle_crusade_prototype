@@ -249,7 +249,6 @@ public class Player : NetworkSetup
             int targetTeamId = opponentsTeamController.GetId();
             int lane = GetSpawnId();
             myTeamController.CmdUpdateCoolDown();
-            //canvasController.SetArrowCooldown();
             GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
             RpcShootVolley(troops);
         }
