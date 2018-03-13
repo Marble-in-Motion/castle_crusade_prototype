@@ -11,10 +11,10 @@ namespace Assets.Scripts.Player
     {
 
         [SerializeField]
-        private Image myHealthBar;
+        private Image blueHealthBar;
 
 		[SerializeField]
-		private Image opponentsHealthBar;
+		private Image redHealthBar;
 
         [SerializeField]
         private Text CurrencyText;
@@ -30,13 +30,13 @@ namespace Assets.Scripts.Player
             CurrencyText.text = text;
         }
 
-        public void SetHealthBar(float health)
+        public void SetBlueHealthBar(float health)
         {
-			myHealthBar.transform.localScale = new Vector3(Mathf.Clamp(health, 0f, 1f), myHealthBar.transform.localScale.y, myHealthBar.transform.localScale.z);
+            blueHealthBar.transform.localScale = new Vector3(Mathf.Clamp(health, 0f, 1f), blueHealthBar.transform.localScale.y, blueHealthBar.transform.localScale.z);
         }
 
-		public void SetOpponentsHealthBar(float health) {
-			opponentsHealthBar.transform.localScale = new Vector3(Mathf.Clamp(health, 0f, 1f), opponentsHealthBar.transform.localScale.y, opponentsHealthBar.transform.localScale.z);
+		public void SetRedHealthBar(float health) {
+            redHealthBar.transform.localScale = new Vector3(Mathf.Clamp(health, 0f, 1f), redHealthBar.transform.localScale.y, redHealthBar.transform.localScale.z);
 		}
 
         public void SetRenderTexture(RenderTexture texture)
