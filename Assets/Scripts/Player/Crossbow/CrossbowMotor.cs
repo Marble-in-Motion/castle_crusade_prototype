@@ -66,10 +66,7 @@ public class CrossbowMotor : MonoBehaviour
         {
             transform.LookAt(nearestTroop.transform.position);
         }
-        else
-        {
-            transform.LookAt(defaultTargets[activePath]);
-        }
+
     }
 
     GameObject findNearestTroop(GameObject[] troopsInLane)
@@ -95,17 +92,19 @@ public class CrossbowMotor : MonoBehaviour
 
     public void moveRight()
     {
-        if (activePath != 2)
+        if (activePath < 2)
         {
             activePath += 1;
+            transform.LookAt(defaultTargets[activePath]);
         }
     }
 
     public void moveLeft()
     {
-        if (activePath != 0)
+        if (activePath > 0)
         {
             activePath -= 1;
+            transform.LookAt(defaultTargets[activePath]);
         }
     }
 
