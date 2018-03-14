@@ -176,8 +176,16 @@ public class Player : NetworkSetup
             }
 
             canvasController.SetCurrencyText(myTeamController.GetCoin().ToString());
-            canvasController.SetHealthBar(myTeamController.GetTowerHealthRatio());
-            canvasController.SetOpponentsHealthBar(opponentsTeamController.GetTowerHealthRatio());
+
+            if (teamId == TeamController.TEAM1)
+            {
+                canvasController.SetBlueHealthBar(myTeamController.GetTowerHealthRatio());
+                canvasController.SetRedHealthBar(opponentsTeamController.GetTowerHealthRatio());
+            } else
+            {
+                canvasController.SetRedHealthBar(myTeamController.GetTowerHealthRatio());
+                canvasController.SetBlueHealthBar(opponentsTeamController.GetTowerHealthRatio());
+            }
             canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
 
             if( myTeamController.GetEndOfCoolDown() > myTeamController.GetCurrentTime() && cooldownAnimReset)
@@ -249,7 +257,6 @@ public class Player : NetworkSetup
             int targetTeamId = opponentsTeamController.GetId();
             int lane = GetSpawnId();
             myTeamController.CmdUpdateCoolDown();
-            //canvasController.SetArrowCooldown();
             GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
             RpcShootVolley(troops);
         }
