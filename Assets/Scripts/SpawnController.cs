@@ -63,6 +63,29 @@ public class SpawnController : NetworkBehaviour
 		return theta;
 	}
 
+	public Vector3 calculateDefaultSpawn(int path, int spawnId, int teamId)
+	{
+		GameObject lane = GetSpawnFromId(spawnId, teamId);
+		GameObject target = GetTargetTower(teamId);
+
+		float theta = 0;
+		int pathWidth = 10;
+		switch (path) {
+		case 0:
+			theta = -maxOffset + (-maxOffset + pathWidth)/2;
+			break;
+		case 1:
+			theta = -maxOffset + 2*pathWidth + (-maxOffset + 3*pathWidth)/2;
+			break;
+		case 2:
+			theta = -maxOffset + 4*pathWidth +  (-maxOffset + 5*pathWidth)/2;
+			break;
+		default:
+			break;
+		}
+		return ApplyOffset (lane, target, theta);
+	}
+
 	public Vector3 calculateSpawn(int path, int spawnId, int teamId)
 	{
 		GameObject lane = GetSpawnFromId(spawnId, teamId);
