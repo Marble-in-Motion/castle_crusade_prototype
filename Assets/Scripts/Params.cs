@@ -12,7 +12,7 @@ public class Params {
 	public static int COIN_BOOST = 1;
 	public static float DESTROY_COOL_DOWN = 30f;
 	public static int DESTROY_COST = 100;
-	public static int[] NPC_COST = {10,40,40};
+	public static int[] NPC_COST = {1,1,1};
 	public static float[] NPC_HEALTH = {200f,100f,800f};
 	public static float[] NPC_SPEED = {12f,16f,12f};
 	public static int[] NPC_REWARD = {5,20,20};

@@ -100,12 +100,12 @@ public class SpawnController : NetworkBehaviour
 	{
 		int path = Random.Range(0, numberOfPaths);
 		Vector3 spawn = calculateSpawn (path, spawnId, teamId);
+		GameObject lane = GetSpawnFromId(spawnId, teamId);
 
-		GameObject troop = Instantiate(troopPrefabs[troopId], spawn, Quaternion.identity) as GameObject;
+		GameObject troop = Instantiate(troopPrefabs[troopId], spawn, lane.transform.rotation) as GameObject;
 		troop.GetComponent<AIController>().SetTagName(string.Format("NPCT{0}L{1}", teamId, spawnId + 1));
 		troop.GetComponent<AIController> ().SetTroopType (troopId);
 		troop.GetComponent<AIController>().SetPath(path);
-
 
 		int opponentTeamIndex = (teamId == 1) ? 2 : 1;
 
