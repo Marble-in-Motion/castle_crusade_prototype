@@ -20,7 +20,7 @@ public class AIController : NetworkBehaviour {
 	private int troopType;
 
   [SyncVar]
-  private int path;
+  public int path;
 
   public void SetPath(int path)
   {

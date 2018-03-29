@@ -45,6 +45,10 @@ public class Player : NetworkSetup
 
     private float nextActionTime = 0.0f;
 
+    private Boolean aiEnabled = true;
+
+    private float nextAIActionTime = 0.0f;
+
     public int GetId()
     {
         return id;
@@ -108,114 +112,196 @@ public class Player : NetworkSetup
         }
 
     }
-
-
+    
     void Update()
     {
         if (isLocalPlayer)
         {
-            // spawn npc command
-            if (Input.GetKeyDown(KeyCode.Y))
+            if (!aiEnabled)
             {
-                CmdRequestOffensiveTroopSpawn(0, 0);
-            }
-            else if (Input.GetKeyDown(KeyCode.J))
-            {
-                CmdRequestOffensiveTroopSpawn(0, 1);
-            }
-            else if (Input.GetKeyDown(KeyCode.N))
-            {
-                CmdRequestOffensiveTroopSpawn(0, 2);
-            }
-            else if (Input.GetKeyDown(KeyCode.B))
-            {
-                CmdRequestOffensiveTroopSpawn(0, 3);
-            }
-            else if (Input.GetKeyDown(KeyCode.G))
-            {
-                CmdRequestOffensiveTroopSpawn(0, 4);
-            }
-            else if (Input.GetKeyDown(KeyCode.Return))
-            {
-                CmdRequestOffensiveTroopSpawn(0, GetSpawnId() - 1);
-            }
-			else if (Input.GetKeyDown(KeyCode.Slash))
-            {
-                CmdRequestOffensiveTroopSpawn(1, GetSpawnId() - 1);
-            }
-            else if (Input.GetKeyDown(KeyCode.Backspace))
-            {
-                CmdRequestOffensiveTroopSpawn(2, GetSpawnId() - 1);
-            }
-            else if (Input.GetKeyDown(KeyCode.Space))
-            {
-                if (myTeamController.GetCurrentTime() > myTeamController.GetEndOfCoolDown())
+                // spawn npc command
+                if (Input.GetKeyDown(KeyCode.Y))
                 {
-                    CmdDestroyTroops(GetId(), GetTeamId());
-					
+                    CmdRequestOffensiveTroopSpawn(0, 0);
+                }
+                else if (Input.GetKeyDown(KeyCode.J))
+                {
+                    CmdRequestOffensiveTroopSpawn(0, 1);
+                }
+                else if (Input.GetKeyDown(KeyCode.N))
+                {
+                    CmdRequestOffensiveTroopSpawn(0, 2);
+                }
+                else if (Input.GetKeyDown(KeyCode.B))
+                {
+                    CmdRequestOffensiveTroopSpawn(0, 3);
+                }
+                else if (Input.GetKeyDown(KeyCode.G))
+                {
+                    CmdRequestOffensiveTroopSpawn(0, 4);
+                }
+                else if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    CmdRequestOffensiveTroopSpawn(0, GetSpawnId() - 1);
+                }
+                else if (Input.GetKeyDown(KeyCode.Slash))
+                {
+                    CmdRequestOffensiveTroopSpawn(1, GetSpawnId() - 1);
+                }
+                else if (Input.GetKeyDown(KeyCode.Backspace))
+                {
+                    CmdRequestOffensiveTroopSpawn(2, GetSpawnId() - 1);
+                }
+                else if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    if (myTeamController.GetCurrentTime() > myTeamController.GetEndOfCoolDown())
+                    {
+                        CmdDestroyTroops(GetId(), GetTeamId());
+
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    crossbow.GetComponent<CrossbowMotor>().moveLeft();
+                }
+                else if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    crossbow.GetComponent<CrossbowMotor>().moveRight();
+                }
+                else if (Input.GetKeyDown(KeyCode.S))
+                {
+                    Shoot();
+                }
+                else if (Input.GetKeyDown(KeyCode.Delete))
+                {
+                    String path = "exports/";
+                    String fullPath = String.Format("{0}{1}_player{2}.json", path, DateTime.Now.Ticks, GetId());
+                    System.IO.File.WriteAllText(fullPath, vcr.GetRecording().ToString());
+                    Debug.Log("File written");
+                }
+
+                canvasController.SetCurrencyText(myTeamController.GetCoin().ToString());
+
+                if (teamId == TeamController.TEAM1)
+                {
+                    canvasController.SetBlueHealthBar(myTeamController.GetTowerHealthRatio());
+                    canvasController.SetRedHealthBar(opponentsTeamController.GetTowerHealthRatio());
+                }
+                else
+                {
+                    canvasController.SetRedHealthBar(myTeamController.GetTowerHealthRatio());
+                    canvasController.SetBlueHealthBar(opponentsTeamController.GetTowerHealthRatio());
+                }
+                canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
+
+                if (myTeamController.GetEndOfCoolDown() > myTeamController.GetCurrentTime() && cooldownAnimReset)
+                {
+                    canvasController.SetArrowCooldown();
+                    cooldownAnimReset = false;
+                }
+                else if (myTeamController.GetEndOfCoolDown() <= myTeamController.GetCurrentTime())
+                {
+                    cooldownAnimReset = true;
+                }
+
+                GameObject[] enemyTroops = FindEnemyTroopsInLane();
+                int numCloseTroops = 0;
+
+                for (int i = 0; i < enemyTroops.Length; i++)
+                {
+                    AIController enemyTroopsAi = enemyTroops[i].GetComponent<AIController>();
+                    float distanceRatioToTarget = enemyTroopsAi.GetDistanceRatioToTarget();
+                    if (distanceRatioToTarget > CLOSE_DISTANCE)
+                    {
+                        numCloseTroops++;
+                    }
+                    if ((numCloseTroops >= NUM_TROOPS_FOR_WARNING) && (Time.time > nextActionTime))
+                    {
+                        nextActionTime = Time.time + KLAXON_FIRE_TIME;
+                        audioManager.PlaySound("klaxon");
+                    }
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            else
             {
-                crossbow.GetComponent<CrossbowMotor>().moveLeft();
-            }
-            else if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                crossbow.GetComponent<CrossbowMotor>().moveRight();
-            }
-            else if (Input.GetKeyDown(KeyCode.S))
-            {
-                Shoot();
-            }
-            else if (Input.GetKeyDown(KeyCode.Delete))
-            {
-                String path = "exports/";
-                String fullPath = String.Format("{0}{1}_player{2}.json", path, DateTime.Now.Ticks, GetId());
-                System.IO.File.WriteAllText(fullPath, vcr.GetRecording().ToString());
-                Debug.Log("File written");
-            }
-
-            canvasController.SetCurrencyText(myTeamController.GetCoin().ToString());
-
-            if (teamId == TeamController.TEAM1)
-            {
-                canvasController.SetBlueHealthBar(myTeamController.GetTowerHealthRatio());
-                canvasController.SetRedHealthBar(opponentsTeamController.GetTowerHealthRatio());
-            } else
-            {
-                canvasController.SetRedHealthBar(myTeamController.GetTowerHealthRatio());
-                canvasController.SetBlueHealthBar(opponentsTeamController.GetTowerHealthRatio());
-            }
-            canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
-
-            if( myTeamController.GetEndOfCoolDown() > myTeamController.GetCurrentTime() && cooldownAnimReset)
-            {
-                canvasController.SetArrowCooldown();
-                cooldownAnimReset = false;
-            }
-            else if (myTeamController.GetEndOfCoolDown() <= myTeamController.GetCurrentTime())
-            {
-                cooldownAnimReset = true;
-            }
-
-            GameObject[] enemyTroops = FindEnemyTroopsInLane();
-            int numCloseTroops = 0;
-
-            for (int i = 0; i < enemyTroops.Length; i++)
-            {
-                AIController enemyTroopsAi = enemyTroops[i].GetComponent<AIController>();
-                float distanceRatioToTarget = enemyTroopsAi.GetDistanceRatioToTarget();
-                if (distanceRatioToTarget > CLOSE_DISTANCE)
+                if (Input.GetKeyDown(KeyCode.A))
                 {
-                    numCloseTroops++;
+                    aiEnabled = false;
                 }
-                if ((numCloseTroops >= NUM_TROOPS_FOR_WARNING) && (Time.time > nextActionTime))
+                if (Time.time > nextAIActionTime)
                 {
-                    nextActionTime = Time.time + KLAXON_FIRE_TIME;
-                    audioManager.PlaySound("klaxon");
+                    nextAIActionTime = Time.time + 2;
+                    GameObject[] troopsInLane = FindEnemyTroopsInLane();
+                    Debug.Log("Found in lane");
+                    if (troopsInLane.Length != 0)
+                    {
+
+                        GameObject target = crossbow.GetComponent<CrossbowMotor>().AIFindTarget(troopsInLane);
+                        if (target != null)
+                        {
+                            int pathToLookAt = target.GetComponent<AIController>().GetPath();
+                            facePath2(pathToLookAt);
+                            Shoot();
+                            Shoot();
+                            Shoot();
+                        }
+                        
+                        /*while (target.GetComponent<NPCHealth>().IsAlive())
+                        {
+                            Shoot();
+                        }*/
+
+                    }
                 }
             }
         }
+    }
+
+    private void facePath(int path)
+    {
+        int currentPath = crossbow.GetComponent<CrossbowMotor>().getActivePath();
+        while (currentPath != path)
+        {
+            currentPath = crossbow.GetComponent<CrossbowMotor>().getActivePath();
+            if (currentPath > path)
+            {
+                crossbow.GetComponent<CrossbowMotor>().moveLeft();
+            }
+            else
+            {
+                crossbow.GetComponent<CrossbowMotor>().moveRight();
+            }
+            
+        }
+        Debug.Log("Enemy Path "+path);
+        Debug.Log("My Path " + currentPath);
+    }
+
+    private void facePath2(int path)
+    {
+        int currentPath = crossbow.GetComponent<CrossbowMotor>().getActivePath();
+        if (currentPath == path + 1)
+        {
+            crossbow.GetComponent<CrossbowMotor>().moveLeft();
+        }
+        else if(currentPath == path - 1)
+        {
+            crossbow.GetComponent<CrossbowMotor>().moveRight();
+        }
+        else if (currentPath == path + 2)
+        {
+            crossbow.GetComponent<CrossbowMotor>().moveLeft();
+            crossbow.GetComponent<CrossbowMotor>().moveLeft();
+        }
+        else if (currentPath == path - 2)
+        {
+            crossbow.GetComponent<CrossbowMotor>().moveRight();
+            crossbow.GetComponent<CrossbowMotor>().moveRight();
+        }
+        //yield return new WaitForSeconds(0.5f);
+        currentPath = crossbow.GetComponent<CrossbowMotor>().getActivePath();
+        Debug.Log("Enemy Path " + path);
+        Debug.Log("My Path " + currentPath);
     }
 
     public int GetSpawnId()
