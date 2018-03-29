@@ -32082,11 +32082,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 319f93e12d7de1e4fa6298fb9e7ff203, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &833176360 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1963867883654344, guid: e5b8afeca8c93e346953bf10e71e7b1a,
-    type: 2}
-  m_PrefabInternal: {fileID: 1285288832}
 --- !u!1 &834181848
 GameObject:
   m_ObjectHideFlags: 0
@@ -34886,7 +34881,7 @@ Prefab:
         type: 2}
       propertyPath: spawnPoints.Array.data[1]
       value: 
-      objectReference: {fileID: 833176360}
+      objectReference: {fileID: 91668182}
     - target: {fileID: 114902761845413668, guid: 5160414700beea447b402921bb1b1092,
         type: 2}
       propertyPath: spawnPoints.Array.data[2]
