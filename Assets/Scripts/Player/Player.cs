@@ -45,9 +45,13 @@ public class Player : NetworkSetup
 
     private float nextActionTime = 0.0f;
 
+    private float AIActionTime = 0.0f;
+    private float AIMoveDelay = 0.5f;
+
     private Boolean aiEnabled = true;
 
-    private float nextAIActionTime = 0.0f;
+    private WaitForSeconds shotTime = new WaitForSeconds(0.3f);
+    private WaitForSeconds changeDirection = new WaitForSeconds(0.8f);
 
     public int GetId()
     {
@@ -228,80 +232,90 @@ public class Player : NetworkSetup
                 {
                     aiEnabled = false;
                 }
-                if (Time.time > nextAIActionTime)
+                if (Time.time > AIActionTime)
                 {
-                    nextAIActionTime = Time.time + 2;
+                    AIActionTime = AIActionTime + AIMoveDelay;
                     GameObject[] troopsInLane = FindEnemyTroopsInLane();
                     Debug.Log("Found in lane");
                     if (troopsInLane.Length != 0)
                     {
-
                         GameObject target = crossbow.GetComponent<CrossbowMotor>().AIFindTarget(troopsInLane);
                         if (target != null)
                         {
-                            int pathToLookAt = target.GetComponent<AIController>().GetPath();
-                            facePath2(pathToLookAt);
-                            Shoot();
-                            Shoot();
-                            Shoot();
+                            StartCoroutine(killTarget(target));
                         }
-                        
-                        /*while (target.GetComponent<NPCHealth>().IsAlive())
-                        {
-                            Shoot();
-                        }*/
-
                     }
                 }
+                
             }
         }
     }
 
-    private void facePath(int path)
+    private IEnumerator AIChangeDirection(int direction)
     {
-        int currentPath = crossbow.GetComponent<CrossbowMotor>().getActivePath();
-        while (currentPath != path)
+        if(direction == -1)
         {
-            currentPath = crossbow.GetComponent<CrossbowMotor>().getActivePath();
-            if (currentPath > path)
-            {
-                crossbow.GetComponent<CrossbowMotor>().moveLeft();
-            }
-            else
-            {
-                crossbow.GetComponent<CrossbowMotor>().moveRight();
-            }
+            yield return changeDirection;
+            crossbow.GetComponent<CrossbowMotor>().moveLeft();
             
         }
-        Debug.Log("Enemy Path "+path);
-        Debug.Log("My Path " + currentPath);
+        else if(direction == 1)
+        {
+            yield return changeDirection;
+            crossbow.GetComponent<CrossbowMotor>().moveRight();
+            
+        }
     }
 
-    private void facePath2(int path)
+    private IEnumerator AIShooting()
     {
+        yield return shotTime;
+        Shoot();
+    }
+
+    private IEnumerator killTarget(GameObject target)
+    {
+        int path = target.GetComponent<AIController>().GetPath();
         int currentPath = crossbow.GetComponent<CrossbowMotor>().getActivePath();
-        if (currentPath == path + 1)
+        if (currentPath != path)
         {
-            crossbow.GetComponent<CrossbowMotor>().moveLeft();
+            if (currentPath == path + 1)
+            {
+                //StartCoroutine(AIChangeDirection(-1));
+                yield return changeDirection;
+                crossbow.GetComponent<CrossbowMotor>().moveLeft();
+            }
+            else if (currentPath == path - 1)
+            {
+                //StartCoroutine(AIChangeDirection(1));
+                yield return changeDirection;
+                crossbow.GetComponent<CrossbowMotor>().moveRight();
+            }
+            else if (currentPath == path + 2)
+            {
+                //StartCoroutine(AIChangeDirection(-1));
+                //StartCoroutine(AIChangeDirection(-1));
+                yield return changeDirection;
+                crossbow.GetComponent<CrossbowMotor>().moveLeft();
+                yield return changeDirection;
+                crossbow.GetComponent<CrossbowMotor>().moveLeft();
+            }
+            else if (currentPath == path - 2)
+            {
+                //StartCoroutine(AIChangeDirection(1));
+                //StartCoroutine(AIChangeDirection(1));
+                yield return changeDirection;
+                crossbow.GetComponent<CrossbowMotor>().moveRight();
+                yield return changeDirection;
+                crossbow.GetComponent<CrossbowMotor>().moveRight();
+            }
         }
-        else if(currentPath == path - 1)
+        while (target.GetComponent<NPCHealth>().IsAlive())
         {
-            crossbow.GetComponent<CrossbowMotor>().moveRight();
+            //StartCoroutine(AIShooting());
+            yield return shotTime;
+            Shoot();
         }
-        else if (currentPath == path + 2)
-        {
-            crossbow.GetComponent<CrossbowMotor>().moveLeft();
-            crossbow.GetComponent<CrossbowMotor>().moveLeft();
-        }
-        else if (currentPath == path - 2)
-        {
-            crossbow.GetComponent<CrossbowMotor>().moveRight();
-            crossbow.GetComponent<CrossbowMotor>().moveRight();
-        }
-        //yield return new WaitForSeconds(0.5f);
-        currentPath = crossbow.GetComponent<CrossbowMotor>().getActivePath();
-        Debug.Log("Enemy Path " + path);
-        Debug.Log("My Path " + currentPath);
     }
 
     public int GetSpawnId()
