@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Networking;
+﻿using UnityEngine.Networking;
 using UnityEngine;
-using UnityEngine.UI;
 using System;
 using Assets.Scripts.Player;
 
@@ -70,10 +67,10 @@ public class Player : NetworkSetup
 
     void Start()
     {
-		NetworkManagerHUD hud = FindObjectOfType<NetworkManagerHUD>();
-		if( hud != null )
-			hud.showGUI = false;
-		
+        NetworkManagerHUD hud = FindObjectOfType<NetworkManagerHUD>();
+        if (hud != null)
+            hud.showGUI = false;
+
         id = FindObjectsOfType<Player>().Length - 1;
         RegisterModel(Player.PLAYER_TAG, GetId());
         spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
@@ -82,6 +79,11 @@ public class Player : NetworkSetup
         opponentsTeamController = gameController.GetOpponentTeamController(id);
         teamId = myTeamController.GetId();
         cooldownAnimReset = true;
+
+        //get audio manager
+        audioManager = AudioGameObject.GetComponent<AudioManager>();
+        audioManager.BuildDict();
+        audioManager.PlaySound("ambience");
 
         if (isLocalPlayer)
         {
@@ -96,9 +98,6 @@ public class Player : NetworkSetup
             canvas.planeDistance = 1;
             canvasController = canvas.GetComponent<CanvasController>();
             canvasController.SetRenderTexture(opponentsTeamController.GetRenderTexture());
-
-            //get audio manager
-            audioManager = AudioGameObject.GetComponent<AudioManager>();
         }
 
         if (!isLocalPlayer)
@@ -139,7 +138,7 @@ public class Player : NetworkSetup
             {
                 CmdRequestOffensiveTroopSpawn(0, GetSpawnId() - 1);
             }
-			else if (Input.GetKeyDown(KeyCode.Slash))
+            else if (Input.GetKeyDown(KeyCode.Slash))
             {
                 CmdRequestOffensiveTroopSpawn(1, GetSpawnId() - 1);
             }
@@ -152,7 +151,7 @@ public class Player : NetworkSetup
                 if (myTeamController.GetCurrentTime() > myTeamController.GetEndOfCoolDown())
                 {
                     CmdDestroyTroops(GetId(), GetTeamId());
-					
+
                 }
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -181,14 +180,15 @@ public class Player : NetworkSetup
             {
                 canvasController.SetBlueHealthBar(myTeamController.GetTowerHealthRatio());
                 canvasController.SetRedHealthBar(opponentsTeamController.GetTowerHealthRatio());
-            } else
+            }
+            else
             {
                 canvasController.SetRedHealthBar(myTeamController.GetTowerHealthRatio());
                 canvasController.SetBlueHealthBar(opponentsTeamController.GetTowerHealthRatio());
             }
             canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
 
-            if( myTeamController.GetEndOfCoolDown() > myTeamController.GetCurrentTime() && cooldownAnimReset)
+            if (myTeamController.GetEndOfCoolDown() > myTeamController.GetCurrentTime() && cooldownAnimReset)
             {
                 canvasController.SetArrowCooldown();
                 cooldownAnimReset = false;
@@ -253,13 +253,14 @@ public class Player : NetworkSetup
         bool successfulPurchase = myTeamController.SpendGold(Params.DESTROY_COST);
         if (successfulPurchase)
         {
-            
+            audioManager.PlaySound("volley");
             int targetTeamId = opponentsTeamController.GetId();
             int lane = GetSpawnId();
             myTeamController.CmdUpdateCoolDown();
             GameObject[] troops = GetTroopsInLane(targetTeamId, lane);
             RpcShootVolley(troops);
         }
+
     }
 
     [Client]
@@ -316,12 +317,25 @@ public class Player : NetworkSetup
     [Command]
     private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
     {
+
         int cost = Params.NPC_COST[troopId];
         int teamId = GetTeamId();
         bool successfulPurchase = myTeamController.SpendGold(cost);
         if (successfulPurchase)
         {
+            if (troopId == 0)
+            {
+                audioManager.PlaySound("sword");
+            }
+            else if (troopId == 2)
+            {
+                audioManager.PlaySound("horn");
+            }
             spawnController.SpawnOffensive(troopId, spawnId, teamId);
+        }
+        else
+        {
+            audioManager.PlaySound("coins");
         }
 
     }
