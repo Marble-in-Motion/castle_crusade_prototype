@@ -50,11 +50,11 @@ public class Player : NetworkSetup
     private float AIActionTime = 0.0f;
     private float AIMoveDelay = 0.5f;
 
-    private Boolean aiEnabled = true;
+    private Boolean AIEnabled = false;
 
     private float nextAIActionTime = 0;
     private float changeDirectionTime = 0.4f;
-    private float timePerShot = 0.15f;
+    private float timePerShot = 0.2f;
     private GameObject AITargetEnemy;
     private float AINextTroopSendTime = 0;
     private int AINextNumberTroopsToSend = 1;
@@ -129,7 +129,7 @@ public class Player : NetworkSetup
     {
         if (isLocalPlayer)
         {
-            if (!aiEnabled)
+            if (!AIEnabled)
             {
                 // spawn npc command
                 if (Input.GetKeyDown(KeyCode.Y))
@@ -138,7 +138,7 @@ public class Player : NetworkSetup
                 }
                 else if (Input.GetKeyDown(KeyCode.A))
                 {
-                    aiEnabled = true;
+                    AIEnabled = true;
                 }
                 else if (Input.GetKeyDown(KeyCode.J))
                 {
@@ -220,7 +220,7 @@ public class Player : NetworkSetup
             {
                 if (Input.GetKeyDown(KeyCode.A))
                 {
-                    aiEnabled = false;
+                    AIEnabled = false;
                 }
                 if(Time.time > AINextTroopSendTime)
                 {
