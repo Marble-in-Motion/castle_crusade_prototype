@@ -56,6 +56,8 @@ public class Player : NetworkSetup
     private float changeDirectionTime = 0.4f;
     private float timePerShot = 0.15f;
     private GameObject AITargetEnemy;
+    private float AINextTroopSendTime = 0;
+    private int AINextNumberTroopsToSend = 1;
 
     private AICommands nextCommand = AICommands.FIND;
 
@@ -134,6 +136,10 @@ public class Player : NetworkSetup
                 {
                     CmdRequestOffensiveTroopSpawn(0, 0);
                 }
+                else if (Input.GetKeyDown(KeyCode.A))
+                {
+                    aiEnabled = true;
+                }
                 else if (Input.GetKeyDown(KeyCode.J))
                 {
                     CmdRequestOffensiveTroopSpawn(0, 1);
@@ -190,29 +196,7 @@ public class Player : NetworkSetup
                     Debug.Log("File written");
                 }
 
-                canvasController.SetCurrencyText(myTeamController.GetCoin().ToString());
-
-                if (teamId == TeamController.TEAM1)
-                {
-                    canvasController.SetBlueHealthBar(myTeamController.GetTowerHealthRatio());
-                    canvasController.SetRedHealthBar(opponentsTeamController.GetTowerHealthRatio());
-                }
-                else
-                {
-                    canvasController.SetRedHealthBar(myTeamController.GetTowerHealthRatio());
-                    canvasController.SetBlueHealthBar(opponentsTeamController.GetTowerHealthRatio());
-                }
-                canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
-
-                if (myTeamController.GetEndOfCoolDown() > myTeamController.GetCurrentTime() && cooldownAnimReset)
-                {
-                    canvasController.SetArrowCooldown();
-                    cooldownAnimReset = false;
-                }
-                else if (myTeamController.GetEndOfCoolDown() <= myTeamController.GetCurrentTime())
-                {
-                    cooldownAnimReset = true;
-                }
+                
 
                 GameObject[] enemyTroops = FindEnemyTroopsInLane();
                 int numCloseTroops = 0;
@@ -238,6 +222,20 @@ public class Player : NetworkSetup
                 {
                     aiEnabled = false;
                 }
+                if(Time.time > AINextTroopSendTime)
+                {
+                    for(int i = 0; i < AINextNumberTroopsToSend; i++)
+                    {
+                        CmdRequestOffensiveTroopSpawn(0, GetSpawnId() - 1);
+                    }
+                    System.Random rnd = new System.Random();
+                    int interval = rnd.Next(1, 11);
+                    AINextTroopSendTime = Time.time + interval;
+
+                    int coin = myTeamController.GetCoin();
+                    int uppberBound = (int)(coin / 40);
+                    AINextNumberTroopsToSend = rnd.Next(1, uppberBound);
+                }
                 if (Time.time > nextAIActionTime)
                 {
                     if (nextCommand == AICommands.FIND)
@@ -259,6 +257,29 @@ public class Player : NetworkSetup
                     }
                 }
                 
+            }
+            canvasController.SetCurrencyText(myTeamController.GetCoin().ToString());
+
+            if (teamId == TeamController.TEAM1)
+            {
+                canvasController.SetBlueHealthBar(myTeamController.GetTowerHealthRatio());
+                canvasController.SetRedHealthBar(opponentsTeamController.GetTowerHealthRatio());
+            }
+            else
+            {
+                canvasController.SetRedHealthBar(myTeamController.GetTowerHealthRatio());
+                canvasController.SetBlueHealthBar(opponentsTeamController.GetTowerHealthRatio());
+            }
+            canvasController.SetGameOverValue(myTeamController.GetIsGameOver());
+
+            if (myTeamController.GetEndOfCoolDown() > myTeamController.GetCurrentTime() && cooldownAnimReset)
+            {
+                canvasController.SetArrowCooldown();
+                cooldownAnimReset = false;
+            }
+            else if (myTeamController.GetEndOfCoolDown() <= myTeamController.GetCurrentTime())
+            {
+                cooldownAnimReset = true;
             }
         }
     }
