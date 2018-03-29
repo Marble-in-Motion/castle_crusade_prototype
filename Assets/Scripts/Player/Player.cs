@@ -9,6 +9,8 @@ using Assets.Scripts.Player;
 public class Player : NetworkSetup
 {
 
+    enum AICommands : int { FIND = 0, AIM = 1, KILL = 2}
+
     public const string PLAYER_TAG = "Player";
     private const string REMOTE_LAYER_NAME = "RemotePlayer";
     private const float CLOSE_DISTANCE = 0.5f;
@@ -52,6 +54,13 @@ public class Player : NetworkSetup
 
     private WaitForSeconds shotTime = new WaitForSeconds(0);
     private WaitForSeconds changeDirection = new WaitForSeconds(0);
+
+    private float nextAIActionTime = 0;
+    private float changeDirectionTime = 0.5f;
+    private float timePerShot = 0.3f;
+    private GameObject AITargetEnemy;
+
+    private AICommands nextCommand = AICommands.FIND;
 
     public int GetId()
     {
@@ -232,16 +241,36 @@ public class Player : NetworkSetup
                 {
                     aiEnabled = false;
                 }
-                if (Time.time > AIActionTime)
+                if (Time.time > nextAIActionTime)
                 {
-                    AIActionTime = AIActionTime + AIMoveDelay;
-                    GameObject[] troopsInLane = FindEnemyTroopsInLane();;
-                    if (troopsInLane.Length != 0)
+                    if (nextCommand == AICommands.FIND)
                     {
-                        GameObject target = crossbow.GetComponent<CrossbowMotor>().AIFindTarget(troopsInLane);
-                        if (target != null)
+                        AITargetEnemy = findTarget();
+                        if(AITargetEnemy != null)
                         {
-                            StartCoroutine(killTarget(target));
+                            nextCommand = AICommands.AIM;
+                        }
+                    }
+                    else if (nextCommand == AICommands.AIM)
+                    {
+                        moveTowardsTarget();
+                        int currentPath = crossbow.GetComponent<CrossbowMotor>().getActivePath();
+                        int targetPath = AITargetEnemy.GetComponent<AIController>().GetPath();
+                        if(currentPath == targetPath)
+                        {
+                            nextCommand = AICommands.KILL;
+                        }
+                    }
+                    else if(nextCommand == AICommands.KILL)
+                    {
+                        Shoot();
+                        if (!AITargetEnemy.GetComponent<NPCHealth>().IsAlive())
+                        {
+                            nextCommand = AICommands.FIND;
+                        }
+                        else
+                        {
+                            nextAIActionTime = Time.time + timePerShot;
                         }
                     }
                 }
@@ -250,70 +279,26 @@ public class Player : NetworkSetup
         }
     }
 
-    private IEnumerator AIChangeDirection(int direction)
+    private GameObject findTarget()
     {
-        if(direction == -1)
-        {
-            yield return changeDirection;
-            crossbow.GetComponent<CrossbowMotor>().moveLeft();
-            
-        }
-        else if(direction == 1)
-        {
-            yield return changeDirection;
-            crossbow.GetComponent<CrossbowMotor>().moveRight();
-            
-        }
+        GameObject[] troopsInLane = FindEnemyTroopsInLane(); ;
+        GameObject target = crossbow.GetComponent<CrossbowMotor>().AIFindTarget(troopsInLane);
+        return target;
     }
 
-    private IEnumerator AIShooting()
+    private void moveTowardsTarget()
     {
-        yield return shotTime;
-        Shoot();
-    }
-
-    private IEnumerator killTarget(GameObject target)
-    {
-        int path = target.GetComponent<AIController>().GetPath();
         int currentPath = crossbow.GetComponent<CrossbowMotor>().getActivePath();
-        if (currentPath != path)
+        int targetPath = AITargetEnemy.GetComponent<AIController>().GetPath();
+        if (currentPath > targetPath)
         {
-            if (currentPath == path + 1)
-            {
-                //StartCoroutine(AIChangeDirection(-1));
-                yield return changeDirection;
-                crossbow.GetComponent<CrossbowMotor>().moveLeft();
-            }
-            else if (currentPath == path - 1)
-            {
-                //StartCoroutine(AIChangeDirection(1));
-                yield return changeDirection;
-                crossbow.GetComponent<CrossbowMotor>().moveRight();
-            }
-            else if (currentPath == path + 2)
-            {
-                //StartCoroutine(AIChangeDirection(-1));
-                //StartCoroutine(AIChangeDirection(-1));
-                yield return changeDirection;
-                crossbow.GetComponent<CrossbowMotor>().moveLeft();
-                yield return changeDirection;
-                crossbow.GetComponent<CrossbowMotor>().moveLeft();
-            }
-            else if (currentPath == path - 2)
-            {
-                //StartCoroutine(AIChangeDirection(1));
-                //StartCoroutine(AIChangeDirection(1));
-                yield return changeDirection;
-                crossbow.GetComponent<CrossbowMotor>().moveRight();
-                yield return changeDirection;
-                crossbow.GetComponent<CrossbowMotor>().moveRight();
-            }
+            crossbow.GetComponent<CrossbowMotor>().moveLeft();
+            nextAIActionTime = Time.time + changeDirectionTime;
         }
-        while (target.GetComponent<NPCHealth>().IsAlive())
+        else if (currentPath < targetPath)
         {
-            //StartCoroutine(AIShooting());
-            yield return shotTime;
-            Shoot();
+            crossbow.GetComponent<CrossbowMotor>().moveRight();
+            nextAIActionTime = Time.time + changeDirectionTime;
         }
     }
 
