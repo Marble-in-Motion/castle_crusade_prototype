@@ -50,8 +50,8 @@ public class Player : NetworkSetup
 
     private Boolean aiEnabled = true;
 
-    private WaitForSeconds shotTime = new WaitForSeconds(0.3f);
-    private WaitForSeconds changeDirection = new WaitForSeconds(0.8f);
+    private WaitForSeconds shotTime = new WaitForSeconds(0);
+    private WaitForSeconds changeDirection = new WaitForSeconds(0);
 
     public int GetId()
     {
@@ -235,8 +235,7 @@ public class Player : NetworkSetup
                 if (Time.time > AIActionTime)
                 {
                     AIActionTime = AIActionTime + AIMoveDelay;
-                    GameObject[] troopsInLane = FindEnemyTroopsInLane();
-                    Debug.Log("Found in lane");
+                    GameObject[] troopsInLane = FindEnemyTroopsInLane();;
                     if (troopsInLane.Length != 0)
                     {
                         GameObject target = crossbow.GetComponent<CrossbowMotor>().AIFindTarget(troopsInLane);
