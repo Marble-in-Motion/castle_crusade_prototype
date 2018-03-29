@@ -52,12 +52,9 @@ public class Player : NetworkSetup
 
     private Boolean aiEnabled = true;
 
-    private WaitForSeconds shotTime = new WaitForSeconds(0);
-    private WaitForSeconds changeDirection = new WaitForSeconds(0);
-
     private float nextAIActionTime = 0;
-    private float changeDirectionTime = 0.5f;
-    private float timePerShot = 0.3f;
+    private float changeDirectionTime = 0.4f;
+    private float timePerShot = 0.15f;
     private GameObject AITargetEnemy;
 
     private AICommands nextCommand = AICommands.FIND;
@@ -254,24 +251,11 @@ public class Player : NetworkSetup
                     else if (nextCommand == AICommands.AIM)
                     {
                         moveTowardsTarget();
-                        int currentPath = crossbow.GetComponent<CrossbowMotor>().getActivePath();
-                        int targetPath = AITargetEnemy.GetComponent<AIController>().GetPath();
-                        if(currentPath == targetPath)
-                        {
-                            nextCommand = AICommands.KILL;
-                        }
+                        
                     }
                     else if(nextCommand == AICommands.KILL)
                     {
-                        Shoot();
-                        if (!AITargetEnemy.GetComponent<NPCHealth>().IsAlive())
-                        {
-                            nextCommand = AICommands.FIND;
-                        }
-                        else
-                        {
-                            nextAIActionTime = Time.time + timePerShot;
-                        }
+                        killTarget();
                     }
                 }
                 
@@ -299,6 +283,25 @@ public class Player : NetworkSetup
         {
             crossbow.GetComponent<CrossbowMotor>().moveRight();
             nextAIActionTime = Time.time + changeDirectionTime;
+        }
+
+        currentPath = crossbow.GetComponent<CrossbowMotor>().getActivePath();
+        if (currentPath == targetPath)
+        {
+            nextCommand = AICommands.KILL;
+        }
+    }
+
+    private void killTarget()
+    {
+        Shoot();
+        if (!AITargetEnemy.GetComponent<NPCHealth>().IsAlive())
+        {
+            nextCommand = AICommands.FIND;
+        }
+        else
+        {
+            nextAIActionTime = Time.time + timePerShot;
         }
     }
 
