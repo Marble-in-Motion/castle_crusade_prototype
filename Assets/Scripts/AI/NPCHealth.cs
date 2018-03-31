@@ -21,8 +21,15 @@ public class NPCHealth : NetworkBehaviour {
 	{
 		Vector3 troopPostion = this.transform.position;
 		float distance = Vector3.Distance(troopPostion, crossBowPosition);
-        Debug.Log(this.GetComponentInParent<NavMeshAgent>().speed);
-		float flightTime = distance / (boltSpeed - this.GetComponentInParent<NavMeshAgent>().speed) - ARROW_START_DELAY;
+        float flightTime;
+        try
+        {
+            flightTime = distance / (boltSpeed - this.GetComponentInParent<NavMeshAgent>().speed) - ARROW_START_DELAY;
+        }
+        catch
+        {
+            flightTime = 0;
+        }
 		return flightTime;
 	}
 
