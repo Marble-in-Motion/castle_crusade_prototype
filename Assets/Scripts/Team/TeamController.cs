@@ -10,6 +10,9 @@ public class TeamController : NetworkBehaviour
     public const int TEAM1 = 1;
     public const int TEAM2 = 2;
 
+    private AudioSource deductHealth; 
+    private AudioClip audioClip;
+
     [SerializeField]
     private int id;
 
@@ -40,6 +43,8 @@ public class TeamController : NetworkBehaviour
     {
 		gameOverValue = 0;
 		towerHealth = Params.STARTING_TOWER_HEALTH;
+        deductHealth = GetComponent<AudioSource>();
+        audioClip = deductHealth.clip;
         if (isServer)
         {
             endOfCoolDown = Time.time;
@@ -154,6 +159,8 @@ public class TeamController : NetworkBehaviour
 	[Command]
 	public void CmdDeductTowerHealth(int damage)  {
 		towerHealth = towerHealth - damage;
+        deductHealth.PlayOneShot(audioClip);
+
 		if (towerHealth <= 0) {
 			TellGameControllerGameOver();
 		}
