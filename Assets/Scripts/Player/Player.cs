@@ -83,9 +83,6 @@ public class Player : NetworkSetup
 
     void Start()
     {
-        NetworkManagerHUD hud = FindObjectOfType<NetworkManagerHUD>();
-        if (hud != null)
-            hud.showGUI = false;
 
         id = FindObjectsOfType<Player>().Length - 1;
         RegisterModel(Player.PLAYER_TAG, GetId());
@@ -128,48 +125,11 @@ public class Player : NetworkSetup
     {
         if (isLocalPlayer)
         {
-<<<<<<< HEAD
-            // spawn npc command
-            if (Input.GetKeyDown(KeyCode.Y))
-            {
-                CmdRequestOffensiveTroopSpawn(0, 0);
-            }
-            else if (Input.GetKeyDown(KeyCode.J))
-            {
-                CmdRequestOffensiveTroopSpawn(0, 1);
-            }
-            else if (Input.GetKeyDown(KeyCode.N))
-            {
-                CmdRequestOffensiveTroopSpawn(0, 2);
-            }
-            else if (Input.GetKeyDown(KeyCode.B))
-            {
-                CmdRequestOffensiveTroopSpawn(0, 3);
-            }
-            else if (Input.GetKeyDown(KeyCode.G))
-            {
-                CmdRequestOffensiveTroopSpawn(0, 4);
-            }
-            else if (Input.GetKeyDown(KeyCode.Return))
-            {
-                CmdRequestOffensiveTroopSpawn(0, GetSpawnId() - 1);
-            }
-            else if (Input.GetKeyDown(KeyCode.Slash))
-            {
-                CmdRequestOffensiveTroopSpawn(1, GetSpawnId() - 1);
-            }
-            else if (Input.GetKeyDown(KeyCode.Backspace))
-=======
             if (!AIEnabled)
->>>>>>> c0e847ea0bceb7bcb2a0de7c8c439a946b4a402b
             {
                 // spawn npc command
                 if (Input.GetKeyDown(KeyCode.Y))
                 {
-<<<<<<< HEAD
-                    CmdDestroyTroops(GetId(), GetTeamId());
-
-=======
                     CmdRequestOffensiveTroopSpawn(0, 0);
                 }
                 else if (Input.GetKeyDown(KeyCode.A))
@@ -250,7 +210,6 @@ public class Player : NetworkSetup
                         nextActionTime = Time.time + KLAXON_FIRE_TIME;
                         audioManager.PlaySound("klaxon");
                     }
->>>>>>> c0e847ea0bceb7bcb2a0de7c8c439a946b4a402b
                 }
             }
             else
