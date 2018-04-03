@@ -6,6 +6,8 @@ using UnityEngine.Networking;
 
 public class TeamController : NetworkBehaviour
 {
+    public const string TEAM_CONTROLLER_1_TAG = "TeamController1";
+    public const string TEAM_CONTROLLER_2_TAG = "TeamController2";
 
     public const int TEAM1 = 1;
     public const int TEAM2 = 2;
@@ -41,7 +43,7 @@ public class TeamController : NetworkBehaviour
 
     void Start()
     {
-		gameOverValue = 0;
+		gameOverValue = GameController.GameState.GAME_RESTART;
 		towerHealth = Params.STARTING_TOWER_HEALTH;
         deductHealth = GetComponent<AudioSource>();
         audioClip = deductHealth.clip;

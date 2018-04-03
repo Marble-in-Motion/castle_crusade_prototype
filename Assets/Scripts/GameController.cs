@@ -15,56 +15,59 @@ public class GameController : NetworkBehaviour
     [SerializeField]
     private List<GameObject> spawnPoints;
 
-    [SerializeField]
-    private GameObject team1GameObject;
+    private TeamController teamController1;
 
-    [SerializeField]
-    private GameObject team2GameObject;
-
+    private TeamController teamController2;
+    
     private Camera sceneCamera;
 
     private bool restart;
 
     private float coinIncreaseTime;
 
-
-    // Use this for initialization
     void Start()
     {
-
         coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
         sceneCamera = Camera.main;
         sceneCamera.gameObject.SetActive(true);
-        //gameOver = 0;
         restart = false;
 
+        teamController1 = GameObject.FindGameObjectWithTag(TeamController.TEAM_CONTROLLER_1_TAG).GetComponent<TeamController>();
+        teamController2 = GameObject.FindGameObjectWithTag(TeamController.TEAM_CONTROLLER_2_TAG).GetComponent<TeamController>();
+    }
+        
+    public void DeactiveScreenCamera()
+    {
+        sceneCamera.gameObject.SetActive(false);
     }
 
-    public void InitialisePlayer(Player player)
+    public int GetMyTeamControllerId(int playerId)
     {
-        MovePlayerToSpawn(player);
-        sceneCamera.gameObject.SetActive(false);
+        return GetMyTeamController(playerId).GetId();
+    }
+
+    public int GetOpponentsTeamControllerId(int playerId)
+    {
+        return GetOpponentsTeamController(playerId).GetId();
     }
 
     public TeamController GetMyTeamController(int playerId)
     {
         return (CalculateTeamId(playerId) == TeamController.TEAM1)
-            ? team1GameObject.GetComponent<TeamController>()
-            : team2GameObject.GetComponent<TeamController>();
+            ? teamController1
+            : teamController2;
     }
 
-	public TeamController GetOpponentTeamController(int playerId)
-	{
-		return (CalculateTeamId(playerId) == TeamController.TEAM1)
-			? team2GameObject.GetComponent<TeamController>()
-			: team1GameObject.GetComponent<TeamController>();
-	}
-
-
-    private void MovePlayerToSpawn(Player player)
+    public TeamController GetOpponentsTeamController(int playerId)
     {
-        player.transform.position = spawnPoints[player.GetId()].transform.position;
-        player.transform.rotation = spawnPoints[player.GetId()].transform.rotation;
+        return (CalculateTeamId(playerId) == TeamController.TEAM1)
+            ? teamController2
+            : teamController1;
+    }
+
+    public Transform GetPlayerTransform(int playerId)
+    {
+        return spawnPoints[playerId].transform;
     }
 
     private int CalculateTeamId(int playerId)
@@ -76,8 +79,8 @@ public class GameController : NetworkBehaviour
         GameState team1GameOverValue = (losingTeamId == TeamController.TEAM1) ? GameState.GAME_LOST : GameState.GAME_WON;
         GameState team2GameOverValue = (losingTeamId == TeamController.TEAM2) ? GameState.GAME_LOST : GameState.GAME_WON;
 
-        team1GameObject.GetComponent<TeamController>().SetGameOver(team1GameOverValue);
-		team2GameObject.GetComponent<TeamController>().SetGameOver(team2GameOverValue);
+        teamController1.SetGameOver(team1GameOverValue);
+		teamController2.SetGameOver(team2GameOverValue);
 
         GameRestart();
     }
@@ -106,8 +109,8 @@ public class GameController : NetworkBehaviour
         if (Time.time > coinIncreaseTime)
         {
             coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
-            team1GameObject.GetComponent<TeamController>().CmdIncreaseCoinPerInterval(Params.COIN_BOOST);
-			team2GameObject.GetComponent<TeamController>().CmdIncreaseCoinPerInterval(Params.COIN_BOOST);
+            teamController1.CmdIncreaseCoinPerInterval(Params.COIN_BOOST);
+			teamController2.CmdIncreaseCoinPerInterval(Params.COIN_BOOST);
         }
     }
 
@@ -118,16 +121,15 @@ public class GameController : NetworkBehaviour
         {
             DestroyAllTroops();
             
-
             if (Input.GetKeyDown(KeyCode.R))
             {
-                team1GameObject.GetComponent<TeamController>().SetGameOver(GameState.GAME_RESTART);
-                team2GameObject.GetComponent<TeamController>().SetGameOver(GameState.GAME_RESTART);
-                team1GameObject.GetComponent<TeamController>().Restart();
-                team2GameObject.GetComponent<TeamController>().Restart();
+                teamController1.SetGameOver(GameState.GAME_RESTART);
+                teamController2.SetGameOver(GameState.GAME_RESTART);
+                teamController1.Restart();
+                teamController2.Restart();
                 DestroyAllTroops();
-                team1GameObject.GetComponent<TeamController>().CmdResetCoinPerInterval();
-                team2GameObject.GetComponent<TeamController>().CmdResetCoinPerInterval();
+                teamController1.CmdResetCoinPerInterval();
+                teamController2.CmdResetCoinPerInterval();
                 coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
                 restart = false;
             }

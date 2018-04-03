@@ -65,7 +65,7 @@ namespace Assets.Scripts.Player
         }
 
 		public void SetArrowCooldown() {
-			anim.SetTrigger ("Cooldown");
+			anim.SetTrigger("Cooldown");
 		}
 
     }

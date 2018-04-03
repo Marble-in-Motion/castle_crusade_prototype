@@ -11,6 +11,13 @@ public class CrossbowMotor : MonoBehaviour
     private Vector3 mousePos;
 
     private int activePath;
+    public int ActivePath
+    {
+        get
+        {
+            return activePath;
+        }
+    }
 
     private SpawnController spawnController;
 
@@ -25,48 +32,22 @@ public class CrossbowMotor : MonoBehaviour
 
     void Update()
     {
-        lookAtTroop();
+        LookAtTroop();
     }
 
     private void SetDefaultTargets()
     {
-        int teamId = this.GetComponentInParent<Player>().GetOpponentTeamId();
-        int spawnId = this.GetComponentInParent<Player>().GetSpawnId() - 1;
+        Player player = GetComponentInParent<Player>();
         for (int i = 0; i <= 2; i++)
         {
-            defaultTargets.Add(spawnController.calculateDefaultSpawn(i, spawnId, teamId));
+            defaultTargets.Add(spawnController.calculateDefaultSpawn(i, player.LaneId, player.OpponentsTeamId));
         }
     }
 
-    // Run every physics iteration
-    //    void FixedUpdate()
-    //    {
-    //        PerformRotation();
-    //    }
-    //
-    //    // Gets a rotational vector
-    //    public void Rotate(Vector3 mousePosition)
-    //    {
-    //        mousePos = mousePosition;
-    //        mousePos.z = 10;
-    //    }
-    //
-    //    //Perform rotation
-    //    void PerformRotation()
-    //    {
-    //        Vector3 worldPos = cam.ScreenToWorldPoint(mousePos);
-    //        transform.LookAt(worldPos);
-    //    }
-
-    public int getActivePath()
+    private void LookAtTroop()
     {
-        return activePath;
-    }
-
-    void lookAtTroop()
-    {
-        GameObject[] troopsInLane = this.GetComponentInParent<Player>().FindEnemyTroopsInLane();
-        GameObject nearestTroop = findNearestTroopInPath(troopsInLane);
+        GameObject[] troopsInLane = GetComponentInParent<Player>().FindEnemyTroopsInLane();
+        GameObject nearestTroop = FindNearestTroopInPath(troopsInLane);
         if (nearestTroop != null)
         {
             transform.LookAt(nearestTroop.transform.position);
@@ -96,7 +77,7 @@ public class CrossbowMotor : MonoBehaviour
        
     }
 
-    GameObject findNearestTroopInPath(GameObject[] troopsInLane)
+    GameObject FindNearestTroopInPath(GameObject[] troopsInLane)
     {
         float minDist = float.MaxValue;
         GameObject nearestTroop = null;
@@ -117,7 +98,7 @@ public class CrossbowMotor : MonoBehaviour
         return nearestTroop;
     }
 
-    public void moveRight()
+    public void MoveRight()
     {
         if (activePath < 2)
         {
@@ -126,7 +107,7 @@ public class CrossbowMotor : MonoBehaviour
         }
     }
 
-    public void moveLeft()
+    public void MoveLeft()
     {
         if (activePath > 0)
         {
