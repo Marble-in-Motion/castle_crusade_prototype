@@ -2,6 +2,7 @@
 using UnityEngine;
 using System;
 using Assets.Scripts.Player;
+using System.Collections;
 
 public class Player : NetworkSetup
 {
@@ -14,17 +15,19 @@ public class Player : NetworkSetup
     private const int NUM_TROOPS_FOR_WARNING = 3;
     private const float KLAXON_FIRE_TIME = 5.0f;
 
+
     private int id;
+
 
     private int laneId;
     public int LaneId
     {
         get
         {
-            Debug.Log(laneId);
             return laneId;
         }
     }
+
 
     private int myTeamId;
     public int MyTeamId
@@ -34,6 +37,7 @@ public class Player : NetworkSetup
             return myTeamId;
         }
     }
+
 
     private int opponentsTeamId;
     public int OpponentsTeamId
@@ -95,6 +99,11 @@ public class Player : NetworkSetup
         vcr.NewRecording();
     }
 
+    IEnumerator WaitExample()
+    {
+        yield return new WaitForSeconds(3);
+    }
+
     void Start()
     {
         id = FindObjectsOfType<Player>().Length - 1;
@@ -108,18 +117,35 @@ public class Player : NetworkSetup
         audioManager.BuildDict();
         audioManager.PlaySound("ambience");
 
+        Debug.Log(NetworkServer.active);
+
         if (isLocalPlayer)
         {
             // Player Initialisation
             CmdInitialisePlayer();
+
+            StartCoroutine(WaitExample());
+
+            //if (NetworkServer.active)
+            //{
+                Debug.Log("initialise player");
+                Debug.Log("id: " + id);
+                Debug.Log("laneId : " + laneId);
+                Debug.Log("myTeamId: " + myTeamId);
+                Debug.Log("opponentsTeamId : " + opponentsTeamId);
+            //}
+            
+
 
             // Camera Settings
             Cursor.visible = false;
 
             // Canvas Settings
             Canvas canvas = GetComponentInChildren<Canvas>();
+            Debug.Log("Initialise canvas: " + canvas.name);
             canvas.planeDistance = 1;
             canvasController = canvas.GetComponent<CanvasController>();
+            Debug.Log(canvasController);
 
             // crossbow
             crossbowMotor = crossbow.GetComponent<CrossbowMotor>();
@@ -141,9 +167,12 @@ public class Player : NetworkSetup
         Transform transform = gameController.GetPlayerTransform(id);
 
         RpcSetPlayerTransform(transform.position, transform.rotation);
+
         RpcSetMyTeamId(gameController.GetMyTeamControllerId(id));
-        RpcSetOpponentsTeamId(gameController.GetOpponentsTeamControllerId(id));
-        RpcSetLaneId();
+        opponentsTeamId = gameController.GetOpponentsTeamControllerId(id);
+        laneId = (myTeamId == TeamController.TEAM1)
+            ? (id / 2) + 1
+            : (id - 1) / 2 + 1;
     }
 
     [ClientRpc]
@@ -157,22 +186,24 @@ public class Player : NetworkSetup
     [ClientRpc]
     void RpcSetMyTeamId(int teamId)
     {
+        Debug.Log(teamId);
         myTeamId = teamId;
+        Debug.Log(myTeamId);
     }
 
-    [ClientRpc]
-    void RpcSetOpponentsTeamId(int teamId)
-    {
-        opponentsTeamId = teamId;
-    }
+    //[ClientRpc]
+    //void RpcSetOpponentsTeamId(int teamId)
+    //{
+    //    opponentsTeamId = teamId;
+    //}
 
-    [ClientRpc]
-    void RpcSetLaneId()
-    {
-        laneId = (myTeamId == TeamController.TEAM1)
-            ? (id/ 2) + 1
-            : (id - 1) / 2 + 1;
-    }
+    //[ClientRpc]
+    //void RpcSetLaneId()
+    //{
+    //    laneId = (myTeamId == TeamController.TEAM1)
+    //        ? (id / 2) + 1
+    //        : (id - 1) / 2 + 1;
+    //}
 
 
     //[Command]
@@ -189,7 +220,7 @@ public class Player : NetworkSetup
     //    canvasController.SetRenderTexture(texture);
     //}
 
-    
+
     void ExecuteControls()
     {
         if (Input.GetKeyDown(KeyCode.Y))

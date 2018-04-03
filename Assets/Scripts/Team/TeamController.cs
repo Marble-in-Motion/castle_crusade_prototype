@@ -18,10 +18,10 @@ public class TeamController : NetworkBehaviour
     [SerializeField]
     private int id;
 
-    [SyncVar]
+
 	private int coin = Params.STARTING_COIN;
 
-	[SyncVar]
+
 	private float towerHealth;
 
 	private float nextActionTime = 0.0f;
@@ -29,16 +29,16 @@ public class TeamController : NetworkBehaviour
     [SerializeField]
     private RenderTexture renderTexture;
 
-	[SyncVar]
+
 	private GameController.GameState gameOverValue;
 
-    [SyncVar]
+
     private int coinsPerSecond = Params.STARTING_COIN_INCREASE_AMOUNT;
 
-    [SyncVar]
+
     private float endOfCoolDown;
 
-    [SyncVar]
+
     private float currentTime;
 
     void Start()
