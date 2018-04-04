@@ -17,6 +17,13 @@ public class Player : NetworkSetup
 
 
     private int id;
+    public int Id
+    {
+        get
+        {
+            return Id;
+        }
+    }
 
 
     private int laneId;
@@ -86,12 +93,9 @@ public class Player : NetworkSetup
 
     private AICommands nextCommand = AICommands.FIND;
 
-    public int GetId()
-    {
-        return id;
-    }
-
     private InputVCR vcr;
+
+    private bool startComplete = false;
 
     void Awake()
     {
@@ -99,64 +103,49 @@ public class Player : NetworkSetup
         vcr.NewRecording();
     }
 
-    IEnumerator WaitExample()
-    {
-        yield return new WaitForSeconds(3);
-    }
-
     void Start()
     {
         id = FindObjectsOfType<Player>().Length - 1;
-        RegisterModel(PLAYER_TAG, GetId());
-        spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
-
+        RegisterModel(PLAYER_TAG, id);
         cooldownAnimReset = true;
 
-        //get audio manager
+        // Audio manager
         audioManager = AudioGameObject.GetComponent<AudioManager>();
         audioManager.BuildDict();
         audioManager.PlaySound("ambience");
 
-        Debug.Log(NetworkServer.active);
+        // Canvas Settings
+        Canvas canvas = GetComponentInChildren<Canvas>();
+        canvas.planeDistance = 1;
+        canvasController = canvas.GetComponent<CanvasController>();
+
+        // Crossbow Motor
+        crossbowMotor = crossbow.GetComponent<CrossbowMotor>();
+
+        // Spawn Controller
+        spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
+
+        NetworkManagerHUD hud = FindObjectOfType<NetworkManagerHUD>();
+        if (hud != null)
+        {
+            hud.showGUI = false;
+        }
 
         if (isLocalPlayer)
         {
             // Player Initialisation
             CmdInitialisePlayer();
 
-            StartCoroutine(WaitExample());
-
-            //if (NetworkServer.active)
-            //{
-                Debug.Log("initialise player");
-                Debug.Log("id: " + id);
-                Debug.Log("laneId : " + laneId);
-                Debug.Log("myTeamId: " + myTeamId);
-                Debug.Log("opponentsTeamId : " + opponentsTeamId);
-            //}
-            
-
-
             // Camera Settings
             Cursor.visible = false;
-
-            // Canvas Settings
-            Canvas canvas = GetComponentInChildren<Canvas>();
-            Debug.Log("Initialise canvas: " + canvas.name);
-            canvas.planeDistance = 1;
-            canvasController = canvas.GetComponent<CanvasController>();
-            Debug.Log(canvasController);
-
-            // crossbow
-            crossbowMotor = crossbow.GetComponent<CrossbowMotor>();
             
-        }
-
-        if (!isLocalPlayer)
+        } else
         {
             DisableNonLocalCompontents();
             AssignLayer(REMOTE_LAYER_NAME);
         }
+
+        startComplete = true;
     }
 
     [Command]
@@ -164,15 +153,16 @@ public class Player : NetworkSetup
     {
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
         gameController.DeactiveScreenCamera();
-        Transform transform = gameController.GetPlayerTransform(id);
 
+        Transform transform = gameController.GetPlayerTransform(id);
         RpcSetPlayerTransform(transform.position, transform.rotation);
 
-        RpcSetMyTeamId(gameController.GetMyTeamControllerId(id));
-        opponentsTeamId = gameController.GetOpponentsTeamControllerId(id);
-        laneId = (myTeamId == TeamController.TEAM1)
-            ? (id / 2) + 1
-            : (id - 1) / 2 + 1;
+        int myTeamId = gameController.GetMyTeamControllerId(id);
+        RpcSetMyTeamId(myTeamId);
+        RpcSetRenderTexture(myTeamId);
+
+        RpcSetOpponentsTeamId(gameController.GetOpponentsTeamControllerId(id));
+        RpcSetLaneId();
     }
 
     [ClientRpc]
@@ -186,40 +176,28 @@ public class Player : NetworkSetup
     [ClientRpc]
     void RpcSetMyTeamId(int teamId)
     {
-        Debug.Log(teamId);
         myTeamId = teamId;
-        Debug.Log(myTeamId);
     }
 
-    //[ClientRpc]
-    //void RpcSetOpponentsTeamId(int teamId)
-    //{
-    //    opponentsTeamId = teamId;
-    //}
+    [ClientRpc]
+    void RpcSetOpponentsTeamId(int teamId)
+    {
+        opponentsTeamId = teamId;
+    }
 
-    //[ClientRpc]
-    //void RpcSetLaneId()
-    //{
-    //    laneId = (myTeamId == TeamController.TEAM1)
-    //        ? (id / 2) + 1
-    //        : (id - 1) / 2 + 1;
-    //}
+    [ClientRpc]
+    void RpcSetLaneId()
+    {
+        laneId = (myTeamId == TeamController.TEAM1)
+            ? (id / 2)
+            : (id - 1) / 2;
+    }
 
-
-    //[Command]
-    //void CmdSetRenderTexture()
-    //{
-    //    TeamController opponentsTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetOpponentsTeamController(id);
-    //    RenderTexture texture = opponentsTeamController.GetRenderTexture();
-    //    RpcSetRenderTexture(texture);
-    //}
-
-    //[ClientRpc]
-    //void RpcSetRenderTexture(RenderTexture texture)
-    //{
-    //    canvasController.SetRenderTexture(texture);
-    //}
-
+    [ClientRpc]
+    void RpcSetRenderTexture(int teamId)
+    {
+        canvasController.SetRenderTexture(teamId);
+    }
 
     void ExecuteControls()
     {
@@ -274,15 +252,26 @@ public class Player : NetworkSetup
         else if (Input.GetKeyDown(KeyCode.Delete))
         {
             String path = "exports/";
-            String fullPath = String.Format("{0}{1}_player{2}.json", path, DateTime.Now.Ticks, GetId());
+            String fullPath = String.Format("{0}{1}_player{2}.json", path, DateTime.Now.Ticks, id);
             System.IO.File.WriteAllText(fullPath, vcr.GetRecording().ToString());
             Debug.Log("File written");
+        } else if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Debug.Log("id: " + id);
+            Debug.Log("laneId : " + laneId);
+            Debug.Log("myTeamId: " + myTeamId);
+            Debug.Log("opponentsTeamId : " + opponentsTeamId);
         }
 
     }
 
     void Update()
     {
+        if (!startComplete)
+        {
+            return;
+        }
+    
         if (isLocalPlayer)
         {
             if (Input.GetKeyDown(KeyCode.A))
@@ -323,7 +312,7 @@ public class Player : NetworkSetup
                     if (nextCommand == AICommands.FIND)
                     {
                         AITargetEnemy = findTarget();
-                        if(AITargetEnemy != null)
+                        if (AITargetEnemy != null)
                         {
                             nextCommand = AICommands.AIM;
                         }
@@ -331,19 +320,25 @@ public class Player : NetworkSetup
                     else if (nextCommand == AICommands.AIM)
                     {
                         moveTowardsTarget();
-                        
+
                     }
-                    else if(nextCommand == AICommands.KILL)
+                    else if (nextCommand == AICommands.KILL)
                     {
-                        killTarget();
+                        KillTarget();
                     }
                 }
-                
             }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (isLocalPlayer)
+        {
             CmdSetCurrencyText();
             CmdSetHealthBar();
             CmdSetGameState();
-            CmdSetVolleyCooldown(); 
+            CmdSetVolleyCooldown();
         }
     }
 
@@ -431,7 +426,7 @@ public class Player : NetworkSetup
 
         for (int i = 0; i < AINextNumberTroopsToSend; i++)
         {
-            CmdRequestOffensiveTroopSpawn(0, laneId - 1);
+            CmdRequestOffensiveTroopSpawn(0, laneId);
         }
         System.Random rnd = new System.Random();
         int interval = rnd.Next(1, 11);
@@ -471,7 +466,7 @@ public class Player : NetworkSetup
         }
     }
 
-    private void killTarget()
+    private void KillTarget()
     {
         Shoot();
         if (!AITargetEnemy.GetComponent<NPCHealth>().IsAlive())
@@ -491,8 +486,15 @@ public class Player : NetworkSetup
 
     private GameObject[] GetTroopsInLane(int teamId, int lane)
     {
-        String troopTag = String.Format("NPCT{0}L{1}", teamId, lane);
-        return GameObject.FindGameObjectsWithTag(troopTag);
+        try
+        {
+            String troopTag = String.Format("NPCT{0}L{1}", teamId, lane);
+            return GameObject.FindGameObjectsWithTag(troopTag);
+        }
+        catch
+        {
+            return new GameObject[0];
+        }
     }
 
     [ClientRpc]

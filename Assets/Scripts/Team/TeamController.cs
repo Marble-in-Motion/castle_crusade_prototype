@@ -12,32 +12,23 @@ public class TeamController : NetworkBehaviour
     public const int TEAM1 = 1;
     public const int TEAM2 = 2;
 
-    private AudioSource deductHealth; 
-    private AudioClip audioClip;
-
     [SerializeField]
     private int id;
 
+    [SerializeField]
+    private AudioSource seigeAudio;
 
-	private int coin = Params.STARTING_COIN;
-
+    private int coin = Params.STARTING_COIN;
 
 	private float towerHealth;
 
 	private float nextActionTime = 0.0f;
-
-    [SerializeField]
-    private RenderTexture renderTexture;
-
-
+    
 	private GameController.GameState gameOverValue;
-
 
     private int coinsPerSecond = Params.STARTING_COIN_INCREASE_AMOUNT;
 
-
     private float endOfCoolDown;
-
 
     private float currentTime;
 
@@ -45,14 +36,9 @@ public class TeamController : NetworkBehaviour
     {
 		gameOverValue = GameController.GameState.GAME_RESTART;
 		towerHealth = Params.STARTING_TOWER_HEALTH;
-        deductHealth = GetComponent<AudioSource>();
-        audioClip = deductHealth.clip;
-        if (isServer)
-        {
-            endOfCoolDown = Time.time;
-            currentTime = Time.time;
-        }
         
+        endOfCoolDown = Time.time;
+        currentTime = Time.time;
     }
 
     [Command]
@@ -104,11 +90,6 @@ public class TeamController : NetworkBehaviour
         return currentTime;
     }
 
-    public RenderTexture GetRenderTexture()
-    {
-        return renderTexture;
-    }
-
 	public GameController.GameState GetIsGameOver() {
 		return gameOverValue;
 	}
@@ -158,10 +139,9 @@ public class TeamController : NetworkBehaviour
         }
     }
 
-	[Command]
-	public void CmdDeductTowerHealth(int damage)  {
+	public void DeductTowerHealth(int damage)  {
 		towerHealth = towerHealth - damage;
-        deductHealth.PlayOneShot(audioClip);
+        seigeAudio.PlayOneShot(seigeAudio.clip);
 
 		if (towerHealth <= 0) {
 			TellGameControllerGameOver();

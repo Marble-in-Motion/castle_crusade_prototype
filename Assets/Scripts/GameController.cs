@@ -65,6 +65,13 @@ public class GameController : NetworkBehaviour
             : teamController1;
     }
 
+    public TeamController GetTeamControllerById(int teamId)
+    {
+        return (teamId == TeamController.TEAM1)
+            ? teamController1
+            : teamController2;
+    }
+
     public Transform GetPlayerTransform(int playerId)
     {
         return spawnPoints[playerId].transform;
@@ -94,10 +101,10 @@ public class GameController : NetworkBehaviour
     {
         for (int team = 1; team <= 2; team++)
         {
-            for (int lane = 1; lane <= 5; lane++)
+            for (int lane = 0; lane <= 4; lane++)
             {
                 GameObject[] troops = GameObject.FindGameObjectsWithTag(string.Format(ENEMY_TAG, team, lane));
-                for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
+                for (int i = 0; i < troops.Length; i++) { NetworkServer.Destroy(troops[i]); }
             }
         }
     }

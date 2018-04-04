@@ -2271,6 +2271,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eb4b9fe501db374e98a0645066d0e6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderTextures:
+  - {fileID: 8400000, guid: 1a2d9d8eea0b1f34bbe478a9384f3d1d, type: 2}
+  - {fileID: 8400000, guid: 9cc5c90bd5609614e9ca1a03dc7554f3, type: 2}
   blueHealthBar: {fileID: 114099868721221822}
   redHealthBar: {fileID: 114580449291712106}
   CurrencyText: {fileID: 114992888872638716}

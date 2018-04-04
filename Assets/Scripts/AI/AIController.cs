@@ -19,26 +19,13 @@ public class AIController : NetworkBehaviour {
 	[SyncVar]
 	private int troopType;
 
-  [SyncVar]
-  public int path;
+    [SyncVar]
+    public int path;
 
-  public void SetPath(int path)
-  {
-    if(path >= 0 && path <= 2)
-    {
-      this.path = path;
-    }
-  }
-
-  public int GetPath()
-  {
-    return path;
-  }
-
-	private float spawnToTargetDistance;
+    private float spawnToTargetDistance;
 
     void Start() {
-        if(GetComponent<Animation>() != null)
+        if (GetComponent<Animation>() != null)
         {
             GetComponent<Animation>().Play("run");
         }
@@ -53,6 +40,19 @@ public class AIController : NetworkBehaviour {
 		agent.SetDestination(target.position);
 		spawnToTargetDistance = Vector3.Distance(transform.position, target.position);
 	}
+
+    public void SetPath(int path)
+    {
+        if (path >= 0 && path <= 2)
+        {
+            this.path = path;
+        }
+    }
+
+    public int GetPath()
+    {
+        return path;
+    }
 
     public String GetTagName()
     {
@@ -71,7 +71,7 @@ public class AIController : NetworkBehaviour {
 
 	public void SetTroopType(int type)
 	{
-		this.troopType = type;
+		troopType = type;
 	}
 
 	public void SetTargetIndex(int targetIndex){

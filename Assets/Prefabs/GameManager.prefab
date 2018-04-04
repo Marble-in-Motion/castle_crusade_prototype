@@ -21,8 +21,6 @@ GameObject:
   - component: {fileID: 4709786940892582}
   - component: {fileID: 114494554183618778}
   - component: {fileID: 114902761845413668}
-  - component: {fileID: 114667098643584830}
-  - component: {fileID: 114937366362080918}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameController
@@ -75,19 +73,6 @@ MonoBehaviour:
     i15: 146
   m_ServerOnly: 1
   m_LocalPlayerAuthority: 0
---- !u!114 &114667098643584830
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1653050938014410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42ae8ec33a4b69b43a87598a0f2e45b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 1
-  renderTexture: {fileID: 8400000, guid: 1a2d9d8eea0b1f34bbe478a9384f3d1d, type: 2}
 --- !u!114 &114902761845413668
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -110,18 +95,3 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  team1GameObject: {fileID: 0}
-  team2GameObject: {fileID: 0}
---- !u!114 &114937366362080918
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1653050938014410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42ae8ec33a4b69b43a87598a0f2e45b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 2
-  renderTexture: {fileID: 8400000, guid: 9cc5c90bd5609614e9ca1a03dc7554f3, type: 2}

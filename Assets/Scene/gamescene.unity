@@ -22621,6 +22621,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 574315798}
   m_Mesh: {fileID: 4300632, guid: e4a081b22537529408d010d988743948, type: 3}
+--- !u!82 &576777146 stripped
+AudioSource:
+  m_PrefabParentObject: {fileID: 82088566396292166, guid: e5b8afeca8c93e346953bf10e71e7b1a,
+    type: 2}
+  m_PrefabInternal: {fileID: 814675054}
 --- !u!1001 &580260062
 Prefab:
   m_ObjectHideFlags: 0
@@ -31712,14 +31717,24 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114498849243490692, guid: e5b8afeca8c93e346953bf10e71e7b1a,
+    - target: {fileID: 82088566396292166, guid: e5b8afeca8c93e346953bf10e71e7b1a,
         type: 2}
-      propertyPath: teamController
-      value: 
-      objectReference: {fileID: 1926188722}
+      propertyPath: Loop
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 82088566396292166, guid: e5b8afeca8c93e346953bf10e71e7b1a,
+        type: 2}
+      propertyPath: BypassEffects
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e5b8afeca8c93e346953bf10e71e7b1a, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &814675055 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1963867883654344, guid: e5b8afeca8c93e346953bf10e71e7b1a,
+    type: 2}
+  m_PrefabInternal: {fileID: 814675054}
 --- !u!1 &816528521
 GameObject:
   m_ObjectHideFlags: 0
@@ -34894,7 +34909,7 @@ Prefab:
         type: 2}
       propertyPath: spawnPoints.Array.data[1]
       value: 
-      objectReference: {fileID: 91668182}
+      objectReference: {fileID: 814675055}
     - target: {fileID: 114902761845413668, guid: 5160414700beea447b402921bb1b1092,
         type: 2}
       propertyPath: spawnPoints.Array.data[2]
@@ -34935,23 +34950,15 @@ Prefab:
       propertyPath: spawnPoints.Array.data[9]
       value: 
       objectReference: {fileID: 1598703070}
-    - target: {fileID: 114902761845413668, guid: 5160414700beea447b402921bb1b1092,
-        type: 2}
-      propertyPath: team1GameObject
-      value: 
-      objectReference: {fileID: 1964208002}
-    - target: {fileID: 114902761845413668, guid: 5160414700beea447b402921bb1b1092,
-        type: 2}
-      propertyPath: team2GameObject
-      value: 
-      objectReference: {fileID: 78605721}
     - target: {fileID: 1653050938014410, guid: 5160414700beea447b402921bb1b1092, type: 2}
       propertyPath: m_Name
       value: GameController
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 114667098643584830, guid: 5160414700beea447b402921bb1b1092, type: 2}
-    - {fileID: 114937366362080918, guid: 5160414700beea447b402921bb1b1092, type: 2}
+    - target: {fileID: 1653050938014410, guid: 5160414700beea447b402921bb1b1092, type: 2}
+      propertyPath: m_TagString
+      value: GameController
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5160414700beea447b402921bb1b1092, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &898516776 stripped
@@ -61144,7 +61151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
-  renderTexture: {fileID: 8400000, guid: 9cc5c90bd5609614e9ca1a03dc7554f3, type: 2}
+  seigeAudio: {fileID: 1573352886}
 --- !u!114 &1551961071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61965,14 +61972,19 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114305577602490256, guid: c738f34b9b7288147b29b5c1766d24e7,
+    - target: {fileID: 82869828838027278, guid: c738f34b9b7288147b29b5c1766d24e7,
         type: 2}
-      propertyPath: teamController
-      value: 
-      objectReference: {fileID: 1551961069}
+      propertyPath: Loop
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c738f34b9b7288147b29b5c1766d24e7, type: 2}
   m_IsPrefabParent: 0
+--- !u!82 &1573352886 stripped
+AudioSource:
+  m_PrefabParentObject: {fileID: 82869828838027278, guid: c738f34b9b7288147b29b5c1766d24e7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1573352885}
 --- !u!4 &1573866753 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400002, guid: 93bd618738f3de14a943003011ab4d3a, type: 3}
@@ -75973,7 +75985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
-  renderTexture: {fileID: 8400000, guid: 1a2d9d8eea0b1f34bbe478a9384f3d1d, type: 2}
+  seigeAudio: {fileID: 576777146}
 --- !u!114 &1926188724
 MonoBehaviour:
   m_ObjectHideFlags: 0

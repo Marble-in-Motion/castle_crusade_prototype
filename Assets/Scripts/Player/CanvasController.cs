@@ -11,6 +11,9 @@ namespace Assets.Scripts.Player
     {
 
         [SerializeField]
+        private RenderTexture[] renderTextures;
+
+        [SerializeField]
         private Image blueHealthBar;
 
 		[SerializeField]
@@ -39,9 +42,11 @@ namespace Assets.Scripts.Player
             redHealthBar.transform.localScale = new Vector3(Mathf.Clamp(health, 0f, 1f), redHealthBar.transform.localScale.y, redHealthBar.transform.localScale.z);
 		}
 
-        public void SetRenderTexture(RenderTexture texture)
+        public void SetRenderTexture(int teamId)
         {
-            miniMapView.GetComponent<RawImage>().texture = texture;
+            // teamId 1 -> index 0
+            // teamId 2 -> index 1
+            miniMapView.GetComponent<RawImage>().texture = renderTextures[teamId - 1];
         }
 
         public void SetGameOverValue(GameController.GameState gameOverValue)

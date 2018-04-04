@@ -21,12 +21,12 @@ TagManager:
   - NPCT1L2
   - NPCT1L3
   - NPCT1L4
-  - NPCT1L5
   - NPCT2L1
   - NPCT2L2
   - NPCT2L3
   - NPCT2L4
-  - NPCT2L5
+  - NPCT2L0
+  - NPCT1L0
   layers:
   - Default
   - TransparentFX
