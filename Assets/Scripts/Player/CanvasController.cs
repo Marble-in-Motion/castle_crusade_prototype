@@ -44,8 +44,8 @@ namespace Assets.Scripts.Player
 
         public void SetRenderTexture(int teamId)
         {
-            // teamId 1 -> index 0
-            // teamId 2 -> index 1
+            // teamId 1 (blue) -> index 0 (tower 2)
+            // teamId 2 (red) -> index 1 (tower 1)
             miniMapView.GetComponent<RawImage>().texture = renderTextures[teamId - 1];
         }
 

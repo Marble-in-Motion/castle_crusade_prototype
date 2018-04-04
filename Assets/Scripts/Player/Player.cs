@@ -7,8 +7,6 @@ using System.Collections;
 public class Player : NetworkSetup
 {
 
-    enum AICommands { FIND, AIM, KILL }
-
     public const string PLAYER_TAG = "Player";
     private const string REMOTE_LAYER_NAME = "RemotePlayer";
     private const float CLOSE_DISTANCE = 0.5f;
@@ -55,14 +53,15 @@ public class Player : NetworkSetup
         }
     }
 
-
-    private bool cooldownAnimReset;
+    private bool cooldownAnimReset; // remove this
 
     private SpawnController spawnController;
     private CanvasController canvasController;
     private CrossbowMotor crossbowMotor;
-
+    private CrossbowController crossbowController;
     private AIController aiController;
+    private AudioManager audioManager;
+    private InputVCR vcr;
 
     [SerializeField]
     private Behaviour[] componentsToDisable;
@@ -72,43 +71,24 @@ public class Player : NetworkSetup
 
     [SerializeField]
     private GameObject AudioGameObject;
-
-    private AudioManager audioManager;
-
-    private LineRenderer laserLine;
-
+      
     private float nextActionTime = 0.0f;
 
+    // AI PARAMS
+    private Boolean AIEnabled = false;
+    enum AICommands { FIND, AIM, KILL }
+    private AICommands nextCommand = AICommands.FIND;
+    private GameObject AITargetEnemy;
     private float AIActionTime = 0.0f;
     private float AIMoveDelay = 0.5f;
-
-    private Boolean AIEnabled = false;
-
     private float nextAIActionTime = 0;
     private float changeDirectionTime = 0.4f;
     private float timePerShot = 0.2f;
-    private GameObject AITargetEnemy;
     private float AINextTroopSendTime = 0;
     private int AINextNumberTroopsToSend = 1;
 
-    private AICommands nextCommand = AICommands.FIND;
-
-    private InputVCR vcr;
-
-    private bool startComplete = false;
-
     void Awake()
     {
-        vcr = GetComponent<InputVCR>();
-        vcr.NewRecording();
-    }
-
-    void Start()
-    {
-        id = FindObjectsOfType<Player>().Length - 1;
-        RegisterModel(PLAYER_TAG, id);
-        cooldownAnimReset = true;
-
         // Audio manager
         audioManager = AudioGameObject.GetComponent<AudioManager>();
         audioManager.BuildDict();
@@ -121,9 +101,21 @@ public class Player : NetworkSetup
 
         // Crossbow Motor
         crossbowMotor = crossbow.GetComponent<CrossbowMotor>();
+        crossbowController = crossbow.GetComponent<CrossbowController>();
 
         // Spawn Controller
         spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
+
+        // VCR Recording
+        vcr = GetComponent<InputVCR>();
+        vcr.NewRecording();
+    }
+
+    void Start()
+    {
+        id = FindObjectsOfType<Player>().Length - 1;
+        RegisterModel(PLAYER_TAG, id);
+        cooldownAnimReset = true;
 
         NetworkManagerHUD hud = FindObjectOfType<NetworkManagerHUD>();
         if (hud != null)
@@ -144,12 +136,10 @@ public class Player : NetworkSetup
             DisableNonLocalCompontents();
             AssignLayer(REMOTE_LAYER_NAME);
         }
-
-        startComplete = true;
     }
 
     [Command]
-    void CmdInitialisePlayer()
+    private void CmdInitialisePlayer()
     {
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
         gameController.DeactiveScreenCamera();
@@ -166,7 +156,7 @@ public class Player : NetworkSetup
     }
 
     [ClientRpc]
-    void RpcSetPlayerTransform(Vector3 position, Quaternion rotation)
+    private void RpcSetPlayerTransform(Vector3 position, Quaternion rotation)
     {
         transform.rotation = rotation;
         transform.position = position;
@@ -174,19 +164,19 @@ public class Player : NetworkSetup
 
 
     [ClientRpc]
-    void RpcSetMyTeamId(int teamId)
+    private void RpcSetMyTeamId(int teamId)
     {
         myTeamId = teamId;
     }
 
     [ClientRpc]
-    void RpcSetOpponentsTeamId(int teamId)
+    private void RpcSetOpponentsTeamId(int teamId)
     {
         opponentsTeamId = teamId;
     }
 
     [ClientRpc]
-    void RpcSetLaneId()
+    private void RpcSetLaneId()
     {
         laneId = (myTeamId == TeamController.TEAM1)
             ? (id / 2)
@@ -194,12 +184,12 @@ public class Player : NetworkSetup
     }
 
     [ClientRpc]
-    void RpcSetRenderTexture(int teamId)
+    private void RpcSetRenderTexture(int teamId)
     {
         canvasController.SetRenderTexture(teamId);
     }
 
-    void ExecuteControls()
+    private void ExecuteControls()
     {
         if (Input.GetKeyDown(KeyCode.Y))
         {
@@ -266,12 +256,7 @@ public class Player : NetworkSetup
     }
 
     void Update()
-    {
-        if (!startComplete)
-        {
-            return;
-        }
-    
+    {  
         if (isLocalPlayer)
         {
             if (Input.GetKeyDown(KeyCode.A))
@@ -311,7 +296,7 @@ public class Player : NetworkSetup
                 {
                     if (nextCommand == AICommands.FIND)
                     {
-                        AITargetEnemy = findTarget();
+                        AITargetEnemy = FindTarget();
                         if (AITargetEnemy != null)
                         {
                             nextCommand = AICommands.AIM;
@@ -319,7 +304,7 @@ public class Player : NetworkSetup
                     }
                     else if (nextCommand == AICommands.AIM)
                     {
-                        moveTowardsTarget();
+                        MoveTowardsTarget();
 
                     }
                     else if (nextCommand == AICommands.KILL)
@@ -343,7 +328,7 @@ public class Player : NetworkSetup
     }
 
     [Command]
-    void CmdSetCurrencyText()
+    private void CmdSetCurrencyText()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
         int coin = myTeamController.GetCoin();
@@ -351,13 +336,13 @@ public class Player : NetworkSetup
     }
 
     [ClientRpc]
-    void RpcSetCurrencyText(int coin)
+    private void RpcSetCurrencyText(int coin)
     {
         canvasController.SetCurrencyText(coin.ToString());
     }
 
     [Command]
-    void CmdSetHealthBar()
+    private void CmdSetHealthBar()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
         TeamController opponentsTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetOpponentsTeamController(id);
@@ -368,7 +353,7 @@ public class Player : NetworkSetup
     }
 
     [ClientRpc]
-    void RpcSetHealthBar(float myHealth, float opponentsHealth)
+    private void RpcSetHealthBar(float myHealth, float opponentsHealth)
     {
         if (myTeamId == TeamController.TEAM1)
         {
@@ -383,7 +368,7 @@ public class Player : NetworkSetup
     }
 
     [Command]
-    void CmdSetGameState()
+    private void CmdSetGameState()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
         GameController.GameState gameState = myTeamController.GetIsGameOver();
@@ -391,13 +376,13 @@ public class Player : NetworkSetup
     }
 
     [ClientRpc]
-    void RpcSetGameState(GameController.GameState gameState)
+    private void RpcSetGameState(GameController.GameState gameState)
     {
         canvasController.SetGameOverValue(gameState);
     }
 
     [Command]
-    void CmdSetVolleyCooldown()
+    private void CmdSetVolleyCooldown()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
         float endOfCoolDown = myTeamController.GetEndOfCoolDown();
@@ -406,7 +391,7 @@ public class Player : NetworkSetup
     }
 
     [ClientRpc]
-    void RpcSetVolleyCooldown(float endOfCoolDown, float currentTime)
+    private void RpcSetVolleyCooldown(float endOfCoolDown, float currentTime)
     {
         if (endOfCoolDown > currentTime && cooldownAnimReset)
         {
@@ -419,8 +404,136 @@ public class Player : NetworkSetup
         }
     }
 
+    
+
+    public GameObject[] FindEnemyTroopsInLane()
+    {
+        return GetTroopsInLane(opponentsTeamId, laneId);
+    }
+
+    private GameObject[] GetTroopsInLane(int teamId, int lane)
+    {
+        try
+        {
+            String troopTag = String.Format("NPCT{0}L{1}", teamId, lane);
+            return GameObject.FindGameObjectsWithTag(troopTag);
+        }
+        catch
+        {
+            return new GameObject[0];
+        }
+    }
+
+    [ClientRpc]
+    private void RpcShootVolley(GameObject[] troops)
+    {
+        StartCoroutine(crossbowController.HandleVolley(troops));
+    }
+
     [Command]
-    void CmdAISendTroops()
+    private void CmdDestroyTroops()
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+
+        if (myTeamController.GetCurrentTime() > myTeamController.GetEndOfCoolDown())
+        {
+            bool successfulPurchase = myTeamController.SpendGold(Params.DESTROY_COST);
+            if (successfulPurchase)
+            {
+                audioManager.PlaySound("volley");
+                myTeamController.CmdUpdateCoolDown();
+                GameObject[] troops = GetTroopsInLane(opponentsTeamId, laneId);
+                RpcShootVolley(troops);
+            }
+        }
+    }
+
+    private void Shoot()
+    {
+        LineRenderer laserLine = crossbow.GetComponent<LineRenderer>();
+        laserLine.SetPosition(0, crossbow.transform.position);
+        StartCoroutine(crossbowController.HandleShoot());
+        RaycastHit hit;
+        if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, Params.Bolt.RANGE))
+        {
+            CmdPlayerShot(hit.collider.name, Params.Bolt.DAMAGE, this.transform.position);
+            laserLine.SetPosition(1, hit.point);
+        }
+        else
+        {
+            laserLine.SetPosition(1, crossbow.transform.position + crossbow.transform.forward * Params.Bolt.RANGE);
+        }
+        crossbowController.HandleArrow(laserLine.GetPosition(1));
+    }
+
+    [Command]
+    private void CmdPlayerShot(string targetId, float damage, Vector3 crossbowPosition)
+    {
+        GameObject target = GameObject.Find(targetId);
+        if (target == null)
+        {
+            return;
+        }
+        if (target.GetComponent<NPCHealth>())
+        {
+            target.GetComponent<NPCHealth>().DeductHealth(damage, crossbowController.GetArrowSpeed(), crossbowPosition);
+            if (!target.GetComponent<NPCHealth>().IsAlive())
+            {
+                CmdAddGold(Params.NPC_REWARD[target.GetComponentInParent<AIController>().GetTroopType()]);
+            }
+        }
+        if (target.transform != null /*&& target.collider.tag == "NPC"*/)
+        {
+            target.transform.position = (target.transform.position /*- (normal of the hit)*/);
+        }
+    }
+
+    [Command]
+    private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+        int cost = Params.NPC_COST[troopId];
+
+        bool successfulPurchase = myTeamController.SpendGold(cost);
+        if (successfulPurchase)
+        {
+            if (troopId == 0)
+            {
+                audioManager.PlaySound("sword");
+            }
+            else if (troopId == 2)
+            {
+                audioManager.PlaySound("horn");
+            }
+            spawnController.SpawnOffensive(troopId, spawnId, myTeamId);
+        }
+        else
+        {
+            audioManager.PlaySound("coins");
+        }
+    }
+
+    [Command]
+    private void CmdAddGold(int amount)
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+        myTeamController.AddGold(amount);
+    }
+
+    private void DisableNonLocalCompontents()
+    {
+        foreach (Behaviour behaviour in componentsToDisable)
+        {
+            behaviour.enabled = false;
+        }
+    }
+
+
+
+    // AI IMPLEMENTATION ######################################################
+
+    [Command]
+    private void CmdAISendTroops()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
 
@@ -437,14 +550,14 @@ public class Player : NetworkSetup
         AINextNumberTroopsToSend = rnd.Next(1, upperBound);
     }
 
-    private GameObject findTarget()
+    private GameObject FindTarget()
     {
         GameObject[] troopsInLane = FindEnemyTroopsInLane(); ;
         GameObject target = crossbowMotor.AIFindTarget(troopsInLane);
         return target;
     }
 
-    private void moveTowardsTarget()
+    private void MoveTowardsTarget()
     {
         int currentPath = crossbowMotor.ActivePath;
         int targetPath = AITargetEnemy.GetComponent<AIController>().GetPath();
@@ -477,132 +590,6 @@ public class Player : NetworkSetup
         {
             nextAIActionTime = Time.time + timePerShot;
         }
-    }
-
-    public GameObject[] FindEnemyTroopsInLane()
-    {
-        return GetTroopsInLane(opponentsTeamId, laneId);
-    }
-
-    private GameObject[] GetTroopsInLane(int teamId, int lane)
-    {
-        try
-        {
-            String troopTag = String.Format("NPCT{0}L{1}", teamId, lane);
-            return GameObject.FindGameObjectsWithTag(troopTag);
-        }
-        catch
-        {
-            return new GameObject[0];
-        }
-    }
-
-    [ClientRpc]
-    void RpcShootVolley(GameObject[] troops)
-    {
-        StartCoroutine(crossbow.GetComponent<CrossbowController>().HandleVolley(troops));
-    }
-
-    [Command]
-    private void CmdDestroyTroops()
-    {
-        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-
-        if (myTeamController.GetCurrentTime() > myTeamController.GetEndOfCoolDown())
-        {
-            bool successfulPurchase = myTeamController.SpendGold(Params.DESTROY_COST);
-            if (successfulPurchase)
-            {
-                audioManager.PlaySound("volley");
-                myTeamController.CmdUpdateCoolDown();
-                GameObject[] troops = GetTroopsInLane(opponentsTeamId, laneId);
-                RpcShootVolley(troops);
-            }
-        }
-    }
-
-    [Client]
-    void Shoot()
-    {
-        laserLine = crossbow.GetComponent<LineRenderer>();
-        laserLine.SetPosition(0, crossbow.transform.position);
-        StartCoroutine(crossbow.GetComponent<CrossbowController>().HandleShoot());
-        RaycastHit hit;
-        if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, Params.Bolt.RANGE))
-        {
-            CmdPlayerShot(hit.collider.name, Params.Bolt.DAMAGE, this.transform.position);
-            laserLine.SetPosition(1, hit.point);
-        }
-        else
-        {
-            laserLine.SetPosition(1, crossbow.transform.position + crossbow.transform.forward * Params.Bolt.RANGE);
-        }
-        crossbow.GetComponent<CrossbowController>().HandleArrow(laserLine.GetPosition(1));
-    }
-
-    [Command]
-    public void CmdPlayerShot(string targetId, float damage, Vector3 crossbowPosition)
-    {
-        GameObject target = GameObject.Find(targetId);
-        if (target == null)
-        {
-            return;
-        }
-        if (target.GetComponent<NPCHealth>())
-        {
-            target.GetComponent<NPCHealth>().DeductHealth(damage, crossbow.GetComponent<CrossbowController>().GetArrowSpeed(), crossbowPosition);
-            if (!target.GetComponent<NPCHealth>().IsAlive())
-            {
-                CmdAddGold(Params.NPC_REWARD[target.GetComponentInParent<AIController>().GetTroopType()]);
-            }
-        }
-        if (target.transform != null /*&& target.collider.tag == "NPC"*/)
-        {
-            target.transform.position = (target.transform.position /*- (normal of the hit)*/);
-        }
-    }
-
-
-    private void DisableNonLocalCompontents()
-    {
-        foreach (Behaviour behaviour in componentsToDisable)
-        {
-            behaviour.enabled = false;
-        }
-    }
-
-
-    [Command]
-    private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
-    {
-        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-        int cost = Params.NPC_COST[troopId];
-
-        bool successfulPurchase = myTeamController.SpendGold(cost);
-        if (successfulPurchase)
-        {
-            if (troopId == 0)
-            {
-                audioManager.PlaySound("sword");
-            }
-            else if (troopId == 2)
-            {
-                audioManager.PlaySound("horn");
-            }
-            spawnController.SpawnOffensive(troopId, spawnId, myTeamId);
-        }
-        else
-        {
-            audioManager.PlaySound("coins");
-        }
-
-    }
-
-    [Command]
-    private void CmdAddGold(int amount)
-    {
-        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-        myTeamController.AddGold(amount);
     }
 
 }
