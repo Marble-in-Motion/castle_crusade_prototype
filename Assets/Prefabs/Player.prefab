@@ -1820,7 +1820,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515a106b86060094483165dbd4f56c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 20447019570799976}
 --- !u!114 &114244447448270156
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1911,21 +1910,16 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197108965690756}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c10d3dc2cc22bf84dac8ad3b915d1cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputsToRecord:
-  - inputType: 2
-    inputName: y
-    mouseButtonNum: 0
-    buttonState: 0
-    axisValue: 0
-  recordMouseEvents: 1
+  inputsToRecord: []
+  recordMouseEvents: 0
   syncRecordLocations: 0
   autoSyncLocationRate: 1
-  snapToSyncedLocation: 1
+  snapToSyncedLocation: 0
   recordingFrameRate: 30
   _mode: 1
 --- !u!114 &114580449291712106

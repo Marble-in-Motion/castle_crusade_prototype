@@ -1,15 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Rigidbody))]
 public class CrossbowMotor : MonoBehaviour
 {
-    [SerializeField]
-    private Camera cam;
-
-    private Vector3 mousePos;
-
     private int activePath;
     public int ActivePath
     {
@@ -19,13 +15,10 @@ public class CrossbowMotor : MonoBehaviour
         }
     }
 
-    private SpawnController spawnController;
-
     private List<Vector3> defaultTargets = new List<Vector3>();
 
     void Start()
     {
-        spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
         activePath = 1;
     }
 
@@ -34,47 +27,21 @@ public class CrossbowMotor : MonoBehaviour
         LookAtTroop();
     }
 
-    public void SetDefaultTargets()
+    public void SetDefaultTarget(Vector3 target)
     {
-        Player player = GetComponentInParent<Player>();
-		Debug.Log ("lane: " + player.LaneId + " facing team: " + player.OpponentsTeamId);
-        for (int i = 0; i <= 2; i++)
-        {
-            defaultTargets.Add(spawnController.calculateDefaultSpawn(i, player.LaneId, player.OpponentsTeamId));
-        }
+        defaultTargets.Add(target);
     }
 
     private void LookAtTroop()
     {
+        Debug.Log("activePath: " + activePath);
         GameObject[] troopsInLane = GetComponentInParent<Player>().FindEnemyTroopsInLane();
+        Debug.Log("troop count: " + troopsInLane.Length);
         GameObject nearestTroop = FindNearestTroopInPath(troopsInLane);
         if (nearestTroop != null)
         {
             transform.LookAt(nearestTroop.transform.position);
         }
-
-    }
-
-    public GameObject AIFindTarget(GameObject[] troopsInLane)
-    {
-        float minDist = float.MaxValue;
-        GameObject nearestTroop = null;
-        
-        for (int i = 0; i < troopsInLane.Length; i++)
-        {
-            if (troopsInLane[i].GetComponent<NPCHealth>().IsAlive())
-            {
-                GameObject tempTroop = troopsInLane[i];
-                float tempDistance = Vector3.Distance(tempTroop.transform.position, transform.position);
-                if (tempDistance < minDist)
-                {
-                    minDist = tempDistance;
-                    nearestTroop = tempTroop;
-                }
-            }
-        }
-        return nearestTroop;
-       
     }
 
     GameObject FindNearestTroopInPath(GameObject[] troopsInLane)
@@ -84,7 +51,7 @@ public class CrossbowMotor : MonoBehaviour
 
         for (int i = 0; i < troopsInLane.Length; i++)
         {
-            if (troopsInLane[i].GetComponent<AIController>().GetPath() == activePath && troopsInLane[i].GetComponent<NPCHealth>().IsAlive())
+            if (troopsInLane[i].GetComponent<AIController>().Path == activePath && troopsInLane[i].GetComponent<NPCHealth>().IsAlive())
             {
                 GameObject tempTroop = troopsInLane[i];
                 float tempDistance = Vector3.Distance(tempTroop.transform.position, transform.position);
@@ -114,6 +81,31 @@ public class CrossbowMotor : MonoBehaviour
             activePath -= 1;
             transform.LookAt(defaultTargets[activePath]);
         }
+    }
+
+
+    // AI IMPLEMENTATION ##############################
+
+    public GameObject AIFindTarget(GameObject[] troopsInLane)
+    {
+        float minDist = float.MaxValue;
+        GameObject nearestTroop = null;
+
+        for (int i = 0; i < troopsInLane.Length; i++)
+        {
+            if (troopsInLane[i].GetComponent<NPCHealth>().IsAlive())
+            {
+                GameObject tempTroop = troopsInLane[i];
+                float tempDistance = Vector3.Distance(tempTroop.transform.position, transform.position);
+                if (tempDistance < minDist)
+                {
+                    minDist = tempDistance;
+                    nearestTroop = tempTroop;
+                }
+            }
+        }
+        return nearestTroop;
+
     }
 
 }

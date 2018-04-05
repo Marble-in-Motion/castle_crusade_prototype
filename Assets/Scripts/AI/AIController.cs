@@ -3,26 +3,49 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
 
-public class AIController : NetworkBehaviour {
+public class AIController : MonoBehaviour {
 
     private NavMeshAgent agent;
 
 	[SerializeField]
-	private Transform[] targets;
+	private GameObject[] targets;
 
-	[SyncVar]
-	private int targetIndex;
-
-    [SyncVar]
-    private String tagName;
-
-	[SyncVar]
+	private int targetTeamId;
 	private int troopType;
+    public int TroopType
+    {
+        get
+        {
+            return troopType;
+        }
+        set
+        {
+            troopType = TroopType;
+            agent.speed = Params.NPC_SPEED[troopType];
+        }
+    }
 
-    [SyncVar]
-    public int path;
-
+    private int path;
+    public int Path
+    {
+        get
+        {
+            return path;
+        }
+        set
+        {
+            if (Path >= 0 && Path <= 2)
+            {
+                path = Path;
+            }
+        }
+    }
     private float spawnToTargetDistance;
+
+    private void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+    }
 
     void Start() {
         if (GetComponent<Animation>() != null)
@@ -33,54 +56,18 @@ public class AIController : NetworkBehaviour {
         {
             GetComponent<Animator>().SetTrigger("Run");
         }
-        tag = tagName;
-		agent = GetComponent<NavMeshAgent>();
-		agent.speed = Params.NPC_SPEED [troopType];
-		Transform target = targets[targetIndex].transform;
-		agent.SetDestination(target.position);
-		spawnToTargetDistance = Vector3.Distance(transform.position, target.position);
 	}
 
-    public void SetPath(int path)
+	public void SetTarget(int targetTeamId)
     {
-        if (path >= 0 && path <= 2)
-        {
-            this.path = path;
-        }
+        Transform target = targets[targetTeamId - 1].transform;
+        agent.SetDestination(target.position);
+        spawnToTargetDistance = Vector3.Distance(transform.position, target.position);
     }
-
-    public int GetPath()
-    {
-        return path;
-    }
-
-    public String GetTagName()
-    {
-        return tagName;
-    }
-
-    public void SetTagName(String tagName)
-    {
-        this.tagName = tagName;
-    }
-
-	public int GetTroopType()
-	{
-		return troopType;
-	}
-
-	public void SetTroopType(int type)
-	{
-		troopType = type;
-	}
-
-	public void SetTargetIndex(int targetIndex){
-		this.targetIndex = targetIndex;
-	}
 
     public float GetDistanceRatioToTarget()
 	{
-		float currentDistanceToTarget = Vector3.Distance (transform.position, targets[targetIndex].position);
+		float currentDistanceToTarget = Vector3.Distance (transform.position, targets[targetTeamId - 1].transform.position);
 		float temp = 1 - (currentDistanceToTarget / spawnToTargetDistance);
 		return temp;
     }

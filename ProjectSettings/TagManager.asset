@@ -9,8 +9,6 @@ TagManager:
   - NPC
   - Tower2
   - NetworkManager
-  - NPCT1
-  - NPCT2
   - TeamController1
   - TeamController2
   - SpawnController

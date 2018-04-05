@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using Assets.Scripts.Player;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : NetworkSetup
 {
@@ -55,7 +56,6 @@ public class Player : NetworkSetup
 
     private bool cooldownAnimReset; // remove this
 
-    private SpawnController spawnController;
     private CanvasController canvasController;
     private CrossbowMotor crossbowMotor;
     private CrossbowController crossbowController;
@@ -104,7 +104,7 @@ public class Player : NetworkSetup
         crossbowController = crossbow.GetComponent<CrossbowController>();
 
         // Spawn Controller
-        spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
+        
 
         // VCR Recording
         vcr = GetComponent<InputVCR>();
@@ -152,8 +152,17 @@ public class Player : NetworkSetup
         RpcSetRenderTexture(myTeamId);
 
         RpcSetOpponentsTeamId(gameController.GetOpponentsTeamControllerId(id));
-        RpcSetLaneId();
-		RpcSetCrossbowTargets ();
+
+        int laneId = (myTeamId == TeamController.TEAM1)
+            ? (id / 2)
+            : (id - 1) / 2;
+        RpcSetLaneId(laneId);
+
+        SpawnController spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
+        for (int i = 0; i <= 2; i++)
+        {
+            RpcSetCrossbowTargets(spawnController.CalculateDefaultCrossbowTarget(i, laneId, myTeamId));
+        }
     }
 
     [ClientRpc]
@@ -162,7 +171,6 @@ public class Player : NetworkSetup
         transform.rotation = rotation;
         transform.position = position;
     }
-
 
     [ClientRpc]
     private void RpcSetMyTeamId(int teamId)
@@ -177,11 +185,9 @@ public class Player : NetworkSetup
     }
 
     [ClientRpc]
-    private void RpcSetLaneId()
+    private void RpcSetLaneId(int laneId)
     {
-        laneId = (myTeamId == TeamController.TEAM1)
-            ? (id / 2)
-            : (id - 1) / 2;
+        this.laneId = laneId;
     }
 
     [ClientRpc]
@@ -191,9 +197,9 @@ public class Player : NetworkSetup
     }
 
 	[ClientRpc]
-	private void RpcSetCrossbowTargets ()
+	private void RpcSetCrossbowTargets(Vector3 target)
 	{
-		crossbowMotor.SetDefaultTargets ();
+        crossbowMotor.SetDefaultTarget(target);
 	}
 
     private void ExecuteControls()
@@ -222,13 +228,9 @@ public class Player : NetworkSetup
         {
             CmdRequestOffensiveTroopSpawn(0, laneId);
         }
-        else if (Input.GetKeyDown(KeyCode.Slash))
-        {
-            CmdRequestOffensiveTroopSpawn(1, laneId);
-        }
         else if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            CmdRequestOffensiveTroopSpawn(2, laneId);
+            CmdRequestOffensiveTroopSpawn(1, laneId);
         }
         else if (Input.GetKeyDown(KeyCode.V))
         {
@@ -411,22 +413,21 @@ public class Player : NetworkSetup
         }
     }
 
-    
-
     public GameObject[] FindEnemyTroopsInLane()
     {
         return GetTroopsInLane(opponentsTeamId, laneId);
     }
 
-    private GameObject[] GetTroopsInLane(int teamId, int lane)
+    private GameObject[] GetTroopsInLane(int troopTeamId, int lane)
     {
+        String troopTag = String.Format("NPCT{0}L{1}", troopTeamId, lane);
         try
         {
-            String troopTag = String.Format("NPCT{0}L{1}", teamId, lane);
             return GameObject.FindGameObjectsWithTag(troopTag);
         }
         catch
         {
+            Debug.Log("error, no tag: " + troopTag);
             return new GameObject[0];
         }
     }
@@ -486,7 +487,7 @@ public class Player : NetworkSetup
             target.GetComponent<NPCHealth>().DeductHealth(damage, crossbowController.GetArrowSpeed(), crossbowPosition);
             if (!target.GetComponent<NPCHealth>().IsAlive())
             {
-                CmdAddGold(Params.NPC_REWARD[target.GetComponentInParent<AIController>().GetTroopType()]);
+                CmdAddGold(Params.NPC_REWARD[target.GetComponentInParent<AIController>().TroopType]);
             }
         }
         if (target.transform != null /*&& target.collider.tag == "NPC"*/)
@@ -496,9 +497,10 @@ public class Player : NetworkSetup
     }
 
     [Command]
-    private void CmdRequestOffensiveTroopSpawn(int troopId, int spawnId)
+    private void CmdRequestOffensiveTroopSpawn(int troopId, int laneId)
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+        SpawnController spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
         int cost = Params.NPC_COST[troopId];
 
         bool successfulPurchase = myTeamController.SpendGold(cost);
@@ -512,7 +514,7 @@ public class Player : NetworkSetup
             {
                 audioManager.PlaySound("horn");
             }
-            spawnController.SpawnOffensive(troopId, spawnId, myTeamId);
+            spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
         }
         else
         {
@@ -567,7 +569,7 @@ public class Player : NetworkSetup
     private void MoveTowardsTarget()
     {
         int currentPath = crossbowMotor.ActivePath;
-        int targetPath = AITargetEnemy.GetComponent<AIController>().GetPath();
+        int targetPath = AITargetEnemy.GetComponent<AIController>().Path;
         if (currentPath > targetPath)
         {
             crossbowMotor.MoveLeft();

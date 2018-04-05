@@ -14,7 +14,7 @@ public class NPCHealth : NetworkBehaviour {
 	private float currentHealth;
 
 	void Start() {
-		currentHealth = Params.NPC_HEALTH[ this.GetComponentInParent<AIController> ().GetTroopType ()];
+		currentHealth = Params.NPC_HEALTH[GetComponentInParent<AIController>().TroopType];
 	}
 
 	private float CalculateFlightTime(int boltSpeed, Vector3 crossBowPosition)
@@ -64,7 +64,6 @@ public class NPCHealth : NetworkBehaviour {
         }
         Destroy(GetComponent<BoxCollider>());
         Destroy(GetComponent<NavMeshAgent>());
-        //GetComponent<NavMeshAgent>().speed = 0;
     }
 
     public float GetHealth() {
@@ -72,6 +71,6 @@ public class NPCHealth : NetworkBehaviour {
 	}
 
 	public bool IsAlive() {
-		return this.currentHealth > 0;
+		return currentHealth > 0;
 	}
 }
