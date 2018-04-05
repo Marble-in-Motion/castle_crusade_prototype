@@ -340,7 +340,7 @@ public class Player : NetworkSetup
     private void CmdSetCurrencyText()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-        int coin = myTeamController.GetCoin();
+        int coin = myTeamController.Coin;
         RpcSetCurrencyText(coin);
     }
 
@@ -380,7 +380,7 @@ public class Player : NetworkSetup
     private void CmdSetGameState()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-        GameController.GameState gameState = myTeamController.GetIsGameOver();
+        GameController.GameState gameState = myTeamController.GameOverState;
         RpcSetGameState(gameState);
     }
 
@@ -394,8 +394,8 @@ public class Player : NetworkSetup
     private void CmdSetVolleyCooldown()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-        float endOfCoolDown = myTeamController.GetEndOfCoolDown();
-        float currentTime = myTeamController.GetCurrentTime();
+        float endOfCoolDown = myTeamController.EndOfCoolDown;
+        float currentTime = myTeamController.CurrentTime;
         RpcSetVolleyCooldown(endOfCoolDown, currentTime);
     }
 
@@ -444,13 +444,13 @@ public class Player : NetworkSetup
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
 
-        if (myTeamController.GetCurrentTime() > myTeamController.GetEndOfCoolDown())
+        if (myTeamController.CurrentTime > myTeamController.EndOfCoolDown)
         {
             bool successfulPurchase = myTeamController.SpendGold(Params.DESTROY_COST);
             if (successfulPurchase)
             {
                 audioManager.PlaySound("volley");
-                myTeamController.CmdUpdateCoolDown();
+                myTeamController.UpdateCoolDown();
                 GameObject[] troops = GetTroopsInLane(opponentsTeamId, laneId).ToArray();
                 RpcShootVolley(troops);
             }
@@ -555,7 +555,7 @@ public class Player : NetworkSetup
         int interval = rnd.Next(1, 11);
         AINextTroopSendTime = Time.time + interval;
 
-        int coin = myTeamController.GetCoin();
+        int coin = myTeamController.Coin;
         int upperBound = coin / 40;
         AINextNumberTroopsToSend = rnd.Next(1, upperBound);
     }

@@ -43,12 +43,12 @@ public class GameController : NetworkBehaviour
 
     public int GetMyTeamControllerId(int playerId)
     {
-        return GetMyTeamController(playerId).GetId();
+        return GetMyTeamController(playerId).Id;
     }
 
     public int GetOpponentsTeamControllerId(int playerId)
     {
-        return GetOpponentsTeamController(playerId).GetId();
+        return GetOpponentsTeamController(playerId).Id;
     }
 
     public TeamController GetMyTeamController(int playerId)
@@ -86,8 +86,8 @@ public class GameController : NetworkBehaviour
         GameState team1GameOverValue = (losingTeamId == TeamController.TEAM1) ? GameState.GAME_LOST : GameState.GAME_WON;
         GameState team2GameOverValue = (losingTeamId == TeamController.TEAM2) ? GameState.GAME_LOST : GameState.GAME_WON;
 
-        teamController1.SetGameOver(team1GameOverValue);
-		teamController2.SetGameOver(team2GameOverValue);
+        teamController1.GameOverState = team1GameOverValue;
+		teamController2.GameOverState = team2GameOverValue;
 
         GameRestart();
     }
@@ -113,8 +113,8 @@ public class GameController : NetworkBehaviour
         if (Time.time > coinIncreaseTime)
         {
             coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
-            teamController1.CmdIncreaseCoinPerInterval(Params.COIN_BOOST);
-			teamController2.CmdIncreaseCoinPerInterval(Params.COIN_BOOST);
+            teamController1.IncreaseCoinPerInterval(Params.COIN_BOOST);
+			teamController2.IncreaseCoinPerInterval(Params.COIN_BOOST);
         }
     }
 
@@ -127,13 +127,11 @@ public class GameController : NetworkBehaviour
             
             if (Input.GetKeyDown(KeyCode.R))
             {
-                teamController1.SetGameOver(GameState.GAME_RESTART);
-                teamController2.SetGameOver(GameState.GAME_RESTART);
+                teamController1.GameOverState = GameState.GAME_RESTART;
+                teamController2.GameOverState = GameState.GAME_RESTART;
                 teamController1.Restart();
                 teamController2.Restart();
                 DestroyAllTroops();
-                teamController1.CmdResetCoinPerInterval();
-                teamController2.CmdResetCoinPerInterval();
                 coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
                 restart = false;
             }

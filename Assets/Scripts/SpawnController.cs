@@ -99,7 +99,6 @@ public class SpawnController : NetworkBehaviour
 		return ApplyOffset(lane, myTower, theta);
 	}
 
-
 	public Vector3 CalculateSpawn(GameObject lane, int path, int myTeamId)
 	{
 		GameObject targetTower = GetOpponentsTower(myTeamId);
