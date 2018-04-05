@@ -10,10 +10,23 @@ public class NPCHealth : NetworkBehaviour {
     private const string DEATH_TRIGGER = "Die";
     private const float ANIM_WAIT = 5.0f;
 
-	[SyncVar]
+	
 	private float currentHealth;
+    public float CurrentHealth
+    {
+        get
+        {
+            return currentHealth;
+        }
+    }
 
-	void Start() {
+    public bool IsAlive()
+    {
+        return currentHealth > 0;
+    }
+
+
+    void Start() {
 		currentHealth = Params.NPC_HEALTH[GetComponentInParent<AIController>().TroopType];
 	}
 
@@ -33,25 +46,28 @@ public class NPCHealth : NetworkBehaviour {
 		return flightTime;
 	}
 
-	IEnumerator DeathDelay(int boltSpeed, Vector3 crossBowPosition)
+	private IEnumerator DeathDelay(int boltSpeed, Vector3 crossBowPosition)
 	{
 		float wait = CalculateFlightTime(boltSpeed, crossBowPosition) ;
         wait = wait + ANIM_WAIT;
 		yield return new WaitForSeconds(wait);
 		Destroy(gameObject);
+
+        // This may need to be NetworkServer.Destory
 	}
 
-	public void DeductHealth(float damage, int boltSpeed, Vector3 crossBowPosition) {
+    [Command]
+	public void CmdDeductHealth(float damage, int boltSpeed, Vector3 crossBowPosition) {
 		currentHealth -= damage;
 
-		if (!IsAlive ()) {
-            RpcTriggerDeath();
+		if (!IsAlive()) {
+            RpcKill();
             StartCoroutine(DeathDelay(boltSpeed, crossBowPosition));
 		}
 	}
 
     [ClientRpc]
-    private void RpcTriggerDeath()
+    private void RpcKill()
     {
         if (GetComponent<Animation>() != null)
         {
@@ -60,17 +76,9 @@ public class NPCHealth : NetworkBehaviour {
         else
         {
             GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
-
         }
         Destroy(GetComponent<BoxCollider>());
         Destroy(GetComponent<NavMeshAgent>());
     }
-
-    public float GetHealth() {
-		return currentHealth;
-	}
-
-	public bool IsAlive() {
-		return currentHealth > 0;
-	}
+    
 }

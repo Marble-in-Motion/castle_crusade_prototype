@@ -485,7 +485,7 @@ public class Player : NetworkSetup
         }
         if (target.GetComponent<NPCHealth>())
         {
-            target.GetComponent<NPCHealth>().DeductHealth(damage, crossbowController.GetArrowSpeed(), crossbowPosition);
+            target.GetComponent<NPCHealth>().CmdDeductHealth(damage, crossbowController.GetArrowSpeed(), crossbowPosition);
             if (!target.GetComponent<NPCHealth>().IsAlive())
             {
                 CmdAddGold(Params.NPC_REWARD[target.GetComponentInParent<AIController>().TroopType]);

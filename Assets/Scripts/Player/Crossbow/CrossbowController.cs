@@ -42,7 +42,7 @@ public class CrossbowController : MonoBehaviour {
             if (troops[i].GetComponent<NPCHealth>().IsAlive())
             {
                 troopLocs.Add(troops[i].transform.position);
-                troops[i].GetComponent<NPCHealth>().DeductHealth(troops[i].GetComponent<NPCHealth>().GetHealth(), speed, volleyLoc);
+                troops[i].GetComponent<NPCHealth>().CmdDeductHealth(troops[i].GetComponent<NPCHealth>().CurrentHealth, speed, volleyLoc);
             }
 		}
 		foreach(Vector3 loc in troopLocs) {

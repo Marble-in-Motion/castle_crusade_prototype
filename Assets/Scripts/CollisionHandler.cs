@@ -15,7 +15,6 @@ public class CollisionHandler : NetworkBehaviour {
 
         CmdDeductTowerHealth(towerDamage);
         CmdDestroyTroop(other.gameObject);
-        
 	}
 
     [Command]
