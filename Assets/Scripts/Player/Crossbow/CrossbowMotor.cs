@@ -27,7 +27,6 @@ public class CrossbowMotor : MonoBehaviour
     {
         spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
         activePath = 1;
-        SetDefaultTargets();
     }
 
     void Update()
@@ -35,9 +34,10 @@ public class CrossbowMotor : MonoBehaviour
         LookAtTroop();
     }
 
-    private void SetDefaultTargets()
+    public void SetDefaultTargets()
     {
         Player player = GetComponentInParent<Player>();
+		Debug.Log ("lane: " + player.LaneId + " facing team: " + player.OpponentsTeamId);
         for (int i = 0; i <= 2; i++)
         {
             defaultTargets.Add(spawnController.calculateDefaultSpawn(i, player.LaneId, player.OpponentsTeamId));

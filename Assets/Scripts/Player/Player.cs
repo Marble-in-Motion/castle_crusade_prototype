@@ -153,6 +153,7 @@ public class Player : NetworkSetup
 
         RpcSetOpponentsTeamId(gameController.GetOpponentsTeamControllerId(id));
         RpcSetLaneId();
+		RpcSetCrossbowTargets ();
     }
 
     [ClientRpc]
@@ -188,6 +189,12 @@ public class Player : NetworkSetup
     {
         canvasController.SetRenderTexture(teamId);
     }
+
+	[ClientRpc]
+	private void RpcSetCrossbowTargets ()
+	{
+		crossbowMotor.SetDefaultTargets ();
+	}
 
     private void ExecuteControls()
     {
