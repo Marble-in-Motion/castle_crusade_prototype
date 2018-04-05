@@ -96,7 +96,7 @@ public class AIController : NetworkBehaviour {
     {
         if (path >= 0 && path <= 2)
         {
-            this.path = Path;
+            this.path = path;
         }
     }
 
