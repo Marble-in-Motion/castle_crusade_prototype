@@ -8,7 +8,7 @@ public class GameController : NetworkBehaviour
 {
 
     public const string GAME_CONTROLLER_TAG = "GameController";
-    public const string ENEMY_TAG = "NPCT{0}L{1}";
+    public const string NPC_TAG = "NPC";
 
     public enum GameState { GAME_RESTART, GAME_IN_PROGRESS, GAME_LOST, GAME_WON }
 
@@ -99,13 +99,10 @@ public class GameController : NetworkBehaviour
 
     private void DestroyAllTroops()
     {
-        for (int team = 1; team <= 2; team++)
+        GameObject[] allTroops = GameObject.FindGameObjectsWithTag(NPC_TAG);
+        for (int i = 0; i < allTroops.Length; i++)
         {
-            for (int lane = 0; lane <= 4; lane++)
-            {
-                GameObject[] troops = GameObject.FindGameObjectsWithTag(string.Format(ENEMY_TAG, team, lane));
-                for (int i = 0; i < troops.Length; i++) { NetworkServer.Destroy(troops[i]); }
-            }
+            NetworkServer.Destroy(allTroops[i]);
         }
     }
 

@@ -115,12 +115,16 @@ public class SpawnController : NetworkBehaviour
         Vector3 spawn = CalculateSpawn(lane, path, myTeamId);
 		
 		GameObject troop = Instantiate(troopPrefabs[troopId], spawn, lane.transform.rotation) as GameObject;
-        string tag = string.Format("NPCT{0}L{1}", myTeamId, laneId);
-        troop.GetComponent<AIController>().tag = tag;
-        troop.GetComponent<AIController>().TroopType = troopId;
-		troop.GetComponent<AIController>().Path = path;
-		troop.GetComponent<AIController>().SetTarget(opponentsTeamId);
         NetworkServer.Spawn(troop);
+
+        AIController ai = troop.GetComponent<AIController>();
+        ai.RpcSetTeamId(myTeamId);
+        ai.RpcSetLaneId(laneId);
+        ai.RpcSetTroopType(troopId);
+        ai.RpcSetPath(path);
+        ai.RpcSetTarget(opponentsTeamId);
     }
+
+    
 
 }

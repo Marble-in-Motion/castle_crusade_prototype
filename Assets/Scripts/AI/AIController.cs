@@ -3,25 +3,22 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
 
-public class AIController : MonoBehaviour {
+public class AIController : NetworkBehaviour {
 
     private NavMeshAgent agent;
 
 	[SerializeField]
 	private GameObject[] targets;
 
-	private int targetTeamId;
-	private int troopType;
+    private float spawnToTargetDistance;
+    private GameObject target;
+
+    private int troopType;
     public int TroopType
     {
         get
         {
             return troopType;
-        }
-        set
-        {
-            troopType = TroopType;
-            agent.speed = Params.NPC_SPEED[troopType];
         }
     }
 
@@ -32,15 +29,25 @@ public class AIController : MonoBehaviour {
         {
             return path;
         }
-        set
+    }
+
+    private int laneId;
+    public int LaneId
+    {
+        get
         {
-            if (Path >= 0 && Path <= 2)
-            {
-                path = Path;
-            }
+            return laneId;
         }
     }
-    private float spawnToTargetDistance;
+
+    private int teamId;
+    public int TeamId
+    {
+        get
+        {
+            return teamId;
+        }
+    }
 
     private void Awake()
     {
@@ -58,19 +65,47 @@ public class AIController : MonoBehaviour {
         }
 	}
 
-	public void SetTarget(int targetTeamId)
-    {
-        Transform target = targets[targetTeamId - 1].transform;
-        agent.SetDestination(target.position);
-        spawnToTargetDistance = Vector3.Distance(transform.position, target.position);
-    }
-
     public float GetDistanceRatioToTarget()
 	{
-		float currentDistanceToTarget = Vector3.Distance (transform.position, targets[targetTeamId - 1].transform.position);
+		float currentDistanceToTarget = Vector3.Distance(transform.position, target.transform.position);
 		float temp = 1 - (currentDistanceToTarget / spawnToTargetDistance);
 		return temp;
     }
 
+    [ClientRpc]
+    public void RpcSetTeamId(int teamId)
+    {
+        this.teamId = teamId;
+    }
+
+    [ClientRpc]
+    public void RpcSetLaneId(int laneId)
+    {
+        this.laneId = laneId;
+    }
+
+    [ClientRpc]
+    public void RpcSetTroopType(int troopType)
+    {
+        this.troopType = troopType;
+        agent.speed = Params.NPC_SPEED[troopType];
+    }
+
+    [ClientRpc]
+    public void RpcSetPath(int path)
+    {
+        if (path >= 0 && path <= 2)
+        {
+            this.path = Path;
+        }
+    }
+
+    [ClientRpc]
+    public void RpcSetTarget(int targetTeamId)
+    {
+        target = targets[targetTeamId - 1];
+        agent.SetDestination(target.transform.position);
+        spawnToTargetDistance = Vector3.Distance(transform.position, target.transform.position);
+    }
 
 }

@@ -277,7 +277,7 @@ public class Player : NetworkSetup
             {
                 ExecuteControls();
                 
-                GameObject[] enemyTroops = FindEnemyTroopsInLane();
+                GameObject[] enemyTroops = FindEnemyTroopsInLane().ToArray();
                 int numCloseTroops = 0;
 
                 for (int i = 0; i < enemyTroops.Length; i++)
@@ -413,23 +413,24 @@ public class Player : NetworkSetup
         }
     }
 
-    public GameObject[] FindEnemyTroopsInLane()
+    public List<GameObject> FindEnemyTroopsInLane()
     {
         return GetTroopsInLane(opponentsTeamId, laneId);
     }
 
-    private GameObject[] GetTroopsInLane(int troopTeamId, int lane)
+    private List<GameObject> GetTroopsInLane(int troopTeamId, int laneId)
     {
-        String troopTag = String.Format("NPCT{0}L{1}", troopTeamId, lane);
-        try
+        List<GameObject> troopsInLane = new List<GameObject>();
+        GameObject[] allTroops = GameObject.FindGameObjectsWithTag(GameController.NPC_TAG);
+        for (int i = 0; i < allTroops.Length; i++)
         {
-            return GameObject.FindGameObjectsWithTag(troopTag);
+            AIController ai = allTroops[i].GetComponent<AIController>();
+            if (ai.TeamId == troopTeamId && ai.LaneId == laneId)
+            {
+                troopsInLane.Add(allTroops[i]);
+            }
         }
-        catch
-        {
-            Debug.Log("error, no tag: " + troopTag);
-            return new GameObject[0];
-        }
+        return troopsInLane;
     }
 
     [ClientRpc]
@@ -450,7 +451,7 @@ public class Player : NetworkSetup
             {
                 audioManager.PlaySound("volley");
                 myTeamController.CmdUpdateCoolDown();
-                GameObject[] troops = GetTroopsInLane(opponentsTeamId, laneId);
+                GameObject[] troops = GetTroopsInLane(opponentsTeamId, laneId).ToArray();
                 RpcShootVolley(troops);
             }
         }
@@ -561,7 +562,7 @@ public class Player : NetworkSetup
 
     private GameObject FindTarget()
     {
-        GameObject[] troopsInLane = FindEnemyTroopsInLane(); ;
+        List<GameObject> troopsInLane = FindEnemyTroopsInLane();
         GameObject target = crossbowMotor.AIFindTarget(troopsInLane);
         return target;
     }

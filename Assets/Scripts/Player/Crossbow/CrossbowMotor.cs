@@ -34,9 +34,7 @@ public class CrossbowMotor : MonoBehaviour
 
     private void LookAtTroop()
     {
-        Debug.Log("activePath: " + activePath);
-        GameObject[] troopsInLane = GetComponentInParent<Player>().FindEnemyTroopsInLane();
-        Debug.Log("troop count: " + troopsInLane.Length);
+        List<GameObject> troopsInLane = GetComponentInParent<Player>().FindEnemyTroopsInLane();
         GameObject nearestTroop = FindNearestTroopInPath(troopsInLane);
         if (nearestTroop != null)
         {
@@ -44,21 +42,20 @@ public class CrossbowMotor : MonoBehaviour
         }
     }
 
-    GameObject FindNearestTroopInPath(GameObject[] troopsInLane)
+    GameObject FindNearestTroopInPath(List<GameObject> troopsInLane)
     {
         float minDist = float.MaxValue;
         GameObject nearestTroop = null;
 
-        for (int i = 0; i < troopsInLane.Length; i++)
+        foreach (GameObject troop in troopsInLane)
         {
-            if (troopsInLane[i].GetComponent<AIController>().Path == activePath && troopsInLane[i].GetComponent<NPCHealth>().IsAlive())
+            if (troop.GetComponent<AIController>().Path == activePath && troop.GetComponent<NPCHealth>().IsAlive())
             {
-                GameObject tempTroop = troopsInLane[i];
-                float tempDistance = Vector3.Distance(tempTroop.transform.position, transform.position);
+                float tempDistance = Vector3.Distance(troop.transform.position, transform.position);
                 if (tempDistance < minDist)
                 {
                     minDist = tempDistance;
-                    nearestTroop = tempTroop;
+                    nearestTroop = troop;
                 }
             }
         }
@@ -86,21 +83,21 @@ public class CrossbowMotor : MonoBehaviour
 
     // AI IMPLEMENTATION ##############################
 
-    public GameObject AIFindTarget(GameObject[] troopsInLane)
+    // THIS HAS BEEN DUPLICATED - ADAM FIX PLEASE
+    public GameObject AIFindTarget(List<GameObject> troopsInLane)
     {
         float minDist = float.MaxValue;
         GameObject nearestTroop = null;
 
-        for (int i = 0; i < troopsInLane.Length; i++)
+        foreach (GameObject troop in troopsInLane)
         {
-            if (troopsInLane[i].GetComponent<NPCHealth>().IsAlive())
+            if (troop.GetComponent<NPCHealth>().IsAlive())
             {
-                GameObject tempTroop = troopsInLane[i];
-                float tempDistance = Vector3.Distance(tempTroop.transform.position, transform.position);
+                float tempDistance = Vector3.Distance(troop.transform.position, transform.position);
                 if (tempDistance < minDist)
                 {
                     minDist = tempDistance;
-                    nearestTroop = tempTroop;
+                    nearestTroop = troop;
                 }
             }
         }
