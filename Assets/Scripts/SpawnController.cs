@@ -77,9 +77,6 @@ public class SpawnController : NetworkBehaviour
     // Calculate default look location for crossbow
 	public Vector3 CalculateDefaultCrossbowTarget(int path, int laneId, int myTeamId)
 	{
-        Debug.Log("laneId: " + laneId);
-        Debug.Log("myTeamId: " + myTeamId);
-
 		GameObject lane = GetMyLocalSpawn(laneId, myTeamId);
 		GameObject myTower = GetMyTower(myTeamId);
 
@@ -123,7 +120,6 @@ public class SpawnController : NetworkBehaviour
         ai.RpcSetPath(path);
         ai.RpcSetTarget(opponentsTeamId);
     }
-
     
 
 }

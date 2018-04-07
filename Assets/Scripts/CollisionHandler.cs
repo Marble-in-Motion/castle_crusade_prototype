@@ -13,19 +13,18 @@ public class CollisionHandler : NetworkBehaviour {
 	{
 		int towerDamage = Params.NPC_DAMAGE[0]; // need to get troopId
 
-        CmdDeductTowerHealth(towerDamage);
-        CmdDestroyTroop(other.gameObject);
+        DeductTowerHealth(towerDamage);
+        DestroyTroop(other.gameObject);
 	}
 
-    [Command]
-    void CmdDeductTowerHealth(int damage)
+
+    void DeductTowerHealth(int damage)
     {
         TeamController teamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetTeamControllerById(teamId);
         teamController.DeductTowerHealth(damage);
     }
 
-    [Command]
-    void CmdDestroyTroop(GameObject troop)
+    void DestroyTroop(GameObject troop)
     {
         NetworkServer.Destroy(troop);
     }

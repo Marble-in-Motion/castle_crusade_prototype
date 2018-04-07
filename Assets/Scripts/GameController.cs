@@ -108,8 +108,6 @@ public class GameController : NetworkBehaviour
 
     private void CheckTime()
     {
-        if (!isServer) return;
-
         if (Time.time > coinIncreaseTime)
         {
             coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
@@ -120,7 +118,7 @@ public class GameController : NetworkBehaviour
 
     private void Update()
     {
-        CheckTime();   
+        CheckTime();
         if (restart)
         {
             DestroyAllTroops();
