@@ -49,19 +49,20 @@ namespace Assets.Scripts.Player
             miniMapView.GetComponent<RawImage>().texture = renderTextures[teamId - 1];
         }
 
-        public void SetGameOverValue(GameController.GameState gameOverValue)
+        public void SetGameOverValue(TeamController.TeamResult teamResult)
         {
-            switch (gameOverValue)
+            // Debug.Log(teamResult);
+            switch (teamResult)
             {
-                case GameController.GameState.GAME_LOST:
+                case TeamController.TeamResult.LOST:
                     anim.ResetTrigger("Restart");
                     anim.SetTrigger("GameOver");
                     break;
-                case GameController.GameState.GAME_WON:
+                case TeamController.TeamResult.WON:
                     anim.ResetTrigger("Restart");
                     anim.SetTrigger("GameWin");
                     break;
-                case GameController.GameState.GAME_RESTART:
+                case TeamController.TeamResult.UNDECIDED:
                     anim.ResetTrigger("GameWin");
                     anim.ResetTrigger("GameOver");
                     anim.SetTrigger("Restart");

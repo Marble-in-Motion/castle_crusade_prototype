@@ -1910,18 +1910,33 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197108965690756}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c10d3dc2cc22bf84dac8ad3b915d1cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputsToRecord: []
+  inputsToRecord:
+  - inputType: 2
+    inputName: left
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  - inputType: 2
+    inputName: right
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  - inputType: 2
+    inputName: space
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
   recordMouseEvents: 0
   syncRecordLocations: 0
   autoSyncLocationRate: 1
   snapToSyncedLocation: 0
   recordingFrameRate: 30
-  _mode: 1
+  _mode: 0
 --- !u!114 &114580449291712106
 MonoBehaviour:
   m_ObjectHideFlags: 1

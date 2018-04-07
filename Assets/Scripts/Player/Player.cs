@@ -4,6 +4,7 @@ using System;
 using Assets.Scripts.Player;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class Player : NetworkSetup
 {
@@ -108,7 +109,6 @@ public class Player : NetworkSetup
 
         // VCR Recording
         vcr = GetComponent<InputVCR>();
-        vcr.NewRecording();
     }
 
     void Start()
@@ -236,32 +236,43 @@ public class Player : NetworkSetup
         {
             CmdDestroyTroops();
         }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (vcr.GetKeyDown("left"))
         {
             crossbowMotor.MoveLeft();
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (vcr.GetKeyDown("right"))
         {
             crossbowMotor.MoveRight();
         }
-        else if (Input.GetKeyDown(KeyCode.Space))
+        else if (vcr.GetKeyDown("space"))
         {
             Shoot();
         }
-        else if (Input.GetKeyDown(KeyCode.Delete))
+        else if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            Debug.Log("start new recording");
+            vcr.NewRecording();
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad2))
         {
             String path = "exports/";
-            String fullPath = String.Format("{0}{1}_player{2}.json", path, DateTime.Now.Ticks, id);
-            System.IO.File.WriteAllText(fullPath, vcr.GetRecording().ToString());
+            // String fullPath = String.Format("{0}{1}_player{2}.json", path, DateTime.Now.Ticks, id);
+            String fullPath = String.Format("{0}player{1}.json", path, id);
+            File.WriteAllText(fullPath, vcr.GetRecording().ToString());
             Debug.Log("File written");
-        } else if (Input.GetKeyDown(KeyCode.Z))
-        {
-            Debug.Log("id: " + id);
-            Debug.Log("laneId : " + laneId);
-            Debug.Log("myTeamId: " + myTeamId);
-            Debug.Log("opponentsTeamId : " + opponentsTeamId);
         }
-
+        else if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            string path = String.Format("exports/player{0}.json", id);
+            Debug.Log("attempt to playback: " + path);
+            using (StreamReader r = new StreamReader(path))
+            {
+                string json = r.ReadToEnd();
+                Debug.Log(json);
+                Recording recording = Recording.ParseRecording(json);
+                vcr.Play(recording, 1);
+            }
+        }
     }
 
     void Update()
@@ -331,7 +342,7 @@ public class Player : NetworkSetup
         {
             CmdSetCurrencyText();
             CmdSetHealthBar();
-            CmdSetGameState();
+            CmdSetTeamResult();
             CmdSetVolleyCooldown();
         }
     }
@@ -377,17 +388,17 @@ public class Player : NetworkSetup
     }
 
     [Command]
-    private void CmdSetGameState()
+    private void CmdSetTeamResult()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-        GameController.GameState gameState = myTeamController.GameOverState;
-        RpcSetGameState(gameState);
+        TeamController.TeamResult teamResult = myTeamController.Result;
+        RpcSetTeamResult(teamResult);
     }
 
     [ClientRpc]
-    private void RpcSetGameState(GameController.GameState gameState)
+    private void RpcSetTeamResult(TeamController.TeamResult teamResult)
     {
-        canvasController.SetGameOverValue(gameState);
+        canvasController.SetGameOverValue(teamResult);
     }
 
     [Command]

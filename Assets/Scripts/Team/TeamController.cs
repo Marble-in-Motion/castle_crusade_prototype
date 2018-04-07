@@ -12,6 +12,8 @@ public class TeamController : NetworkBehaviour
     public const int TEAM1 = 1;
     public const int TEAM2 = 2;
 
+    public enum TeamResult { UNDECIDED, LOST, WON }
+
     private int coinsPerSecond = Params.STARTING_COIN_INCREASE_AMOUNT;
     private float towerHealth;
     private float nextActionTime = 0.0f;
@@ -38,17 +40,19 @@ public class TeamController : NetworkBehaviour
         }
     }
     
-	private GameController.GameState gameOverState;
-    public GameController.GameState GameOverState
+	private TeamResult result;
+    public TeamResult Result
     {
         get
         {
-            return gameOverState;
+            return result;
         }
-        set
-        {
-            gameOverState = GameOverState;
-        }
+    }
+
+    // Enum must use setter method 
+    public void SetTeamResult(TeamResult teamResult)
+    {
+        result = teamResult;
     }
 
     private float endOfCoolDown;
@@ -71,9 +75,8 @@ public class TeamController : NetworkBehaviour
 
     void Start()
     {
-		gameOverState = GameController.GameState.GAME_RESTART;
+        result = TeamResult.UNDECIDED;
 		towerHealth = Params.STARTING_TOWER_HEALTH;
-        
         endOfCoolDown = Time.time;
         currentTime = Time.time;
     }
@@ -130,7 +133,8 @@ public class TeamController : NetworkBehaviour
 
         if (towerHealth <= 0)
         {
-            TellGameControllerGameOver();
+            GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+            gameController.GameIsOver(id);
         }
     }
 
@@ -139,12 +143,6 @@ public class TeamController : NetworkBehaviour
         return towerHealth / Params.STARTING_TOWER_HEALTH;
     }
        
-		
-	private void TellGameControllerGameOver() {
-		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
-		gameController.GameIsOver(id);
-	}
-
     public void Restart()
     {
         towerHealth = Params.STARTING_TOWER_HEALTH;

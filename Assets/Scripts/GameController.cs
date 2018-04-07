@@ -10,7 +10,9 @@ public class GameController : NetworkBehaviour
     public const string GAME_CONTROLLER_TAG = "GameController";
     public const string NPC_TAG = "NPC";
 
-    public enum GameState { GAME_RESTART, GAME_IN_PROGRESS, GAME_LOST, GAME_WON }
+    public enum GameState { GAME_IN_PROGRESS, GAME_END }
+
+    private GameState currentGameState;
 
     [SerializeField]
     private List<GameObject> spawnPoints;
@@ -21,16 +23,14 @@ public class GameController : NetworkBehaviour
     
     private Camera sceneCamera;
 
-    private bool restart;
-
     private float coinIncreaseTime;
 
     void Start()
     {
+        currentGameState = GameState.GAME_IN_PROGRESS;
         coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
         sceneCamera = Camera.main;
         sceneCamera.gameObject.SetActive(true);
-        restart = false;
 
         teamController1 = GameObject.FindGameObjectWithTag(TeamController.TEAM_CONTROLLER_1_TAG).GetComponent<TeamController>();
         teamController2 = GameObject.FindGameObjectWithTag(TeamController.TEAM_CONTROLLER_2_TAG).GetComponent<TeamController>();
@@ -83,18 +83,13 @@ public class GameController : NetworkBehaviour
     }
 
 	public void GameIsOver(int losingTeamId) {
-        GameState team1GameOverValue = (losingTeamId == TeamController.TEAM1) ? GameState.GAME_LOST : GameState.GAME_WON;
-        GameState team2GameOverValue = (losingTeamId == TeamController.TEAM2) ? GameState.GAME_LOST : GameState.GAME_WON;
+        TeamController.TeamResult team1Result = (losingTeamId == TeamController.TEAM1) ? TeamController.TeamResult.LOST : TeamController.TeamResult.WON;
+        TeamController.TeamResult team2Result = (losingTeamId == TeamController.TEAM2) ? TeamController.TeamResult.LOST : TeamController.TeamResult.WON;
 
-        teamController1.GameOverState = team1GameOverValue;
-		teamController2.GameOverState = team2GameOverValue;
+        teamController1.SetTeamResult(team1Result);
+        teamController2.SetTeamResult(team2Result);
 
-        GameRestart();
-    }
-
-    public void GameRestart()
-    {
-        restart = true;
+        currentGameState = GameState.GAME_END;
     }
 
     private void DestroyAllTroops()
@@ -119,19 +114,20 @@ public class GameController : NetworkBehaviour
     private void Update()
     {
         CheckTime();
-        if (restart)
+        if (currentGameState == GameState.GAME_END)
         {
             DestroyAllTroops();
             
             if (Input.GetKeyDown(KeyCode.R))
             {
-                teamController1.GameOverState = GameState.GAME_RESTART;
-                teamController2.GameOverState = GameState.GAME_RESTART;
+                teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+                teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+
                 teamController1.Restart();
                 teamController2.Restart();
                 DestroyAllTroops();
                 coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
-                restart = false;
+                currentGameState = GameState.GAME_IN_PROGRESS;
             }
         }
     }
