@@ -73,12 +73,41 @@ public class TeamController : NetworkBehaviour
         }
     }
 
+    private int screenshotCount;
+    public int ScreenshotCount
+    {
+        get
+        {
+            return screenshotCount;
+        }
+    }
+
+    public void IncrementScreenshotCount()
+    {
+        screenshotCount++;
+    }
+
+    private int lastActivePlayerId;
+    public int LastActivePlayerId
+    {
+        get
+        {
+            return lastActivePlayerId;
+        }
+    }
+
+    public void SetLastActivePlayerId(int playerId)
+    {
+        lastActivePlayerId = playerId;
+    }
+
     void Start()
     {
         result = TeamResult.UNDECIDED;
 		towerHealth = Params.STARTING_TOWER_HEALTH;
         endOfCoolDown = Time.time;
         currentTime = Time.time;
+        lastActivePlayerId = -1;
     }
 
     void Update()

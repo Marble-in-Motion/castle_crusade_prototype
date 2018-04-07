@@ -8,52 +8,23 @@ using System.IO;
 
 public class Player : NetworkSetup
 {
-
     public const string PLAYER_TAG = "Player";
     private const string REMOTE_LAYER_NAME = "RemotePlayer";
     private const float CLOSE_DISTANCE = 0.5f;
     private const int NUM_TROOPS_FOR_WARNING = 3;
     private const float KLAXON_FIRE_TIME = 5.0f;
 
-
+    [SyncVar]
     private int id;
-    public int Id
-    {
-        get
-        {
-            return Id;
-        }
-    }
 
-
+    [SyncVar]
     private int laneId;
-    public int LaneId
-    {
-        get
-        {
-            return laneId;
-        }
-    }
 
-
+    [SyncVar]
     private int myTeamId;
-    public int MyTeamId
-    {
-        get
-        {
-            return myTeamId;
-        }
-    }
 
-
+    [SyncVar]
     private int opponentsTeamId;
-    public int OpponentsTeamId
-    {
-        get
-        {
-            return opponentsTeamId;
-        }
-    }
 
     private bool cooldownAnimReset; // remove this
 
@@ -102,10 +73,7 @@ public class Player : NetworkSetup
 
         // Crossbow Motor
         crossbowMotor = crossbow.GetComponent<CrossbowMotor>();
-        crossbowController = crossbow.GetComponent<CrossbowController>();
-
-        // Spawn Controller
-        
+        crossbowController = crossbow.GetComponent<CrossbowController>();     
 
         // VCR Recording
         vcr = GetComponent<InputVCR>();
@@ -113,8 +81,6 @@ public class Player : NetworkSetup
 
     void Start()
     {
-        id = FindObjectsOfType<Player>().Length - 1;
-        RegisterModel(PLAYER_TAG, id);
         cooldownAnimReset = true;
 
         NetworkManagerHUD hud = FindObjectOfType<NetworkManagerHUD>();
@@ -141,22 +107,23 @@ public class Player : NetworkSetup
     [Command]
     private void CmdInitialisePlayer()
     {
+        id = FindObjectsOfType<Player>().Length - 1;
+        RegisterModel(PLAYER_TAG, id);
+
         GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
         gameController.DeactiveScreenCamera();
 
         Transform transform = gameController.GetPlayerTransform(id);
         RpcSetPlayerTransform(transform.position, transform.rotation);
 
-        int myTeamId = gameController.GetMyTeamControllerId(id);
-        RpcSetMyTeamId(myTeamId);
+        myTeamId = gameController.GetMyTeamControllerId(id);
         RpcSetRenderTexture(myTeamId);
 
-        RpcSetOpponentsTeamId(gameController.GetOpponentsTeamControllerId(id));
+        opponentsTeamId = gameController.GetOpponentsTeamControllerId(id);
 
-        int laneId = (myTeamId == TeamController.TEAM1)
+        laneId = (myTeamId == TeamController.TEAM1)
             ? (id / 2)
             : (id - 1) / 2;
-        RpcSetLaneId(laneId);
 
         SpawnController spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
         for (int i = 0; i <= 2; i++)
@@ -166,28 +133,10 @@ public class Player : NetworkSetup
     }
 
     [ClientRpc]
-    private void RpcSetPlayerTransform(Vector3 position, Quaternion rotation)
+    protected void RpcSetPlayerTransform(Vector3 position, Quaternion rotation)
     {
         transform.rotation = rotation;
         transform.position = position;
-    }
-
-    [ClientRpc]
-    private void RpcSetMyTeamId(int teamId)
-    {
-        myTeamId = teamId;
-    }
-
-    [ClientRpc]
-    private void RpcSetOpponentsTeamId(int teamId)
-    {
-        opponentsTeamId = teamId;
-    }
-
-    [ClientRpc]
-    private void RpcSetLaneId(int laneId)
-    {
-        this.laneId = laneId;
     }
 
     [ClientRpc]
@@ -239,14 +188,17 @@ public class Player : NetworkSetup
         else if (vcr.GetKeyDown("left"))
         {
             crossbowMotor.MoveLeft();
+            CmdTakeScreenshot();
         }
         else if (vcr.GetKeyDown("right"))
         {
             crossbowMotor.MoveRight();
+            CmdTakeScreenshot();
         }
         else if (vcr.GetKeyDown("space"))
         {
             Shoot();
+            CmdTakeScreenshot();
         }
         else if (Input.GetKeyDown(KeyCode.Keypad1))
         {
@@ -276,7 +228,9 @@ public class Player : NetworkSetup
     }
 
     void Update()
-    {  
+    {
+        Debug.Log(string.Format("{0}: id: {1}, teamId: {2}, opponentsTeamId: {3}, laneId: {4}", NetworkName, id, myTeamId, opponentsTeamId, laneId));
+
         if (isLocalPlayer)
         {
             if (Input.GetKeyDown(KeyCode.A))
@@ -539,6 +493,31 @@ public class Player : NetworkSetup
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
         myTeamController.AddGold(amount);
+    }
+
+    [Command]
+    private void CmdTakeScreenshot()
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);    
+        
+        if (myTeamController.LastActivePlayerId != id)
+        {
+            RpcTakeScreenshot(myTeamId, myTeamController.ScreenshotCount);
+            myTeamController.IncrementScreenshotCount();
+            myTeamController.SetLastActivePlayerId(id);
+        }
+    }
+
+    [ClientRpc]
+    private void RpcTakeScreenshot(int teamId, int screenshotCount)
+    {
+        if (myTeamId == teamId)
+        {
+            Debug.Log("id: " + id);
+            string directory = Path.GetFullPath(".");
+            string path = Path.Combine(directory, String.Format("Screenshot_{0}_{1}_{2}.png", myTeamId, id, screenshotCount));
+            ScreenCapture.CaptureScreenshot(path);
+        }
     }
 
     private void DisableNonLocalCompontents()

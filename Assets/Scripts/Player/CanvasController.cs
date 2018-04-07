@@ -51,7 +51,6 @@ namespace Assets.Scripts.Player
 
         public void SetGameOverValue(TeamController.TeamResult teamResult)
         {
-            // Debug.Log(teamResult);
             switch (teamResult)
             {
                 case TeamController.TeamResult.LOST:

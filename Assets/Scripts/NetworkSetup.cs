@@ -5,21 +5,30 @@ using UnityEngine.Networking;
 
 public class NetworkSetup : NetworkBehaviour
 {
-
-    protected void RegisterModel(string modelName)
+    [SyncVar(hook = "SetTransformName")]
+    private string networkName;
+    public string NetworkName
     {
-        transform.name = String.Format("{0} {1}", modelName, GetComponent<NetworkIdentity>().netId);
+        get
+        {
+            return networkName;
+        }
     }
 
     protected void RegisterModel(string modelName, int id)
     {
-        transform.name = String.Format("{0} {1}", modelName, id);
+        networkName = String.Format("{0} {1}", modelName, id);
+    }
+
+    private void SetTransformName(string name)
+    {
+        networkName = name;
+        gameObject.name = name;
     }
 
     protected void AssignLayer(string layerName)
     {
         gameObject.layer = LayerMask.NameToLayer(layerName);
     }
-
 
 }
