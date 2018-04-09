@@ -3,7 +3,10 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
 
-public class AIController : NetworkBehaviour {
+public class AIController : NetworkSetup {
+
+    [SerializeField]
+    private string AIName;
 
     private NavMeshAgent agent;
 
@@ -55,6 +58,7 @@ public class AIController : NetworkBehaviour {
     }
 
     void Start() {
+        RegisterModel(AIName);
         if (GetComponent<Animation>() != null)
         {
             GetComponent<Animation>().Play("run");

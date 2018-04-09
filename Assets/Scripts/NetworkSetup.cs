@@ -15,6 +15,11 @@ public class NetworkSetup : NetworkBehaviour
         }
     }
 
+    protected void RegisterModel(string modelName)
+    {
+        networkName = String.Format("{0} {1}", modelName, GetComponent<NetworkIdentity>().netId);
+    }
+
     protected void RegisterModel(string modelName, int id)
     {
         networkName = String.Format("{0} {1}", modelName, id);
@@ -24,6 +29,7 @@ public class NetworkSetup : NetworkBehaviour
     {
         networkName = name;
         gameObject.name = name;
+        transform.name = name;
     }
 
     protected void AssignLayer(string layerName)

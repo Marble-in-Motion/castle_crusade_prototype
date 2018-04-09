@@ -34,11 +34,11 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4033827913842140}
+  - component: {fileID: 114862684751457070}
+  - component: {fileID: 114545954289157202}
   - component: {fileID: 33970383115970742}
   - component: {fileID: 23078809292859296}
   - component: {fileID: 54799683302761386}
-  - component: {fileID: 114862684751457070}
-  - component: {fileID: 114545954289157202}
   m_Layer: 8
   m_Name: Arrow_Small
   m_TagString: Untagged

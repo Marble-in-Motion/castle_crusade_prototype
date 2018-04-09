@@ -10,7 +10,7 @@ public class NPCHealth : NetworkBehaviour {
     private const string DEATH_TRIGGER = "Die";
     private const float ANIM_WAIT = 5.0f;
 
-	
+	[SyncVar(hook = "OnChangeHealth")]
 	private float currentHealth;
     public float CurrentHealth
     {
@@ -30,44 +30,21 @@ public class NPCHealth : NetworkBehaviour {
 		currentHealth = Params.NPC_HEALTH[GetComponentInParent<AIController>().TroopType];
 	}
 
-	private float CalculateFlightTime(int boltSpeed, Vector3 crossBowPosition)
-	{
-		Vector3 troopPostion = this.transform.position;
-		float distance = Vector3.Distance(troopPostion, crossBowPosition);
-        float flightTime;
-        try
+	public void DeductHealth(float damage) {
+		currentHealth = currentHealth - damage;
+    }
+
+    private void OnChangeHealth(float currentHealth)
+    {
+        this.currentHealth = currentHealth;
+
+        if (!IsAlive())
         {
-            flightTime = distance / (boltSpeed - this.GetComponentInParent<NavMeshAgent>().speed) - ARROW_START_DELAY;
+            StartCoroutine(DestroyTroop());
         }
-        catch
-        {
-            flightTime = 0;
-        }
-		return flightTime;
-	}
+    }
 
-	private IEnumerator DeathDelay(int boltSpeed, Vector3 crossBowPosition)
-	{
-		float wait = CalculateFlightTime(boltSpeed, crossBowPosition) ;
-        wait = wait + ANIM_WAIT;
-		yield return new WaitForSeconds(wait);
-		Destroy(gameObject);
-
-        // This may need to be NetworkServer.Destory
-	}
-
-    [Command]
-	public void CmdDeductHealth(float damage, int boltSpeed, Vector3 crossBowPosition) {
-		currentHealth -= damage;
-
-		if (!IsAlive()) {
-            RpcKill();
-            StartCoroutine(DeathDelay(boltSpeed, crossBowPosition));
-		}
-	}
-
-    [ClientRpc]
-    private void RpcKill()
+    private IEnumerator DestroyTroop()
     {
         if (GetComponent<Animation>() != null)
         {
@@ -79,6 +56,10 @@ public class NPCHealth : NetworkBehaviour {
         }
         Destroy(GetComponent<BoxCollider>());
         Destroy(GetComponent<NavMeshAgent>());
+
+        yield return new WaitForSeconds(4);
+        Destroy(gameObject);
     }
-    
+
+
 }

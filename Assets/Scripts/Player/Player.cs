@@ -183,22 +183,22 @@ public class Player : NetworkSetup
         }
         else if (Input.GetKeyDown(KeyCode.V))
         {
-            CmdDestroyTroops();
+            CmdVolley();
         }
         else if (vcr.GetKeyDown("left"))
         {
             crossbowMotor.MoveLeft();
-            CmdTakeScreenshot();
+            //CmdTakeScreenshot();
         }
         else if (vcr.GetKeyDown("right"))
         {
             crossbowMotor.MoveRight();
-            CmdTakeScreenshot();
+            //CmdTakeScreenshot();
         }
         else if (vcr.GetKeyDown("space"))
         {
             Shoot();
-            CmdTakeScreenshot();
+            //CmdTakeScreenshot();
         }
         else if (Input.GetKeyDown(KeyCode.Keypad1))
         {
@@ -398,14 +398,21 @@ public class Player : NetworkSetup
         return troopsInLane;
     }
 
-    [ClientRpc]
-    private void RpcShootVolley(GameObject[] troops)
+
+    private void Shoot()
     {
-        StartCoroutine(crossbowController.HandleVolley(troops));
+        crossbowController.HandleShoot();
     }
 
     [Command]
-    private void CmdDestroyTroops()
+    public void CmdApplyDamage(GameObject troop)
+    {
+        troop.GetComponent<NPCHealth>().DeductHealth(Params.Bolt.DAMAGE);
+    }
+
+
+    [Command]
+    private void CmdVolley()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
 
@@ -422,45 +429,12 @@ public class Player : NetworkSetup
         }
     }
 
-    private void Shoot()
+    [ClientRpc]
+    private void RpcShootVolley(GameObject[] troops)
     {
-        LineRenderer laserLine = crossbow.GetComponent<LineRenderer>();
-        laserLine.SetPosition(0, crossbow.transform.position);
-        StartCoroutine(crossbowController.HandleShoot());
-        RaycastHit hit;
-        if (Physics.Raycast(crossbow.transform.position, crossbow.transform.forward, out hit, Params.Bolt.RANGE))
-        {
-            CmdPlayerShot(hit.collider.name, Params.Bolt.DAMAGE, this.transform.position);
-            laserLine.SetPosition(1, hit.point);
-        }
-        else
-        {
-            laserLine.SetPosition(1, crossbow.transform.position + crossbow.transform.forward * Params.Bolt.RANGE);
-        }
-        crossbowController.HandleArrow(laserLine.GetPosition(1));
+        StartCoroutine(crossbowController.HandleVolley(troops));
     }
 
-    [Command]
-    private void CmdPlayerShot(string targetId, float damage, Vector3 crossbowPosition)
-    {
-        GameObject target = GameObject.Find(targetId);
-        if (target == null)
-        {
-            return;
-        }
-        if (target.GetComponent<NPCHealth>())
-        {
-            target.GetComponent<NPCHealth>().CmdDeductHealth(damage, crossbowController.GetArrowSpeed(), crossbowPosition);
-            if (!target.GetComponent<NPCHealth>().IsAlive())
-            {
-                CmdAddGold(Params.NPC_REWARD[target.GetComponentInParent<AIController>().TroopType]);
-            }
-        }
-        if (target.transform != null /*&& target.collider.tag == "NPC"*/)
-        {
-            target.transform.position = (target.transform.position /*- (normal of the hit)*/);
-        }
-    }
 
     [Command]
     private void CmdRequestOffensiveTroopSpawn(int troopId, int laneId)
@@ -489,7 +463,7 @@ public class Player : NetworkSetup
     }
 
     [Command]
-    private void CmdAddGold(int amount)
+    public void CmdAddGold(int amount)
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
         myTeamController.AddGold(amount);
