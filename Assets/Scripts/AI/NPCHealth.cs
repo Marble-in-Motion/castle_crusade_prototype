@@ -57,7 +57,7 @@ public class NPCHealth : NetworkBehaviour {
         Destroy(GetComponent<BoxCollider>());
         Destroy(GetComponent<NavMeshAgent>());
 
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(3);
         Destroy(gameObject);
     }
 

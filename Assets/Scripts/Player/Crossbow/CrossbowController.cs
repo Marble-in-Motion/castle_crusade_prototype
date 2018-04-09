@@ -24,13 +24,6 @@ public class CrossbowController : MonoBehaviour {
 		laserLine.enabled = true;
 	}
 
-	//public IEnumerator HandleShoot() {
-	//	shootAudio.PlayOneShot(arrowSound);
-	//	laserLine.enabled = true;
-	//	yield return singleShotDuration;
-	//	laserLine.enabled = false;
-	//}
-
     public void HandleShoot()
     {
         LineRenderer laserLine = GetComponent<LineRenderer>();
@@ -85,7 +78,7 @@ public class CrossbowController : MonoBehaviour {
 
     private void HandleArrow(Vector3 targetPosition)
     {
-        //shootAudio.PlayOneShot(arrowSound);
+        shootAudio.PlayOneShot(arrowSound);
         SendArrow(transform.position, targetPosition);
     }
 
