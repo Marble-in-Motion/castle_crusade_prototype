@@ -8,63 +8,73 @@ public class GameController : NetworkBehaviour
 {
 
     public const string GAME_CONTROLLER_TAG = "GameController";
-    public const string ENEMY_TAG = "NPCT{0}L{1}";
+    public const string NPC_TAG = "NPC";
 
-    public enum GameState { GAME_RESTART, GAME_IN_PROGRESS, GAME_LOST, GAME_WON }
+    public enum GameState { GAME_IN_PROGRESS, GAME_END }
+
+    private GameState currentGameState;
 
     [SerializeField]
     private List<GameObject> spawnPoints;
 
-    [SerializeField]
-    private GameObject team1GameObject;
+    private TeamController teamController1;
 
-    [SerializeField]
-    private GameObject team2GameObject;
-
+    private TeamController teamController2;
+    
     private Camera sceneCamera;
-
-    private bool restart;
 
     private float coinIncreaseTime;
 
-
-    // Use this for initialization
     void Start()
     {
-
+        currentGameState = GameState.GAME_IN_PROGRESS;
         coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
         sceneCamera = Camera.main;
         sceneCamera.gameObject.SetActive(true);
-        //gameOver = 0;
-        restart = false;
 
+        teamController1 = GameObject.FindGameObjectWithTag(TeamController.TEAM_CONTROLLER_1_TAG).GetComponent<TeamController>();
+        teamController2 = GameObject.FindGameObjectWithTag(TeamController.TEAM_CONTROLLER_2_TAG).GetComponent<TeamController>();
+    }
+        
+    public void DeactiveScreenCamera()
+    {
+        sceneCamera.gameObject.SetActive(false);
     }
 
-    public void InitialisePlayer(Player player)
+    public int GetMyTeamControllerId(int playerId)
     {
-        MovePlayerToSpawn(player);
-        sceneCamera.gameObject.SetActive(false);
+        return GetMyTeamController(playerId).Id;
+    }
+
+    public int GetOpponentsTeamControllerId(int playerId)
+    {
+        return GetOpponentsTeamController(playerId).Id;
     }
 
     public TeamController GetMyTeamController(int playerId)
     {
         return (CalculateTeamId(playerId) == TeamController.TEAM1)
-            ? team1GameObject.GetComponent<TeamController>()
-            : team2GameObject.GetComponent<TeamController>();
+            ? teamController1
+            : teamController2;
     }
 
-	public TeamController GetOpponentTeamController(int playerId)
-	{
-		return (CalculateTeamId(playerId) == TeamController.TEAM1)
-			? team2GameObject.GetComponent<TeamController>()
-			: team1GameObject.GetComponent<TeamController>();
-	}
-
-
-    private void MovePlayerToSpawn(Player player)
+    public TeamController GetOpponentsTeamController(int playerId)
     {
-        player.transform.position = spawnPoints[player.GetId()].transform.position;
-        player.transform.rotation = spawnPoints[player.GetId()].transform.rotation;
+        return (CalculateTeamId(playerId) == TeamController.TEAM1)
+            ? teamController2
+            : teamController1;
+    }
+
+    public TeamController GetTeamControllerById(int teamId)
+    {
+        return (teamId == TeamController.TEAM1)
+            ? teamController1
+            : teamController2;
+    }
+
+    public Transform GetPlayerTransform(int playerId)
+    {
+        return spawnPoints[playerId].transform;
     }
 
     private int CalculateTeamId(int playerId)
@@ -73,63 +83,51 @@ public class GameController : NetworkBehaviour
     }
 
 	public void GameIsOver(int losingTeamId) {
-        GameState team1GameOverValue = (losingTeamId == TeamController.TEAM1) ? GameState.GAME_LOST : GameState.GAME_WON;
-        GameState team2GameOverValue = (losingTeamId == TeamController.TEAM2) ? GameState.GAME_LOST : GameState.GAME_WON;
+        TeamController.TeamResult team1Result = (losingTeamId == TeamController.TEAM1) ? TeamController.TeamResult.LOST : TeamController.TeamResult.WON;
+        TeamController.TeamResult team2Result = (losingTeamId == TeamController.TEAM2) ? TeamController.TeamResult.LOST : TeamController.TeamResult.WON;
 
-        team1GameObject.GetComponent<TeamController>().SetGameOver(team1GameOverValue);
-		team2GameObject.GetComponent<TeamController>().SetGameOver(team2GameOverValue);
+        teamController1.SetTeamResult(team1Result);
+        teamController2.SetTeamResult(team2Result);
 
-        GameRestart();
-    }
-
-    public void GameRestart()
-    {
-        restart = true;
+        currentGameState = GameState.GAME_END;
     }
 
     private void DestroyAllTroops()
     {
-        for (int team = 1; team <= 2; team++)
+        GameObject[] allTroops = GameObject.FindGameObjectsWithTag(NPC_TAG);
+        for (int i = 0; i < allTroops.Length; i++)
         {
-            for (int lane = 1; lane <= 5; lane++)
-            {
-                GameObject[] troops = GameObject.FindGameObjectsWithTag(string.Format(ENEMY_TAG, team, lane));
-                for (int i = 0; i < troops.Length; i++) { Destroy(troops[i]); }
-            }
+            NetworkServer.Destroy(allTroops[i]);
         }
     }
 
     private void CheckTime()
     {
-        if (!isServer) return;
-
         if (Time.time > coinIncreaseTime)
         {
             coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
-            team1GameObject.GetComponent<TeamController>().CmdIncreaseCoinPerInterval(Params.COIN_BOOST);
-			team2GameObject.GetComponent<TeamController>().CmdIncreaseCoinPerInterval(Params.COIN_BOOST);
+            teamController1.IncreaseCoinPerInterval(Params.COIN_BOOST);
+			teamController2.IncreaseCoinPerInterval(Params.COIN_BOOST);
         }
     }
 
     private void Update()
     {
-        CheckTime();   
-        if (restart)
+        CheckTime();
+        if (currentGameState == GameState.GAME_END)
         {
             DestroyAllTroops();
             
-
             if (Input.GetKeyDown(KeyCode.R))
             {
-                team1GameObject.GetComponent<TeamController>().SetGameOver(GameState.GAME_RESTART);
-                team2GameObject.GetComponent<TeamController>().SetGameOver(GameState.GAME_RESTART);
-                team1GameObject.GetComponent<TeamController>().Restart();
-                team2GameObject.GetComponent<TeamController>().Restart();
+                teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+                teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+
+                teamController1.Restart();
+                teamController2.Restart();
                 DestroyAllTroops();
-                team1GameObject.GetComponent<TeamController>().CmdResetCoinPerInterval();
-                team2GameObject.GetComponent<TeamController>().CmdResetCoinPerInterval();
                 coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
-                restart = false;
+                currentGameState = GameState.GAME_IN_PROGRESS;
             }
         }
     }

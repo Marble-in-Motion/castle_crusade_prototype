@@ -16,6 +16,7 @@ public class Params {
 	public static float[] NPC_HEALTH = {200f,100f,800f};
 	public static float[] NPC_SPEED = {12f,16f,12f};
 	public static int[] NPC_REWARD = {5,20,20};
+    public static int[] NPC_DAMAGE = { 10, 10, 10 };
 
 	public class Bolt
 	{

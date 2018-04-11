@@ -6,116 +6,137 @@ using UnityEngine.Networking;
 
 public class TeamController : NetworkBehaviour
 {
+    public const string TEAM_CONTROLLER_1_TAG = "TeamController1";
+    public const string TEAM_CONTROLLER_2_TAG = "TeamController2";
 
     public const int TEAM1 = 1;
     public const int TEAM2 = 2;
 
-    private AudioSource deductHealth; 
-    private AudioClip audioClip;
+    public enum TeamResult { UNDECIDED, LOST, WON }
+
+    private int coinsPerSecond = Params.STARTING_COIN_INCREASE_AMOUNT;
+    private float towerHealth;
+    private float nextActionTime = 0.0f;
+
+    [SerializeField]
+    private AudioSource seigeAudio;
 
     [SerializeField]
     private int id;
+    public int Id
+    {
+        get
+        {
+            return id;
+        }
+    }
 
-    [SyncVar]
-	private int coin = Params.STARTING_COIN;
+    private int coin = Params.STARTING_COIN;
+    public int Coin
+    {
+        get
+        {
+            return coin;
+        }
+    }
+    
+	private TeamResult result;
+    public TeamResult Result
+    {
+        get
+        {
+            return result;
+        }
+    }
 
-	[SyncVar]
-	private float towerHealth;
+    // Enum must use setter method 
+    public void SetTeamResult(TeamResult teamResult)
+    {
+        result = teamResult;
+    }
 
-	private float nextActionTime = 0.0f;
-
-    [SerializeField]
-    private RenderTexture renderTexture;
-
-	[SyncVar]
-	private GameController.GameState gameOverValue;
-
-    [SyncVar]
-    private int coinsPerSecond = Params.STARTING_COIN_INCREASE_AMOUNT;
-
-    [SyncVar]
     private float endOfCoolDown;
+    public float EndOfCoolDown
+    {
+        get
+        {
+            return endOfCoolDown;
+        }
+    }
 
-    [SyncVar]
     private float currentTime;
+    public float CurrentTime
+    {
+        get
+        {
+            return currentTime;
+        }
+    }
+
+    private int screenshotCount;
+    public int ScreenshotCount
+    {
+        get
+        {
+            return screenshotCount;
+        }
+    }
+
+    public void IncrementScreenshotCount()
+    {
+        screenshotCount++;
+    }
+
+    private int lastActivePlayerId;
+    public int LastActivePlayerId
+    {
+        get
+        {
+            return lastActivePlayerId;
+        }
+    }
+
+    public void SetLastActivePlayerId(int playerId)
+    {
+        lastActivePlayerId = playerId;
+    }
 
     void Start()
     {
-		gameOverValue = 0;
+        result = TeamResult.UNDECIDED;
 		towerHealth = Params.STARTING_TOWER_HEALTH;
-        deductHealth = GetComponent<AudioSource>();
-        audioClip = deductHealth.clip;
-        if (isServer)
-        {
-            endOfCoolDown = Time.time;
-            currentTime = Time.time;
-        }
-        
+        endOfCoolDown = Time.time;
+        currentTime = Time.time;
+        lastActivePlayerId = -1;
     }
 
-    [Command]
-    public void CmdUpdateCoolDown()
+    void Update()
+    {
+        AddCoinPerSecond();
+        currentTime = Time.time;
+    }
+
+    private void AddCoinPerSecond()
+    {
+        if (!isServer) return;
+
+        if (Time.time > nextActionTime)
+        {
+            nextActionTime += Params.COIN_DELAY;
+            AddGold(coinsPerSecond);
+        }
+    }
+
+    public void UpdateCoolDown()
     {
         endOfCoolDown = Time.time + Params.DESTROY_COOL_DOWN;
     }
 
-    public float GetEndOfCoolDown()
-    {
-        return endOfCoolDown;
-    }
-
-    public int GetId()
-    {
-        return id;
-    }
-
-    [Command]
-    public void CmdIncreaseCoinPerInterval(int increase)
+    public void IncreaseCoinPerInterval(int increase)
     {
         coinsPerSecond += increase;
     }
 
-    [Command]
-    public void CmdResetCoinPerInterval()
-    {
-        coinsPerSecond = 5;
-    }
-
-
-    private float GetTowerHealth()
-    {
-        return towerHealth;
-    }
-
-	public float GetTowerHealthRatio(){
-		return GetTowerHealth() / Params.STARTING_TOWER_HEALTH;
-	}
-
-    public int GetCoin()
-    {
-        return coin;
-    }
-
-    public float GetCurrentTime()
-    {
-        //CmdUpdateCurrentTime();
-        return currentTime;
-    }
-
-    public RenderTexture GetRenderTexture()
-    {
-        return renderTexture;
-    }
-
-	public GameController.GameState GetIsGameOver() {
-		return gameOverValue;
-	}
-
-	public void SetGameOver(GameController.GameState gameOverValue) {
-		this.gameOverValue = gameOverValue;
-	}
-
-    [ClientCallback]
     public bool SpendGold(int amount)
     {
         if (coin - amount >= 0)
@@ -129,51 +150,32 @@ public class TeamController : NetworkBehaviour
         return false;
     }
 
-    [ClientCallback]
     public void AddGold(int amount)
     {
         coin += amount;
     }
 
-    
-    private void AddCoinPerSecond()
+    public void DeductTowerHealth(int damage)
     {
-        if (!isServer) return;
+        towerHealth = towerHealth - damage;
+        seigeAudio.PlayOneShot(seigeAudio.clip);
 
-        if (Time.time > nextActionTime)
+        if (towerHealth <= 0)
         {
-			nextActionTime += Params.COIN_DELAY;
-            AddGold(coinsPerSecond);
+            GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+            gameController.GameIsOver(id);
         }
     }
 
-    void Update()
+    public float GetTowerHealthRatio()
     {
-        AddCoinPerSecond();
-        if (isServer)
-        {
-            currentTime = Time.time;
-        }
+        return towerHealth / Params.STARTING_TOWER_HEALTH;
     }
-
-	[Command]
-	public void CmdDeductTowerHealth(int damage)  {
-		towerHealth = towerHealth - damage;
-        deductHealth.PlayOneShot(audioClip);
-
-		if (towerHealth <= 0) {
-			TellGameControllerGameOver();
-		}
-	}
-		
-	private void TellGameControllerGameOver() {
-		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
-		gameController.GameIsOver(id);
-	}
-
+       
     public void Restart()
     {
         towerHealth = Params.STARTING_TOWER_HEALTH;
         coin = Params.STARTING_COIN;
+        coinsPerSecond = 5;
     }
 }

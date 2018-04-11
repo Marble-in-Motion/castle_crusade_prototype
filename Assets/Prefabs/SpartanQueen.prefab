@@ -202,16 +202,16 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4098533335085618}
-  - component: {fileID: 95409402804414774}
   - component: {fileID: 114676181259853492}
+  - component: {fileID: 114717533253868300}
   - component: {fileID: 114385088105630316}
-  - component: {fileID: 114381403125601362}
   - component: {fileID: 114051950409642852}
+  - component: {fileID: 95409402804414774}
   - component: {fileID: 195796910666100542}
   - component: {fileID: 136540936753867304}
   m_Layer: 0
-  m_Name: Spartan Queen
-  m_TagString: Untagged
+  m_Name: SpartanQueen
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1127,7 +1127,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1183937305477732}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 84.31, y: -2.81, z: -86.75}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 8, y: 8, z: 8}
   m_Children:
   - {fileID: 4150926331787784}
@@ -1207,7 +1207,7 @@ Transform:
   m_GameObject: {fileID: 1939566906516362}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.000000075326, y: 2.41, z: 0}
-  m_LocalScale: {x: 5, y: 0.0013655423, z: 5}
+  m_LocalScale: {x: 1.8967762, y: 0.0005180257, z: 1.8967766}
   m_Children: []
   m_Father: {fileID: 4098533335085618}
   m_RootOrder: 0
@@ -2097,18 +2097,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162a684e0304cf3498093c398747a6a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114381403125601362
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1183937305477732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 873fbeabde90bd44d96a7e4c0362a302, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AIName: SpartanQueen
 --- !u!114 &114385088105630316
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2120,9 +2108,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c994871905665fb478e86452381bcd9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AIName: Queen
   targets:
-  - {fileID: 4194691932978656, guid: c738f34b9b7288147b29b5c1766d24e7, type: 2}
-  - {fileID: 4340135974863334, guid: e5b8afeca8c93e346953bf10e71e7b1a, type: 2}
+  - {fileID: 1569264582030364, guid: c738f34b9b7288147b29b5c1766d24e7, type: 2}
+  - {fileID: 1556732296233700, guid: e5b8afeca8c93e346953bf10e71e7b1a, type: 2}
 --- !u!114 &114558997545139970
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2169,6 +2158,27 @@ MonoBehaviour:
     i15: 151
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
+--- !u!114 &114717533253868300
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1183937305477732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.04761905
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!136 &136540936753867304
 CapsuleCollider:
   m_ObjectHideFlags: 1

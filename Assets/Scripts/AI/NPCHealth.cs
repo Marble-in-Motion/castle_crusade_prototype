@@ -10,48 +10,41 @@ public class NPCHealth : NetworkBehaviour {
     private const string DEATH_TRIGGER = "Die";
     private const float ANIM_WAIT = 5.0f;
 
-	[SyncVar]
+	[SyncVar(hook = "OnChangeHealth")]
 	private float currentHealth;
-
-	void Start() {
-		currentHealth = Params.NPC_HEALTH[ this.GetComponentInParent<AIController> ().GetTroopType ()];
-	}
-
-	private float CalculateFlightTime(int boltSpeed, Vector3 crossBowPosition)
-	{
-		Vector3 troopPostion = this.transform.position;
-		float distance = Vector3.Distance(troopPostion, crossBowPosition);
-        float flightTime;
-        try
+    public float CurrentHealth
+    {
+        get
         {
-            flightTime = distance / (boltSpeed - this.GetComponentInParent<NavMeshAgent>().speed) - ARROW_START_DELAY;
+            return currentHealth;
         }
-        catch
+    }
+
+    public bool IsAlive()
+    {
+        return currentHealth > 0;
+    }
+
+
+    void Start() {
+		currentHealth = Params.NPC_HEALTH[GetComponentInParent<AIController>().TroopType];
+	}
+
+	public void DeductHealth(float damage) {
+		currentHealth = currentHealth - damage;
+    }
+
+    private void OnChangeHealth(float currentHealth)
+    {
+        this.currentHealth = currentHealth;
+
+        if (!IsAlive())
         {
-            flightTime = 0;
+            StartCoroutine(DestroyTroop());
         }
-		return flightTime;
-	}
+    }
 
-	IEnumerator DeathDelay(int boltSpeed, Vector3 crossBowPosition)
-	{
-		float wait = CalculateFlightTime(boltSpeed, crossBowPosition) ;
-        wait = wait + ANIM_WAIT;
-		yield return new WaitForSeconds(wait);
-		Destroy(gameObject);
-	}
-
-	public void DeductHealth(float damage, int boltSpeed, Vector3 crossBowPosition) {
-		currentHealth -= damage;
-
-		if (!IsAlive ()) {
-            RpcTriggerDeath();
-            StartCoroutine(DeathDelay(boltSpeed, crossBowPosition));
-		}
-	}
-
-    [ClientRpc]
-    private void RpcTriggerDeath()
+    private IEnumerator DestroyTroop()
     {
         if (GetComponent<Animation>() != null)
         {
@@ -60,18 +53,13 @@ public class NPCHealth : NetworkBehaviour {
         else
         {
             GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
-
         }
         Destroy(GetComponent<BoxCollider>());
         Destroy(GetComponent<NavMeshAgent>());
-        //GetComponent<NavMeshAgent>().speed = 0;
+
+        yield return new WaitForSeconds(3);
+        Destroy(gameObject);
     }
 
-    public float GetHealth() {
-		return currentHealth;
-	}
 
-	public bool IsAlive() {
-		return this.currentHealth > 0;
-	}
 }

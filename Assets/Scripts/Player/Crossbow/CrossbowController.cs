@@ -24,30 +24,50 @@ public class CrossbowController : MonoBehaviour {
 		laserLine.enabled = true;
 	}
 
-	public IEnumerator HandleShoot() {
-		shootAudio.PlayOneShot(arrowSound);
-		laserLine.enabled = true;
-		yield return singleShotDuration;
-		laserLine.enabled = false;
-	}
+    public void HandleShoot()
+    {
+        LineRenderer laserLine = GetComponent<LineRenderer>();
+        laserLine.SetPosition(0, transform.position);
 
-	public void HandleArrow(Vector3 point) {
-		SendArrow(new Vector3 (transform.position.x, transform.position.y, transform.position.z), speed, point);
-	}
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, Params.Bolt.RANGE))
+        {
+            GameObject target = GameObject.Find(hit.collider.name);
 
-	public IEnumerator HandleVolley(GameObject[] troops) {
+            if (target != null && target.GetComponent<NPCHealth>())
+            {
+                Player player = GetComponentInParent<Player>();
+                player.CmdApplyDamage(target);
+
+                if (!target.GetComponent<NPCHealth>().IsAlive())
+                {
+                    player.CmdAddGold(Params.NPC_REWARD[target.GetComponentInParent<AIController>().TroopType]);
+                }
+            }
+
+            laserLine.SetPosition(1, hit.point);
+        }
+        else
+        {
+            laserLine.SetPosition(1, transform.position + transform.forward * Params.Bolt.RANGE);
+        }
+        HandleArrow(laserLine.GetPosition(1));
+    }
+
+
+    public IEnumerator HandleVolley(GameObject[] troops) {
 		Vector3 volleyLoc = new Vector3 (transform.position.x, transform.position.y + 2f, transform.position.z);
 		List<Vector3> troopLocs = new List<Vector3> ();
 		for (int i = 0; i < troops.Length; i++) {
             if (troops[i].GetComponent<NPCHealth>().IsAlive())
             {
                 troopLocs.Add(troops[i].transform.position);
-                troops[i].GetComponent<NPCHealth>().DeductHealth(troops[i].GetComponent<NPCHealth>().GetHealth(), speed, volleyLoc);
+                troops[i].GetComponent<NPCHealth>().DeductHealth(troops[i].GetComponent<NPCHealth>().CurrentHealth);
             }
 		}
-		foreach(Vector3 loc in troopLocs) {
+		foreach (Vector3 loc in troopLocs) {
 			yield return volleyShotDuration;
-			SendArrow (volleyLoc, speed, loc);
+			SendArrow(volleyLoc, loc);
 		}
 	}
 
@@ -56,15 +76,19 @@ public class CrossbowController : MonoBehaviour {
 		return speed;
 	}
 
-	private void SendArrow(Vector3 startLoc, int speed, Vector3 targetLoc) {
-		GameObject bul = Instantiate (arrow, startLoc, transform.rotation);
-		bul.GetComponent<ArrowController> ().Init (targetLoc);
-		Rigidbody rb = bul.GetComponent<Rigidbody> ();
-		Vector3 direction = targetLoc - transform.position;
-		direction = Vector3.Normalize(direction);
+    private void HandleArrow(Vector3 targetPosition)
+    {
+        shootAudio.PlayOneShot(arrowSound);
+        SendArrow(transform.position, targetPosition);
+    }
+
+    private void SendArrow(Vector3 startPosition, Vector3 targetPosition) {
+        GameObject arrow = Instantiate(this.arrow, startPosition, transform.rotation);
+		arrow.GetComponent<ArrowController>().Init(targetPosition);
+
+        Rigidbody rb = arrow.GetComponent<Rigidbody>();
+		Vector3 direction = Vector3.Normalize(targetPosition - startPosition);
 		rb.velocity = speed*direction;
 	}
 
-	void Update () {
-	}
 }

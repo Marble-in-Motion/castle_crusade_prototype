@@ -1820,7 +1820,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515a106b86060094483165dbd4f56c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 20447019570799976}
 --- !u!114 &114244447448270156
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1918,16 +1917,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputsToRecord:
   - inputType: 2
-    inputName: y
+    inputName: left
     mouseButtonNum: 0
     buttonState: 0
     axisValue: 0
-  recordMouseEvents: 1
+  - inputType: 2
+    inputName: right
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  - inputType: 2
+    inputName: space
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  recordMouseEvents: 0
   syncRecordLocations: 0
   autoSyncLocationRate: 1
-  snapToSyncedLocation: 1
+  snapToSyncedLocation: 0
   recordingFrameRate: 30
-  _mode: 1
+  _mode: 0
 --- !u!114 &114580449291712106
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2271,6 +2280,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eb4b9fe501db374e98a0645066d0e6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderTextures:
+  - {fileID: 8400000, guid: 9cc5c90bd5609614e9ca1a03dc7554f3, type: 2}
+  - {fileID: 8400000, guid: 1a2d9d8eea0b1f34bbe478a9384f3d1d, type: 2}
   blueHealthBar: {fileID: 114099868721221822}
   redHealthBar: {fileID: 114580449291712106}
   CurrencyText: {fileID: 114992888872638716}
@@ -2315,7 +2327,7 @@ LineRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1428021765519220}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

@@ -11,6 +11,9 @@ namespace Assets.Scripts.Player
     {
 
         [SerializeField]
+        private RenderTexture[] renderTextures;
+
+        [SerializeField]
         private Image blueHealthBar;
 
 		[SerializeField]
@@ -39,24 +42,26 @@ namespace Assets.Scripts.Player
             redHealthBar.transform.localScale = new Vector3(Mathf.Clamp(health, 0f, 1f), redHealthBar.transform.localScale.y, redHealthBar.transform.localScale.z);
 		}
 
-        public void SetRenderTexture(RenderTexture texture)
+        public void SetRenderTexture(int teamId)
         {
-            miniMapView.GetComponent<RawImage>().texture = texture;
+            // teamId 1 (blue) -> index 0 (tower 2)
+            // teamId 2 (red) -> index 1 (tower 1)
+            miniMapView.GetComponent<RawImage>().texture = renderTextures[teamId - 1];
         }
 
-        public void SetGameOverValue(GameController.GameState gameOverValue)
+        public void SetGameOverValue(TeamController.TeamResult teamResult)
         {
-            switch (gameOverValue)
+            switch (teamResult)
             {
-                case GameController.GameState.GAME_LOST:
+                case TeamController.TeamResult.LOST:
                     anim.ResetTrigger("Restart");
                     anim.SetTrigger("GameOver");
                     break;
-                case GameController.GameState.GAME_WON:
+                case TeamController.TeamResult.WON:
                     anim.ResetTrigger("Restart");
                     anim.SetTrigger("GameWin");
                     break;
-                case GameController.GameState.GAME_RESTART:
+                case TeamController.TeamResult.UNDECIDED:
                     anim.ResetTrigger("GameWin");
                     anim.ResetTrigger("GameOver");
                     anim.SetTrigger("Restart");
@@ -65,7 +70,7 @@ namespace Assets.Scripts.Player
         }
 
 		public void SetArrowCooldown() {
-			anim.SetTrigger ("Cooldown");
+			anim.SetTrigger("Cooldown");
 		}
 
     }

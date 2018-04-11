@@ -11,7 +11,7 @@ public class SpawnController : NetworkBehaviour
 
 	//troops
 	[SerializeField]
-	private GameObject [] troopPrefabs;
+	private GameObject[] troopPrefabs;
 
 	//spawn location - lanes
 	[SerializeField]
@@ -21,29 +21,42 @@ public class SpawnController : NetworkBehaviour
 	[SerializeField]
 	private GameObject[] towers;
 
-	private GameObject GetSpawnFromId(int spawnId, int teamId)
-	{
-		return (teamId == TeamController.TEAM1) ? spawnLocations[spawnId + 5] : spawnLocations[spawnId];
-	}
+    private GameObject GetMyLocalSpawn(int laneId, int myTeamId)
+    {
+        return (myTeamId == TeamController.TEAM1)
+            ? spawnLocations[laneId]
+            : spawnLocations[laneId + 5];
+    }
 
-	private GameObject GetTargetTower(int teamId)
-	{
-		return (teamId == TeamController.TEAM1) ? towers[1] : towers[0];
-	}
+    private GameObject GetOpponentsSpawn(int laneId, int myTeamId)
+    {
+        return (myTeamId == TeamController.TEAM1)
+            ? spawnLocations[laneId + 5]
+            : spawnLocations[laneId];
+    }
 
-	private Vector3 ApplyOffset(GameObject lane, GameObject target, float theta)
-	{
+    private GameObject GetMyTower(int myTeamId)
+    {
+        return (myTeamId == TeamController.TEAM1) ? towers[0] : towers[1];
+    }
 
+    private GameObject GetOpponentsTower(int myTeamId)
+    {
+        return (myTeamId == TeamController.TEAM1) ? towers[1] : towers[0];
+    }
+
+	private Vector3 ApplyOffset(GameObject lane, GameObject tower, float theta)
+	{
         GameObject newSpawn = new GameObject();
         newSpawn.transform.position = lane.transform.position;
-        newSpawn.transform.RotateAround(target.transform.position, Vector3.up, theta);
+        newSpawn.transform.RotateAround(tower.transform.position, Vector3.up, theta);
 
         Vector3 v = newSpawn.transform.position;
         Destroy(newSpawn);
         return v;
   	}
 
-	private float calculateAngle(int path)
+	private float CalculateAngle(int path)
 	{
 		float theta = 0;
 		int pathWidth = 10;
@@ -57,16 +70,15 @@ public class SpawnController : NetworkBehaviour
 			case 2:
 					theta = Random.Range(-maxOffset + 4*pathWidth, -maxOffset + 5*pathWidth);
 					break;
-			default:
-					break;
 		}
 		return theta;
 	}
 
-	public Vector3 calculateDefaultSpawn(int path, int spawnId, int teamId)
+    // Calculate default look location for crossbow
+	public Vector3 CalculateDefaultCrossbowTarget(int path, int laneId, int myTeamId)
 	{
-		GameObject lane = GetSpawnFromId(spawnId, teamId);
-		GameObject target = GetTargetTower(teamId);
+		GameObject lane = GetMyLocalSpawn(laneId, myTeamId);
+		GameObject myTower = GetMyTower(myTeamId);
 
 		float theta = 0;
 		int pathWidth = 10;
@@ -80,36 +92,34 @@ public class SpawnController : NetworkBehaviour
 		case 2:
 			theta = -maxOffset + 4*pathWidth +  (-maxOffset + 5*pathWidth)/2;
 			break;
-		default:
-			break;
 		}
-		return ApplyOffset (lane, target, theta);
+		return ApplyOffset(lane, myTower, theta);
 	}
 
-	public Vector3 calculateSpawn(int path, int spawnId, int teamId)
+	public Vector3 CalculateSpawn(GameObject lane, int path, int myTeamId)
 	{
-		GameObject lane = GetSpawnFromId(spawnId, teamId);
-		GameObject target = GetTargetTower(teamId);
+		GameObject targetTower = GetOpponentsTower(myTeamId);
 
-		float angle = calculateAngle(path);
-		return ApplyOffset (lane, target, angle);
+		float angle = CalculateAngle(path);
+		return ApplyOffset(lane, targetTower, angle);
 	}
 
-
-	public void SpawnOffensive(int troopId, int spawnId, int teamId)
+    public void SpawnOffensiveTroop(int troopId, int laneId, int myTeamId, int opponentsTeamId)
 	{
 		int path = Random.Range(0, numberOfPaths);
-		Vector3 spawn = calculateSpawn (path, spawnId, teamId);
-		GameObject lane = GetSpawnFromId(spawnId, teamId);
-
+        GameObject lane = GetOpponentsSpawn(laneId, myTeamId);
+        Vector3 spawn = CalculateSpawn(lane, path, myTeamId);
+		
 		GameObject troop = Instantiate(troopPrefabs[troopId], spawn, lane.transform.rotation) as GameObject;
-		troop.GetComponent<AIController>().SetTagName(string.Format("NPCT{0}L{1}", teamId, spawnId + 1));
-		troop.GetComponent<AIController> ().SetTroopType (troopId);
-		troop.GetComponent<AIController>().SetPath(path);
-
-		int opponentTeamIndex = (teamId == 1) ? 2 : 1;
-
-		troop.GetComponent<AIController>().SetTargetIndex(opponentTeamIndex - 1);
         NetworkServer.Spawn(troop);
-	}
+
+        AIController ai = troop.GetComponent<AIController>();
+        ai.RpcSetTeamId(myTeamId);
+        ai.RpcSetLaneId(laneId);
+        ai.RpcSetTroopType(troopId);
+        ai.RpcSetPath(path);
+        ai.RpcSetTarget(opponentsTeamId);
+    }
+    
+
 }
