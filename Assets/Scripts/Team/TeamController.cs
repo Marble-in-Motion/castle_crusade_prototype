@@ -137,6 +137,7 @@ public class TeamController : NetworkBehaviour
     {
         AddCoinPerSecond();
         currentTime = Time.time;
+        UpdateAIActive();
     }
 
     private void AddCoinPerSecond()
@@ -148,6 +149,40 @@ public class TeamController : NetworkBehaviour
             nextActionTime += Params.COIN_DELAY;
             AddGold(coinsPerSecond);
         }
+    }
+
+    private void UpdateAIActive()
+    {
+        int aIPlayer = 0;
+        int maxTroops = int.MinValue;
+        for(int lane = 0; lane < 4; lane++)
+        {
+            List<GameObject> troops = GetTroopsInLane(lane);
+            int troopCount = troops.Count;
+            if(troopCount > maxTroops)
+            {
+                maxTroops = troopCount;
+                aIPlayer = lane;
+            }
+        }
+
+        aIActivePlayer = aIPlayer + (id-1)*5;
+        Debug.Log(aIActivePlayer);
+    }
+
+    private List<GameObject> GetTroopsInLane(int laneId)
+    {
+        List<GameObject> troopsInLane = new List<GameObject>();
+        GameObject[] allTroops = GameObject.FindGameObjectsWithTag(GameController.NPC_TAG);
+        for (int i = 0; i < allTroops.Length; i++)
+        {
+            AIController ai = allTroops[i].GetComponent<AIController>();
+            if (ai.OpposingTeamId == id && ai.LaneId == laneId)
+            {
+                troopsInLane.Add(allTroops[i]);
+            }
+        }
+        return troopsInLane;
     }
 
     public void UpdateCoolDown()

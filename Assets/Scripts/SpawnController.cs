@@ -115,6 +115,7 @@ public class SpawnController : NetworkBehaviour
 
         AIController ai = troop.GetComponent<AIController>();
         ai.RpcSetTeamId(myTeamId);
+        ai.RpcSetOpposingTeamId(opponentsTeamId);
         ai.RpcSetLaneId(laneId);
         ai.RpcSetTroopType(troopId);
         ai.RpcSetPath(path);
