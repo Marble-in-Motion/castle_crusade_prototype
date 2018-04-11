@@ -155,7 +155,7 @@ public class TeamController : NetworkBehaviour
     {
         int aIPlayer = 0;
         int maxTroops = int.MinValue;
-        for(int lane = 0; lane < 4; lane++)
+        for(int lane = 0; lane < 5; lane++)
         {
             List<GameObject> troops = GetTroopsInLane(lane);
             int troopCount = troops.Count;
