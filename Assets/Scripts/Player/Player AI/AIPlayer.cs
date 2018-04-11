@@ -62,6 +62,16 @@ public class AIPlayer : NetworkSetup
         }
     }
 
+    [ClientRpc]
+    private void RpcSetNextTroopSend(int coin)
+    {
+        System.Random rnd = new System.Random();
+        int interval = rnd.Next(3, 10);
+        AINextTroopSendTime = Time.time + interval;
+
+        int upperBound = (int)(coin / 20);
+        AINextNumberTroopsToSend = rnd.Next(0, upperBound);
+    }
 
     [Command]
     private void CmdAISendTroops()
@@ -72,13 +82,9 @@ public class AIPlayer : NetworkSetup
         {
             player.CmdRequestOffensiveTroopSpawn(0, player.GetLaneId());
         }
-        System.Random rnd = new System.Random();
-        int interval = rnd.Next(1, 11);
-        AINextTroopSendTime = Time.time + interval;
-
         int coin = myTeamController.Coin;
-        int upperBound = coin / 40;
-        AINextNumberTroopsToSend = rnd.Next(1, upperBound);
+        RpcSetNextTroopSend(coin);
+        
     }
 
     private GameObject FindTarget()
@@ -112,14 +118,14 @@ public class AIPlayer : NetworkSetup
 
     private void KillTarget()
     {
-        player.Shoot();
-        if (!AITargetEnemy.GetComponent<NPCHealth>().IsAlive())
+        if (AITargetEnemy == null || AITargetEnemy.GetComponent<NPCHealth>().IsAlive())
         {
-            nextCommand = AICommands.FIND;
+            player.Shoot();
+            nextAIActionTime = Time.time + timePerShot;
         }
         else
         {
-            nextAIActionTime = Time.time + timePerShot;
+            nextCommand = AICommands.FIND;
         }
     }
 

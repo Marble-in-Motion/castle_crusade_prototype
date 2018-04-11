@@ -223,8 +223,6 @@ public class Player : NetworkSetup
 
     void Update()
     {
-        Debug.Log(string.Format("{0}: id: {1}, teamId: {2}, opponentsTeamId: {3}, laneId: {4}", NetworkName, id, myTeamId, opponentsTeamId, laneId));
-
         if (isLocalPlayer)
         {
 
@@ -491,4 +489,5 @@ public class Player : NetworkSetup
     {
         AIEnabled = false;
     }
+
 }
