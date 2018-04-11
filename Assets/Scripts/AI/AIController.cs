@@ -71,6 +71,7 @@ public class AIController : NetworkSetup {
 
     public float GetDistanceRatioToTarget()
 	{
+
 		float currentDistanceToTarget = Vector3.Distance(transform.position, target.transform.position);
 		float temp = 1 - (currentDistanceToTarget / spawnToTargetDistance);
 		return temp;
