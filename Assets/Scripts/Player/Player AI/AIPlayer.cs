@@ -29,12 +29,13 @@ public class AIPlayer : NetworkSetup
 	
 	// Update is called once per frame
 	void Update () {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            player.DeactivateAI();
+            player.CmdTeamAIActivate(false);
+        }
         if (player.GetAIEnabled())
         {
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                player.DeactivateAI();
-            }
             if (Time.time > AINextTroopSendTime)
             {
                 CmdAISendTroops();

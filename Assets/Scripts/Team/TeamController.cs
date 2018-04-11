@@ -18,6 +18,29 @@ public class TeamController : NetworkBehaviour
     private float towerHealth;
     private float nextActionTime = 0.0f;
 
+    private bool teamAIEnabled = false;
+    public bool TeamAIEnabled
+    {
+        get
+        {
+            return teamAIEnabled;
+        }
+    }
+
+    public void SetTeamAIEnabled(bool state)
+    {
+        teamAIEnabled = state;
+    }
+
+    private int aIActivePlayer = 0;
+    public int AIActivePlayer
+    {
+        get
+        {
+            return aIActivePlayer;
+        }
+    }
+
     [SerializeField]
     private AudioSource seigeAudio;
 
