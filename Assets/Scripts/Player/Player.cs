@@ -43,21 +43,10 @@ public class Player : NetworkSetup
 
     [SerializeField]
     private GameObject AudioGameObject;
-      
-    private float nextActionTime = 0.0f;
 
-    // AI PARAMS
-    private Boolean AIEnabled = false;
-    enum AICommands { FIND, AIM, KILL }
-    private AICommands nextCommand = AICommands.FIND;
-    private GameObject AITargetEnemy;
-    private float AIActionTime = 0.0f;
-    private float AIMoveDelay = 0.5f;
-    private float nextAIActionTime = 0;
-    private float changeDirectionTime = 0.4f;
-    private float timePerShot = 0.2f;
-    private float AINextTroopSendTime = 0;
-    private int AINextNumberTroopsToSend = 1;
+    private float nextActionTime = 0.0f;
+    private bool AIEnabled = false;
+    
 
     void Awake()
     {
@@ -73,7 +62,7 @@ public class Player : NetworkSetup
 
         // Crossbow Motor
         crossbowMotor = crossbow.GetComponent<CrossbowMotor>();
-        crossbowController = crossbow.GetComponent<CrossbowController>();     
+        crossbowController = crossbow.GetComponent<CrossbowController>();
 
         // VCR Recording
         vcr = GetComponent<InputVCR>();
@@ -96,8 +85,9 @@ public class Player : NetworkSetup
 
             // Camera Settings
             Cursor.visible = false;
-            
-        } else
+
+        }
+        else
         {
             DisableNonLocalCompontents();
             AssignLayer(REMOTE_LAYER_NAME);
@@ -145,14 +135,18 @@ public class Player : NetworkSetup
         canvasController.SetRenderTexture(teamId);
     }
 
-	[ClientRpc]
-	private void RpcSetCrossbowTargets(Vector3 target)
-	{
+    [ClientRpc]
+    private void RpcSetCrossbowTargets(Vector3 target)
+    {
         crossbowMotor.SetDefaultTarget(target);
-	}
+    }
 
     private void ExecuteControls()
     {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            AIEnabled = true;
+        }
         if (Input.GetKeyDown(KeyCode.Y))
         {
             CmdRequestOffensiveTroopSpawn(0, 0);
@@ -233,15 +227,12 @@ public class Player : NetworkSetup
 
         if (isLocalPlayer)
         {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                AIEnabled = !AIEnabled;
-            }
 
             if (!AIEnabled)
             {
-                ExecuteControls();
                 
+                ExecuteControls();
+
                 GameObject[] enemyTroops = FindEnemyTroopsInLane().ToArray();
                 int numCloseTroops = 0;
 
@@ -260,34 +251,8 @@ public class Player : NetworkSetup
                     }
                 }
             }
-            else
-            {
-                if (Time.time > AINextTroopSendTime)
-                {
-                    CmdAISendTroops();                   
-                }
-                if (Time.time > nextAIActionTime)
-                {
-                    if (nextCommand == AICommands.FIND)
-                    {
-                        AITargetEnemy = FindTarget();
-                        if (AITargetEnemy != null)
-                        {
-                            nextCommand = AICommands.AIM;
-                        }
-                    }
-                    else if (nextCommand == AICommands.AIM)
-                    {
-                        MoveTowardsTarget();
-
-                    }
-                    else if (nextCommand == AICommands.KILL)
-                    {
-                        KillTarget();
-                    }
-                }
-            }
         }
+
     }
 
     private void LateUpdate()
@@ -399,7 +364,7 @@ public class Player : NetworkSetup
     }
 
 
-    private void Shoot()
+    public void Shoot()
     {
         crossbowController.HandleShoot();
     }
@@ -437,7 +402,7 @@ public class Player : NetworkSetup
 
 
     [Command]
-    private void CmdRequestOffensiveTroopSpawn(int troopId, int laneId)
+    public void CmdRequestOffensiveTroopSpawn(int troopId, int laneId)
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
         SpawnController spawnController = GameObject.FindGameObjectWithTag(SpawnController.SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
@@ -472,8 +437,8 @@ public class Player : NetworkSetup
     [Command]
     private void CmdTakeScreenshot()
     {
-        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);    
-        
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+
         if (myTeamController.LastActivePlayerId != id)
         {
             RpcTakeScreenshot(myTeamId, myTeamController.ScreenshotCount);
@@ -502,68 +467,28 @@ public class Player : NetworkSetup
         }
     }
 
-
-
-    // AI IMPLEMENTATION ######################################################
-
-    [Command]
-    private void CmdAISendTroops()
+    public int GetLaneId()
     {
-        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-
-        for (int i = 0; i < AINextNumberTroopsToSend; i++)
-        {
-            CmdRequestOffensiveTroopSpawn(0, laneId);
-        }
-        System.Random rnd = new System.Random();
-        int interval = rnd.Next(1, 11);
-        AINextTroopSendTime = Time.time + interval;
-
-        int coin = myTeamController.Coin;
-        int upperBound = coin / 40;
-        AINextNumberTroopsToSend = rnd.Next(1, upperBound);
+        return laneId;
     }
 
-    private GameObject FindTarget()
+    public int GetId()
     {
-        List<GameObject> troopsInLane = FindEnemyTroopsInLane();
-        GameObject target = crossbowMotor.AIFindTarget(troopsInLane);
-        return target;
+        return id;
     }
 
-    private void MoveTowardsTarget()
+    public CrossbowMotor GetCrossbowMotor()
     {
-        int currentPath = crossbowMotor.ActivePath;
-        int targetPath = AITargetEnemy.GetComponent<AIController>().Path;
-        if (currentPath > targetPath)
-        {
-            crossbowMotor.MoveLeft();
-            nextAIActionTime = Time.time + changeDirectionTime;
-        }
-        else if (currentPath < targetPath)
-        {
-            crossbowMotor.MoveRight();
-            nextAIActionTime = Time.time + changeDirectionTime;
-        }
-
-        currentPath = crossbow.GetComponent<CrossbowMotor>().ActivePath;
-        if (currentPath == targetPath)
-        {
-            nextCommand = AICommands.KILL;
-        }
+        return crossbowMotor;
     }
 
-    private void KillTarget()
+    public bool GetAIEnabled()
     {
-        Shoot();
-        if (!AITargetEnemy.GetComponent<NPCHealth>().IsAlive())
-        {
-            nextCommand = AICommands.FIND;
-        }
-        else
-        {
-            nextAIActionTime = Time.time + timePerShot;
-        }
+        return AIEnabled;
     }
 
+    public void DeactivateAI()
+    {
+        AIEnabled = false;
+    }
 }
