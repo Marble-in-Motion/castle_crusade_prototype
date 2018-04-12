@@ -34589,7 +34589,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   troopPrefabs:
   - {fileID: 1596017570374888, guid: cfb5c651f84c0564794f704215e73551, type: 2}
-  - {fileID: 1183937305477732, guid: 31477e8ed0704ff48a0d6f949da97497, type: 2}
+  - {fileID: 1545292661495648, guid: 8c76574f5f3d67740b461e72149687d5, type: 2}
   spawnLocations:
   - {fileID: 578724465}
   - {fileID: 1961693275}

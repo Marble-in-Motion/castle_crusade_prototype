@@ -9,15 +9,22 @@ public class NPCHealth : NetworkBehaviour {
     private const float ARROW_START_DELAY = 0.2f;
     private const string DEATH_TRIGGER = "Die";
     private const float ANIM_WAIT = 5.0f;
+    [SerializeField]
+    private GameObject fire;
+    private bool fireFlag;
 
-	[SyncVar(hook = "OnChangeHealth")]
-	private float currentHealth;
+	  [SyncVar(hook = "OnChangeHealth")]
+	  private float currentHealth;
     public float CurrentHealth
     {
         get
         {
             return currentHealth;
         }
+    }
+
+    public void SetHealth(float health){
+      this.currentHealth = health;
     }
 
     public bool IsAlive()
@@ -27,8 +34,8 @@ public class NPCHealth : NetworkBehaviour {
 
 
     void Start() {
-		currentHealth = Params.NPC_HEALTH[GetComponentInParent<AIController>().TroopType];
-	}
+        fireFlag = true;
+	   }
 
 	public void DeductHealth(float damage) {
 		currentHealth = currentHealth - damage;
@@ -46,20 +53,34 @@ public class NPCHealth : NetworkBehaviour {
 
     private IEnumerator DestroyTroop()
     {
-        if (GetComponent<Animation>() != null)
+       
+        if (GetComponent<AIController>().TroopType == 0)
         {
-            GetComponent<Animation>().Play("die");
+           GetComponent<Animation>().Play("die");
         }
-        else
+        else if(GetComponent<AIController>().TroopType == 1 && fireFlag) 
         {
-            GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
+
+            GetComponent<Animator>().StopPlayback();
+            Debug.Log("Hello!!!");
+            Instantiate(fire, transform.position, Quaternion.identity);
+
+            fireFlag = false;
         }
+        //else
+        //{
+        //    GetComponent<Animator>().SetTrigger(DEATH_TRIGGER);
+        //}
+
+        yield return new WaitForSeconds(3);
+
         Destroy(GetComponent<BoxCollider>());
         Destroy(GetComponent<NavMeshAgent>());
 
-        yield return new WaitForSeconds(3);
         Destroy(gameObject);
+    
     }
+
 
 
 }
