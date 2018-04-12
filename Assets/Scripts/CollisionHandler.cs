@@ -11,7 +11,8 @@ public class CollisionHandler : NetworkBehaviour {
     
 	void OnTriggerEnter(Collider other)
 	{
-		int towerDamage = Params.NPC_DAMAGE[0]; // need to get troopId
+	    int troopId = other.gameObject.GetComponent<AIController>().TroopType;
+		int towerDamage = Params.NPC_DAMAGE[troopId]; // need to get troopId
 
         DeductTowerHealth(towerDamage);
         DestroyTroop(other.gameObject);
