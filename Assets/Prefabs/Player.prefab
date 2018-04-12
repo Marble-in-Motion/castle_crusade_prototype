@@ -621,7 +621,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197108965690756}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 200, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2300,6 +2300,17 @@ MonoBehaviour:
   CurrencyText: {fileID: 114992888872638716}
   anim: {fileID: 95106004043515364}
   miniMapView: {fileID: 1601425294448350}
+  sectors:
+  - {fileID: 1479297347454162, guid: db0a74a765a9437429f91d9208d9b156, type: 2}
+  - {fileID: 1569094615983888, guid: 852c40d8069b0a04da5110d9e7b2672d, type: 2}
+  - {fileID: 1302484367402826, guid: c510f7cd3704c6543998b8cb98bbfc5a, type: 2}
+  - {fileID: 1262961463406824, guid: 2e35cb694b16170429ca0e4bd8aca084, type: 2}
+  - {fileID: 1561881972035660, guid: 2bd635a3eac99a649ae1ccdaf3c97c80, type: 2}
+  - {fileID: 1030499684891004, guid: b85a1cbeb720cff44817b7f37622c1a5, type: 2}
+  - {fileID: 1524156197622554, guid: c45e69a86f00fae4885d3d1f55ab481b, type: 2}
+  - {fileID: 1875715068342176, guid: acc9d4eae24844b45baac959484fca92, type: 2}
+  - {fileID: 1851974746766776, guid: e7b7800b007d55e48957b4f6a25c4920, type: 2}
+  - {fileID: 1748523547081502, guid: 2e41d6bebf8ee9447a737af78cea79cf, type: 2}
 --- !u!114 &114992888872638716
 MonoBehaviour:
   m_ObjectHideFlags: 1

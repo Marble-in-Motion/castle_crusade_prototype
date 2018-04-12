@@ -27,6 +27,23 @@ namespace Assets.Scripts.Player
 
         [SerializeField]
         private GameObject miniMapView;
+
+		[SerializeField]
+		private GameObject[] sectors; 
+
+        private GameObject GetSector(int teamId, int laneId)
+        {
+            return (teamId == TeamController.TEAM1)
+            ? sectors[laneId]
+            : sectors[laneId + 5];
+        }
+
+		public void HighlightSector(int teamId, int laneId) {
+
+            GameObject sectorprefab = GetSector(teamId, laneId);
+			Instantiate(sectorprefab, sectorprefab.transform.position, sectorprefab.transform.rotation);
+            
+		}
 		        
         public void SetCurrencyText(string text)
         {

@@ -122,6 +122,15 @@ public class Player : NetworkSetup
         {
             RpcSetCrossbowTargets(spawnController.CalculateDefaultCrossbowTarget(i, laneId, myTeamId));
         }
+
+        RpcHighlightSector(myTeamId, laneId);
+
+    }
+
+    [ClientRpc]
+    private void RpcHighlightSector(int myTeamId, int laneId)
+    {
+        canvasController.HighlightSector(myTeamId, laneId);
     }
 
     [ClientRpc]
