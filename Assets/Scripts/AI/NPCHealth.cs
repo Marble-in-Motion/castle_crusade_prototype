@@ -57,14 +57,13 @@ public class NPCHealth : NetworkBehaviour {
         if (GetComponent<AIController>().TroopType == 0)
         {
            GetComponent<Animation>().Play("die");
+           Destroy(GetComponent<NavMeshAgent>());
         }
         else if(GetComponent<AIController>().TroopType == 1 && fireFlag) 
         {
-
+            Destroy(GetComponent<NavMeshAgent>());
             GetComponent<Animator>().StopPlayback();
-            Debug.Log("Hello!!!");
             Instantiate(fire, transform.position, Quaternion.identity);
-
             fireFlag = false;
         }
         //else
@@ -75,8 +74,6 @@ public class NPCHealth : NetworkBehaviour {
         yield return new WaitForSeconds(3);
 
         Destroy(GetComponent<BoxCollider>());
-        Destroy(GetComponent<NavMeshAgent>());
-
         Destroy(gameObject);
     
     }

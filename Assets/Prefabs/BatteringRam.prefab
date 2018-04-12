@@ -7096,7 +7096,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162a684e0304cf3498093c398747a6a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fire: {fileID: 1010923037858762, guid: 0a4e6a4f84eb3d047bedda6792560c05, type: 2}
+  fire: {fileID: 1920473768299774, guid: 6ac104cae32ee7043ae0f98eadec6669, type: 2}
 --- !u!114 &114283336430125448
 MonoBehaviour:
   m_ObjectHideFlags: 1
