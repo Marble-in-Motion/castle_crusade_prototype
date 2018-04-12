@@ -5,7 +5,7 @@ using UnityEngine;
 public class Params {
 
 	public static float STARTING_TOWER_HEALTH = 100f;
-	public static int STARTING_COIN = 100;
+	public static int STARTING_COIN = 400;
 	public static float COIN_DELAY = 1f;
 	public static float COIN_INCREASE_INTERVAL = 15f;
 	public static int STARTING_COIN_INCREASE_AMOUNT = 5;
