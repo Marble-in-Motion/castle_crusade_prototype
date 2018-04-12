@@ -18,6 +18,9 @@ public class TeamController : NetworkBehaviour
     private float towerHealth;
     private float nextActionTime = 0.0f;
 
+    private float timeToScreenCheck = 0;
+    private float maxTimeAtScreen = 5;
+
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
     {
@@ -137,7 +140,11 @@ public class TeamController : NetworkBehaviour
     {
         AddCoinPerSecond();
         currentTime = Time.time;
-        UpdateAIActive();
+        if (teamAIEnabled)
+        {
+            CheckChangeAI();
+        }
+        
     }
 
     private void AddCoinPerSecond()
@@ -148,6 +155,20 @@ public class TeamController : NetworkBehaviour
         {
             nextActionTime += Params.COIN_DELAY;
             AddGold(coinsPerSecond);
+        }
+    }
+
+    private void CheckChangeAI()
+    {
+        if(Time.time > timeToScreenCheck)
+        {
+            UpdateAIActive();
+            timeToScreenCheck = Time.time + maxTimeAtScreen;
+        }
+        else if (CheckIfNoTroopsPresent())
+        {
+            UpdateAIActive();
+            timeToScreenCheck = Time.time + maxTimeAtScreen;
         }
     }
 
@@ -168,6 +189,13 @@ public class TeamController : NetworkBehaviour
 
         aIActivePlayer = aIPlayer + (id-1)*5;
         Debug.Log(aIActivePlayer);
+    }
+
+    private bool CheckIfNoTroopsPresent()
+    {
+        int lane = aIActivePlayer - (id - 1) * 5;
+        int troops = GetTroopsInLane(lane).Count;
+        return (troops == 0);
     }
 
     private List<GameObject> GetTroopsInLane(int laneId)
