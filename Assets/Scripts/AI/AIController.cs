@@ -52,6 +52,15 @@ public class AIController : NetworkSetup {
         }
     }
 
+    private int opposingTeamId;
+    public int OpposingTeamId
+    {
+        get
+        {
+            return opposingTeamId;
+        }
+    }
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -81,6 +90,12 @@ public class AIController : NetworkSetup {
     public void RpcSetTeamId(int teamId)
     {
         this.teamId = teamId;
+    }
+
+    [ClientRpc]
+    public void RpcSetOpposingTeamId(int teamId)
+    {
+        this.opposingTeamId = teamId;
     }
 
     [ClientRpc]

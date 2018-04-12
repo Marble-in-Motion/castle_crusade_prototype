@@ -18,6 +18,32 @@ public class TeamController : NetworkBehaviour
     private float towerHealth;
     private float nextActionTime = 0.0f;
 
+    private float timeToScreenCheck = 0;
+    private float maxTimeAtScreen = 5;
+
+    private bool teamAIEnabled = false;
+    public bool TeamAIEnabled
+    {
+        get
+        {
+            return teamAIEnabled;
+        }
+    }
+
+    public void SetTeamAIEnabled(bool state)
+    {
+        teamAIEnabled = state;
+    }
+
+    private int aIActivePlayer = 0;
+    public int AIActivePlayer
+    {
+        get
+        {
+            return aIActivePlayer;
+        }
+    }
+
     [SerializeField]
     private AudioSource seigeAudio;
 
@@ -114,6 +140,11 @@ public class TeamController : NetworkBehaviour
     {
         AddCoinPerSecond();
         currentTime = Time.time;
+        if (teamAIEnabled)
+        {
+            CheckChangeAI();
+        }
+        
     }
 
     private void AddCoinPerSecond()
@@ -125,6 +156,70 @@ public class TeamController : NetworkBehaviour
             nextActionTime += Params.COIN_DELAY;
             AddGold(coinsPerSecond);
         }
+    }
+
+    private void CheckChangeAI()
+    {
+        if(Time.time > timeToScreenCheck)
+        {
+            UpdateAIActive();
+            timeToScreenCheck = Time.time + maxTimeAtScreen;
+        }
+        else if (CheckIfNoTroopsPresent())
+        {
+            UpdateAIActive();
+            timeToScreenCheck = Time.time + maxTimeAtScreen;
+        }
+    }
+
+    private void UpdateAIActive()
+    {
+        int aiLane = 0;
+        int maxTroops = int.MinValue;
+        for(int lane = 0; lane < 5; lane++)
+        {
+            List<GameObject> troops = GetTroopsInLane(lane);
+            int troopCount = troops.Count;
+            if(troopCount > maxTroops)
+            {
+                maxTroops = troopCount;
+                aiLane = lane;
+            }
+        }
+
+        aIActivePlayer = ConvertLaneToPlayerId(aiLane);
+    }
+
+    private int ConvertLaneToPlayerId(int lane)
+    {
+        return lane * 2 + (id - 1);
+    }
+
+    private int ConvertPlayerIdToLane(int PlayerId)
+    {
+        return (PlayerId - (id - 1))/2;
+    }
+
+    private bool CheckIfNoTroopsPresent()
+    {
+        int lane = ConvertPlayerIdToLane(aIActivePlayer);
+        int troops = GetTroopsInLane(lane).Count;
+        return (troops == 0);
+    }
+
+    private List<GameObject> GetTroopsInLane(int laneId)
+    {
+        List<GameObject> troopsInLane = new List<GameObject>();
+        GameObject[] allTroops = GameObject.FindGameObjectsWithTag(GameController.NPC_TAG);
+        for (int i = 0; i < allTroops.Length; i++)
+        {
+            AIController ai = allTroops[i].GetComponent<AIController>();
+            if (ai.OpposingTeamId == id && ai.LaneId == laneId)
+            {
+                troopsInLane.Add(allTroops[i]);
+            }
+        }
+        return troopsInLane;
     }
 
     public void UpdateCoolDown()

@@ -45,8 +45,10 @@ public class Player : NetworkSetup
     private GameObject AudioGameObject;
 
     private float nextActionTime = 0.0f;
-    private bool AIEnabled = false;
-    
+
+    private bool playerAIEnabled = false;
+    private bool TeamAIEnabled = false;
+
 
     void Awake()
     {
@@ -145,7 +147,8 @@ public class Player : NetworkSetup
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            AIEnabled = true;
+            playerAIEnabled = true;
+            CmdTeamAIActivate(true);
         }
         if (Input.GetKeyDown(KeyCode.Y))
         {
@@ -225,8 +228,7 @@ public class Player : NetworkSetup
     {
         if (isLocalPlayer)
         {
-
-            if (!AIEnabled)
+            if (!TeamAIEnabled)
             {
                 
                 ExecuteControls();
@@ -261,7 +263,55 @@ public class Player : NetworkSetup
             CmdSetHealthBar();
             CmdSetTeamResult();
             CmdSetVolleyCooldown();
+            CmdSetTeamAI();
+            CmdSetAIPlayerEnabled();
         }
+    }
+
+    [Command]
+    public void CmdTeamAIActivate(bool active)
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+        myTeamController.SetTeamAIEnabled(active);
+    }
+
+    [Command]
+    private void CmdSetTeamAI()
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+        bool state = myTeamController.TeamAIEnabled;
+        RpcSetTeamAIEnabled(state);
+    }
+
+
+    [ClientRpc]
+    private void RpcSetTeamAIEnabled(bool state)
+    {
+        TeamAIEnabled = state;
+    }
+
+    [Command]
+    private void CmdSetAIPlayerEnabled()
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+        int aIActiveId = myTeamController.AIActivePlayer;
+
+        RpcSetAIPlayerEnabled(aIActiveId);
+    }
+
+
+    [ClientRpc]
+    private void RpcSetAIPlayerEnabled(int aIActiveId)
+    {
+        if (aIActiveId == id && TeamAIEnabled == true) {
+            playerAIEnabled = true;
+        }
+        else
+        {
+            playerAIEnabled = false;
+        }
+        Debug.Log(aIActiveId + id);
+        Debug.Log(playerAIEnabled);
     }
 
     [Command]
@@ -482,12 +532,12 @@ public class Player : NetworkSetup
 
     public bool GetAIEnabled()
     {
-        return AIEnabled;
+        return playerAIEnabled;
     }
 
     public void DeactivateAI()
     {
-        AIEnabled = false;
+        playerAIEnabled = false;
     }
 
 }
