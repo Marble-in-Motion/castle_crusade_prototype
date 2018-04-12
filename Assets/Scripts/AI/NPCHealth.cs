@@ -10,14 +10,18 @@ public class NPCHealth : NetworkBehaviour {
     private const string DEATH_TRIGGER = "Die";
     private const float ANIM_WAIT = 5.0f;
 
-	[SyncVar(hook = "OnChangeHealth")]
-	private float currentHealth;
+	  [SyncVar(hook = "OnChangeHealth")]
+	  private float currentHealth;
     public float CurrentHealth
     {
         get
         {
             return currentHealth;
         }
+    }
+
+    public void SetHealth(float health){
+      this.currentHealth = health;
     }
 
     public bool IsAlive()
@@ -27,8 +31,7 @@ public class NPCHealth : NetworkBehaviour {
 
 
     void Start() {
-		currentHealth = Params.NPC_HEALTH[GetComponentInParent<AIController>().TroopType];
-	}
+	   }
 
 	public void DeductHealth(float damage) {
 		currentHealth = currentHealth - damage;
@@ -48,7 +51,8 @@ public class NPCHealth : NetworkBehaviour {
     {
         if (GetComponent<Animation>() != null)
         {
-            GetComponent<Animation>().Play("die");
+           GetComponent<Animation>().Play("die");
+       
         }
         else
         {
@@ -58,8 +62,11 @@ public class NPCHealth : NetworkBehaviour {
         Destroy(GetComponent<NavMeshAgent>());
 
         yield return new WaitForSeconds(3);
+       
+
         Destroy(gameObject);
     }
+
 
 
 }

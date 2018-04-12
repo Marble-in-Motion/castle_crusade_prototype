@@ -109,7 +109,7 @@ public class SpawnController : NetworkBehaviour
 		int path = Random.Range(0, numberOfPaths);
         GameObject lane = GetOpponentsSpawn(laneId, myTeamId);
         Vector3 spawn = CalculateSpawn(lane, path, myTeamId);
-		
+
 		GameObject troop = Instantiate(troopPrefabs[troopId], spawn, lane.transform.rotation) as GameObject;
         NetworkServer.Spawn(troop);
 
@@ -120,6 +120,6 @@ public class SpawnController : NetworkBehaviour
         ai.RpcSetPath(path);
         ai.RpcSetTarget(opponentsTeamId);
     }
-    
+
 
 }

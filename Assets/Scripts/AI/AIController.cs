@@ -10,11 +10,11 @@ public class AIController : NetworkSetup {
 
     private NavMeshAgent agent;
 
-	[SerializeField]
-	private GameObject[] targets;
+  	[SerializeField]
+  	public GameObject[] targets;
 
     private float spawnToTargetDistance;
-    private GameObject target;
+    public GameObject target;
 
     private int troopType;
     public int TroopType
@@ -61,7 +61,9 @@ public class AIController : NetworkSetup {
         RegisterModel(AIName);
         if (GetComponent<Animation>() != null)
         {
-            GetComponent<Animation>().Play("run");
+          if(GetComponent<Animation>().Play("run") != false){
+              GetComponent<Animation>().Play("run");
+          }
         }
         else
         {
@@ -93,6 +95,7 @@ public class AIController : NetworkSetup {
     {
         this.troopType = troopType;
         agent.speed = Params.NPC_SPEED[troopType];
+        GetComponent<NPCHealth>().SetHealth(Params.NPC_HEALTH[TroopType]);
     }
 
     [ClientRpc]
