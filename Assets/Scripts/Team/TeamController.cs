@@ -174,7 +174,7 @@ public class TeamController : NetworkBehaviour
 
     private void UpdateAIActive()
     {
-        int aIPlayer = 0;
+        int aiLane = 0;
         int maxTroops = int.MinValue;
         for(int lane = 0; lane < 5; lane++)
         {
@@ -183,17 +183,26 @@ public class TeamController : NetworkBehaviour
             if(troopCount > maxTroops)
             {
                 maxTroops = troopCount;
-                aIPlayer = lane;
+                aiLane = lane;
             }
         }
 
-        aIActivePlayer = aIPlayer + (id-1)*5;
-        Debug.Log(aIActivePlayer);
+        aIActivePlayer = ConvertLaneToPlayerId(aiLane);
+    }
+
+    private int ConvertLaneToPlayerId(int lane)
+    {
+        return lane * 2 + (id - 1);
+    }
+
+    private int ConvertPlayerIdToLane(int PlayerId)
+    {
+        return (PlayerId - (id - 1))/2;
     }
 
     private bool CheckIfNoTroopsPresent()
     {
-        int lane = aIActivePlayer - (id - 1) * 5;
+        int lane = ConvertPlayerIdToLane(aIActivePlayer);
         int troops = GetTroopsInLane(lane).Count;
         return (troops == 0);
     }

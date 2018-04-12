@@ -310,6 +310,8 @@ public class Player : NetworkSetup
         {
             playerAIEnabled = false;
         }
+        Debug.Log(aIActiveId + id);
+        Debug.Log(playerAIEnabled);
     }
 
     [Command]

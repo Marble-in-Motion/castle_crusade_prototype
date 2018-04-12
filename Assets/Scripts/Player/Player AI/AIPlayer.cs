@@ -12,8 +12,6 @@ public class AIPlayer : NetworkSetup
     enum AICommands { FIND, AIM, KILL }
     private AICommands nextCommand = AICommands.FIND;
     private GameObject AITargetEnemy;
-    private float AIActionTime = 0.0f;
-    private float AIMoveDelay = 0.5f;
     private float nextAIActionTime = 0;
     private float changeDirectionTime = 0.4f;
     private float timePerShot = 0.2f;
@@ -33,6 +31,7 @@ public class AIPlayer : NetworkSetup
         {
             player.DeactivateAI();
             player.CmdTeamAIActivate(false);
+            nextCommand = AICommands.FIND;
         }
         if (player.GetAIEnabled())
         {
