@@ -19,7 +19,12 @@ public class TeamController : NetworkBehaviour
     private float nextActionTime = 0.0f;
 
     private float timeToScreenCheck = 0;
-    private float maxTimeAtScreen = 5;
+    private float maxTimeAtScreen = 2.5f;
+
+    //Danger score params
+    private int troopCountDivisor = Params.TROOP_COUNT_PER_DANGER_INDEX;
+    private float troopTooCloseRatio = Params.TROOP_CLOSE_DISTANCE;
+    private int troopDistanceMultiplyer = Params.TROOP_RATIO_MULTIPLYER;
 
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
@@ -144,7 +149,6 @@ public class TeamController : NetworkBehaviour
         {
             CheckChangeAI();
         }
-        
     }
 
     private void AddCoinPerSecond()
@@ -175,7 +179,7 @@ public class TeamController : NetworkBehaviour
     private void UpdateAIActive()
     {
         int aiLane = 0;
-        int maxDanger = int.MinValue;
+        int maxDanger = 0;
         for(int lane = 0; lane < 5; lane++)
         {
             int index = GetLaneDangerIndex(lane);
@@ -185,7 +189,7 @@ public class TeamController : NetworkBehaviour
                 aiLane = lane;
             }
         }
-
+        Debug.Log(maxDanger);
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
     }
 
@@ -194,7 +198,11 @@ public class TeamController : NetworkBehaviour
         int troopCountDanger = GenerateTroopNumberDangerIndex(lane);
         int troopDistanceDanger = GenerateTroopDistanceDangerIndex(lane);
         int index = troopCountDanger + troopDistanceDanger;
-        Debug.Log(index);
+        if (index > 10)
+        {
+            index = 10;
+        }
+        
         return index;
     }
 
@@ -202,7 +210,7 @@ public class TeamController : NetworkBehaviour
     {
         List<GameObject> troops = GetTroopsInLane(lane);
         int troopCount = troops.Count;
-        int danger = troopCount / 10;
+        int danger = troopCount / troopCountDivisor;
         if(danger > 5)
         {
             danger = 5;
@@ -215,22 +223,30 @@ public class TeamController : NetworkBehaviour
         List<GameObject> troops = GetTroopsInLane(lane);
         int troopCount = troops.Count;
         float totalDistanceToTower = 0;
-        float nearestTroopDistance = int.MaxValue;
+        float nearestTroopDistance = 0;
         foreach (GameObject troop in troops)
         {
-            float distance = Vector3.Distance(troop.transform.position, transform.position);
-            totalDistanceToTower += distance;
-            if(distance < nearestTroopDistance)
+            float distanceRatioToTarget = troop.GetComponent<AIController>().GetDistanceRatioToTarget();
+            totalDistanceToTower += distanceRatioToTarget;
+            if(distanceRatioToTarget > nearestTroopDistance)
             {
-                nearestTroopDistance = distance;
+                nearestTroopDistance = distanceRatioToTarget;
             }
 
         }
-        float averageDistance = totalDistanceToTower / troopCount;
-        int index = (int)averageDistance / 10;
-        if(index > 5)
+        int index = 0;
+        if (troopCount > 0)
         {
-            index = 5;
+            float averageDistance = totalDistanceToTower / troopCount;
+            index = (int)(averageDistance * troopDistanceMultiplyer);
+            if (index > 5)
+            {
+                index = 5;
+            }
+            if (nearestTroopDistance > troopTooCloseRatio)
+            {
+                index = 10;
+            }
         }
         return index;
     }

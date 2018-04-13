@@ -13,8 +13,8 @@ public class AIPlayer : NetworkSetup
     private AICommands nextCommand = AICommands.FIND;
     private GameObject AITargetEnemy;
     private float nextAIActionTime = 0;
-    private float changeDirectionTime = 0.25f;
-    private float timePerShot = 0.1f;
+    private float changeDirectionTime = Params.CHANGE_DIRECTION_TIME;
+    private float timePerShot = Params.TIME_PER_SHOT;
     private float AINextTroopSendTime = 0;
     private int AINextNumberTroopsToSend = 1;
 
