@@ -21,6 +21,11 @@ public class TeamController : NetworkBehaviour
     private float timeToScreenCheck = 0;
     private float maxTimeAtScreen = 2.5f;
 
+    //Danger score params
+    private const int troopCountDivisor = 8;
+    private const float troopTooCloseRatio = 0.55f;
+    private const int troopDistanceMultiplyer = 5;
+
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
     {
@@ -140,12 +145,10 @@ public class TeamController : NetworkBehaviour
     {
         AddCoinPerSecond();
         currentTime = Time.time;
-        /*if (teamAIEnabled)
+        if (teamAIEnabled)
         {
             CheckChangeAI();
-        }*/
-
-        CheckChangeAI();
+        }
     }
 
     private void AddCoinPerSecond()
@@ -186,7 +189,7 @@ public class TeamController : NetworkBehaviour
                 aiLane = lane;
             }
         }
-
+        Debug.Log(maxDanger);
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
     }
 
@@ -194,7 +197,6 @@ public class TeamController : NetworkBehaviour
     {
         int troopCountDanger = GenerateTroopNumberDangerIndex(lane);
         int troopDistanceDanger = GenerateTroopDistanceDangerIndex(lane);
-        Debug.Log(troopDistanceDanger);
         int index = troopCountDanger + troopDistanceDanger;
         if (index > 10)
         {
@@ -208,7 +210,7 @@ public class TeamController : NetworkBehaviour
     {
         List<GameObject> troops = GetTroopsInLane(lane);
         int troopCount = troops.Count;
-        int danger = troopCount / 5;
+        int danger = troopCount / troopCountDivisor;
         if(danger > 5)
         {
             danger = 5;
@@ -236,12 +238,12 @@ public class TeamController : NetworkBehaviour
         if (troopCount > 0)
         {
             float averageDistance = totalDistanceToTower / troopCount;
-            index = (int)(averageDistance * 7);
+            index = (int)(averageDistance * troopDistanceMultiplyer);
             if (index > 5)
             {
                 index = 5;
             }
-            if (nearestTroopDistance > 0.55)
+            if (nearestTroopDistance > troopTooCloseRatio)
             {
                 index = 10;
             }
