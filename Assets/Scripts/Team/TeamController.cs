@@ -175,14 +175,13 @@ public class TeamController : NetworkBehaviour
     private void UpdateAIActive()
     {
         int aiLane = 0;
-        int maxTroops = int.MinValue;
+        int maxDanger = int.MinValue;
         for(int lane = 0; lane < 5; lane++)
         {
-            List<GameObject> troops = GetTroopsInLane(lane);
-            int troopCount = troops.Count;
-            if(troopCount > maxTroops)
+            int index = GetLaneDangerIndex(lane);
+            if (index > maxDanger)
             {
-                maxTroops = troopCount;
+                maxDanger = index;
                 aiLane = lane;
             }
         }
@@ -194,7 +193,9 @@ public class TeamController : NetworkBehaviour
     {
         int troopCountDanger = GenerateTroopNumberDangerIndex(lane);
         int troopDistanceDanger = GenerateTroopDistanceDangerIndex(lane);
-        return troopCountDanger + troopDistanceDanger;
+        int index = troopCountDanger + troopDistanceDanger;
+        Debug.Log(index);
+        return index;
     }
 
     private int GenerateTroopNumberDangerIndex(int lane)
