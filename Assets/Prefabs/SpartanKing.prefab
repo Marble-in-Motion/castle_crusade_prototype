@@ -1380,6 +1380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162a684e0304cf3498093c398747a6a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fire: {fileID: 0}
 --- !u!114 &114498984607916292
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1448,6 +1449,7 @@ MonoBehaviour:
   targets:
   - {fileID: 1569264582030364, guid: c738f34b9b7288147b29b5c1766d24e7, type: 2}
   - {fileID: 1556732296233700, guid: e5b8afeca8c93e346953bf10e71e7b1a, type: 2}
+  target: {fileID: 0}
 --- !u!136 &136365292485456224
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -1821,7 +1823,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1596017570374888}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.2
+  m_Radius: 0.04
   m_Speed: 12
   m_Acceleration: 8
   avoidancePriority: 50
