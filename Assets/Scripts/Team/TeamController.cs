@@ -175,19 +175,64 @@ public class TeamController : NetworkBehaviour
     private void UpdateAIActive()
     {
         int aiLane = 0;
-        int maxTroops = int.MinValue;
+        int maxDanger = int.MinValue;
         for(int lane = 0; lane < 5; lane++)
         {
-            List<GameObject> troops = GetTroopsInLane(lane);
-            int troopCount = troops.Count;
-            if(troopCount > maxTroops)
+            int index = GetLaneDangerIndex(lane);
+            if (index > maxDanger)
             {
-                maxTroops = troopCount;
+                maxDanger = index;
                 aiLane = lane;
             }
         }
 
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
+    }
+
+    private int GetLaneDangerIndex(int lane)
+    {
+        int troopCountDanger = GenerateTroopNumberDangerIndex(lane);
+        int troopDistanceDanger = GenerateTroopDistanceDangerIndex(lane);
+        int index = troopCountDanger + troopDistanceDanger;
+        Debug.Log(index);
+        return index;
+    }
+
+    private int GenerateTroopNumberDangerIndex(int lane)
+    {
+        List<GameObject> troops = GetTroopsInLane(lane);
+        int troopCount = troops.Count;
+        int danger = troopCount / 10;
+        if(danger > 5)
+        {
+            danger = 5;
+        }
+        return danger;
+    }
+
+    private int GenerateTroopDistanceDangerIndex(int lane)
+    {
+        List<GameObject> troops = GetTroopsInLane(lane);
+        int troopCount = troops.Count;
+        float totalDistanceToTower = 0;
+        float nearestTroopDistance = int.MaxValue;
+        foreach (GameObject troop in troops)
+        {
+            float distance = Vector3.Distance(troop.transform.position, transform.position);
+            totalDistanceToTower += distance;
+            if(distance < nearestTroopDistance)
+            {
+                nearestTroopDistance = distance;
+            }
+
+        }
+        float averageDistance = totalDistanceToTower / troopCount;
+        int index = (int)averageDistance / 10;
+        if(index > 5)
+        {
+            index = 5;
+        }
+        return index;
     }
 
     private int ConvertLaneToPlayerId(int lane)
