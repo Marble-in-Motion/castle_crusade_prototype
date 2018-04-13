@@ -22,9 +22,9 @@ public class TeamController : NetworkBehaviour
     private float maxTimeAtScreen = 2.5f;
 
     //Danger score params
-    private const int troopCountDivisor = 8;
-    private const float troopTooCloseRatio = 0.55f;
-    private const int troopDistanceMultiplyer = 5;
+    private int troopCountDivisor = Params.TROOP_COUNT_PER_DANGER_INDEX;
+    private float troopTooCloseRatio = Params.TROOP_CLOSE_DISTANCE;
+    private int troopDistanceMultiplyer = Params.TROOP_RATIO_MULTIPLYER;
 
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
