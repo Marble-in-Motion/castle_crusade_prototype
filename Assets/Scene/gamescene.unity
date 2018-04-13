@@ -64046,7 +64046,7 @@ MonoBehaviour:
   - {fileID: 1875715068342176, guid: acc9d4eae24844b45baac959484fca92, type: 2}
   - {fileID: 0}
   - {fileID: 1183937305477732, guid: 31477e8ed0704ff48a0d6f949da97497, type: 2}
-  m_CustomConfig: 0
+  m_CustomConfig: 1
   m_MaxConnections: 12
   m_ConnectionConfig:
     m_PacketSize: 1440
