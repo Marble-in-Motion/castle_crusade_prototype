@@ -54,6 +54,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4818083324390094}
   - component: {fileID: 114888346568476118}
+  - component: {fileID: 114119659421483812}
   m_Layer: 0
   m_Name: TinyFire
   m_TagString: Untagged
@@ -102,6 +103,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114119659421483812
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1920473768299774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 106
+    i1: 193
+    i2: 4
+    i3: 202
+    i4: 227
+    i5: 46
+    i6: 231
+    i7: 4
+    i8: 58
+    i9: 224
+    i10: 249
+    i11: 142
+    i12: 173
+    i13: 236
+    i14: 102
+    i15: 105
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114888346568476118
 MonoBehaviour:
   m_ObjectHideFlags: 1
