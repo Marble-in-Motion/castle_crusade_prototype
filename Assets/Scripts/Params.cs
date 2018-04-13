@@ -18,7 +18,14 @@ public class Params {
 	public static int[] NPC_REWARD = {5,20,20};
     public static int[] NPC_DAMAGE = { 10, 30, 10 };
 
-	public class Bolt
+    //AI Params
+    public static int TROOP_COUNT_PER_DANGER_INDEX = 8;
+    public static float TROOP_CLOSE_DISTANCE = 0.55f;
+    public static int TROOP_RATIO_MULTIPLYER = 5;
+    public static float CHANGE_DIRECTION_TIME = 0.25f;
+    public static float TIME_PER_SHOT = 0.1f;
+
+    public class Bolt
 	{
 		public static float DAMAGE = 100f;
 		public static float RANGE = 400f;
