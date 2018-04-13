@@ -94,6 +94,7 @@ public class Player : NetworkSetup
             DisableNonLocalCompontents();
             AssignLayer(REMOTE_LAYER_NAME);
         }
+
     }
 
     [Command]
@@ -130,7 +131,10 @@ public class Player : NetworkSetup
     [ClientRpc]
     private void RpcHighlightSector(int myTeamId, int laneId)
     {
-        canvasController.HighlightSector(myTeamId, laneId);
+        if (isLocalPlayer)
+        {
+            canvasController.HighlightSector(myTeamId, laneId);
+        }
     }
 
     [ClientRpc]
