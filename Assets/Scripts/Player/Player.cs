@@ -13,6 +13,7 @@ public class Player : NetworkSetup
     private const float CLOSE_DISTANCE = 0.5f;
     private const int NUM_TROOPS_FOR_WARNING = 3;
     private const float KLAXON_FIRE_TIME = 5.0f;
+	private const float SCREENSHOT_DELAY = 5.0f;
 
     [SyncVar]
     private int id;
@@ -48,6 +49,8 @@ public class Player : NetworkSetup
 
     private bool playerAIEnabled = false;
     private bool TeamAIEnabled = false;
+	private float nextScreenshotTime;
+	private int currentDangerValue = 0;
 
 
     void Awake()
@@ -73,6 +76,7 @@ public class Player : NetworkSetup
     void Start()
     {
         cooldownAnimReset = true;
+		nextScreenshotTime = Time.time + SCREENSHOT_DELAY;
 
         NetworkManagerHUD hud = FindObjectOfType<NetworkManagerHUD>();
         if (hud != null)
@@ -194,17 +198,14 @@ public class Player : NetworkSetup
         else if (vcr.GetKeyDown("left"))
         {
             crossbowMotor.MoveLeft();
-            //CmdTakeScreenshot();
         }
         else if (vcr.GetKeyDown("right"))
         {
             crossbowMotor.MoveRight();
-            //CmdTakeScreenshot();
         }
         else if (vcr.GetKeyDown("space"))
         {
             Shoot();
-            //CmdTakeScreenshot();
         }
         else if (Input.GetKeyDown(KeyCode.Keypad1))
         {
@@ -259,6 +260,10 @@ public class Player : NetworkSetup
                         audioManager.PlaySound("klaxon");
                     }
                 }
+				if (Time.time > nextScreenshotTime) {
+					TakeScreenshot ();
+					nextScreenshotTime = Time.time + SCREENSHOT_DELAY;
+				}
             }
         }
 
@@ -490,31 +495,27 @@ public class Player : NetworkSetup
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
         myTeamController.AddGold(amount);
     }
-
-    [Command]
-    private void CmdTakeScreenshot()
+		
+    private void TakeScreenshot()
     {
-        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-
-        if (myTeamController.LastActivePlayerId != id)
-        {
-            RpcTakeScreenshot(myTeamId, myTeamController.ScreenshotCount);
-            myTeamController.IncrementScreenshotCount();
-            myTeamController.SetLastActivePlayerId(id);
-        }
+		Debug.Log ("taking screenshot");
+		CmdGetDanger ();
+        string directory = Path.GetFullPath(".");
+		string path = Path.Combine(directory + String.Format("/Screenshots/{0}", currentDangerValue), String.Format("Screenshot_{0}_{1}.png",id, UnityEngine.Random.Range(0,20000)));
+        ScreenCapture.CaptureScreenshot(path);
     }
 
-    [ClientRpc]
-    private void RpcTakeScreenshot(int teamId, int screenshotCount)
-    {
-        if (myTeamId == teamId)
-        {
-            Debug.Log("id: " + id);
-            string directory = Path.GetFullPath(".");
-            string path = Path.Combine(directory, String.Format("Screenshot_{0}_{1}_{2}.png", myTeamId, id, screenshotCount));
-            ScreenCapture.CaptureScreenshot(path);
-        }
-    }
+	[Command]
+	private void CmdGetDanger() {
+		TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+		int danger = myTeamController.GetLaneDangerIndex (laneId);
+		RpcSetDanger (danger);
+	}
+
+	[ClientRpc]
+	private void RpcSetDanger(int value) {
+		currentDangerValue = value;
+	}
 
     private void DisableNonLocalCompontents()
     {
