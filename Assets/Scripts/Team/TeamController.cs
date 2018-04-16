@@ -104,20 +104,6 @@ public class TeamController : NetworkBehaviour
         }
     }
 
-    private int screenshotCount;
-    public int ScreenshotCount
-    {
-        get
-        {
-            return screenshotCount;
-        }
-    }
-
-    public void IncrementScreenshotCount()
-    {
-        screenshotCount++;
-    }
-
     private int lastActivePlayerId;
     public int LastActivePlayerId
     {
@@ -193,7 +179,7 @@ public class TeamController : NetworkBehaviour
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
     }
 
-    private int GetLaneDangerIndex(int lane)
+    public int GetLaneDangerIndex(int lane)
     {
         int troopCountDanger = GenerateTroopNumberDangerIndex(lane);
         int troopDistanceDanger = GenerateTroopDistanceDangerIndex(lane);
@@ -202,7 +188,6 @@ public class TeamController : NetworkBehaviour
         {
             index = 10;
         }
-        
         return index;
     }
 
