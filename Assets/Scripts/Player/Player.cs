@@ -273,7 +273,7 @@ public class Player : NetworkSetup
                 {
                     if (Time.time > nextScreenshotTime)
                     {
-                        TakeScreenshot();
+                        CmdTakeScreenShot();
                         nextScreenshotTime = Time.time + SCREENSHOT_DELAY;
                     }
                 }
@@ -294,6 +294,23 @@ public class Player : NetworkSetup
             CmdSetAIPlayerEnabled();
             CmdSetEnableScreenShot();
         }
+    }
+
+    [Command]
+    private void CmdTakeScreenShot()
+    {
+        GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+        bool gameOver = gameController.GetCurrentGameOver();
+        if (!gameOver)
+        {
+            RpcTakeScreenShot();
+        }
+    }
+
+    [ClientRpc]
+    private void RpcTakeScreenShot()
+    {
+        TakeScreenshot();
     }
 
     [Command]

@@ -25,6 +25,11 @@ public class GameController : NetworkBehaviour
 
     private float coinIncreaseTime;
 
+    public bool GetCurrentGameOver()
+    {
+        return currentGameState == GameState.GAME_END;
+    }
+
     private bool screenshotEnabled = false;
     public bool ScreenshotEnabled
     {
