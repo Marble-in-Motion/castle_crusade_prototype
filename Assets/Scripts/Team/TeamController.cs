@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -296,10 +295,17 @@ public class TeamController : NetworkBehaviour
         coin += amount;
     }
 
+    [Command]
+    private void CmdServerSound()
+    {
+        seigeAudio.PlayOneShot(seigeAudio.clip);
+
+    }
+
     public void DeductTowerHealth(int damage)
     {
         towerHealth = towerHealth - damage;
-        seigeAudio.PlayOneShot(seigeAudio.clip);
+        CmdServerSound();
 
         if (towerHealth <= 0)
         {
