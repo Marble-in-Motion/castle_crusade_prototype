@@ -13,7 +13,7 @@ public class Player : NetworkSetup
     private const float CLOSE_DISTANCE = 0.5f;
     private const int NUM_TROOPS_FOR_WARNING = 3;
     private const float KLAXON_FIRE_TIME = 5.0f;
-	private const float SCREENSHOT_DELAY = 5.0f;
+	private const float SCREENSHOT_DELAY = 2.0f;
 
     [SyncVar]
     private int id;
@@ -48,7 +48,8 @@ public class Player : NetworkSetup
     private float nextActionTime = 0.0f;
 
     private bool playerAIEnabled = false;
-    private bool TeamAIEnabled = false;
+    private bool teamAIEnabled = false;
+    private bool screenShotEnabled = false;
 	private float nextScreenshotTime;
 	private int currentDangerValue = 0;
 
@@ -167,6 +168,10 @@ public class Player : NetworkSetup
             playerAIEnabled = true;
             CmdTeamAIActivate(true);
         }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            CmdToggleScreenShot();
+        }
         if (Input.GetKeyDown(KeyCode.Y))
         {
             CmdRequestOffensiveTroopSpawn(0, 0);
@@ -242,7 +247,7 @@ public class Player : NetworkSetup
     {
         if (isLocalPlayer)
         {
-            if (!TeamAIEnabled)
+            if (!teamAIEnabled)
             {
                 
                 ExecuteControls();
@@ -264,10 +269,14 @@ public class Player : NetworkSetup
                         audioManager.PlaySound("klaxon");
                     }
                 }
-				if (Time.time > nextScreenshotTime) {
-					TakeScreenshot ();
-					nextScreenshotTime = Time.time + SCREENSHOT_DELAY;
-				}
+                if (screenShotEnabled)
+                {
+                    if (Time.time > nextScreenshotTime)
+                    {
+                        TakeScreenshot();
+                        nextScreenshotTime = Time.time + SCREENSHOT_DELAY;
+                    }
+                }
             }
         }
 
@@ -283,6 +292,7 @@ public class Player : NetworkSetup
             CmdSetVolleyCooldown();
             CmdSetTeamAI();
             CmdSetAIPlayerEnabled();
+            CmdSetEnableScreenShot();
         }
     }
 
@@ -305,7 +315,29 @@ public class Player : NetworkSetup
     [ClientRpc]
     private void RpcSetTeamAIEnabled(bool state)
     {
-        TeamAIEnabled = state;
+        teamAIEnabled = state;
+    }
+
+    [Command]
+    private void CmdToggleScreenShot()
+    {
+        GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+        gameController.ToggleScreenShot();
+    }
+
+    [Command]
+    private void CmdSetEnableScreenShot()
+    {
+        GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+        bool state = gameController.ScreenshotEnabled;
+        RpcSetEnableScreenShot(state);
+    }
+
+
+    [ClientRpc]
+    private void RpcSetEnableScreenShot(bool state)
+    {
+        screenShotEnabled = state;
     }
 
     [Command]
@@ -321,15 +353,13 @@ public class Player : NetworkSetup
     [ClientRpc]
     private void RpcSetAIPlayerEnabled(int aIActiveId)
     {
-        if (aIActiveId == id && TeamAIEnabled == true) {
+        if (aIActiveId == id && teamAIEnabled == true) {
             playerAIEnabled = true;
         }
         else
         {
             playerAIEnabled = false;
         }
-        //Debug.Log(aIActiveId + id);
-        //Debug.Log(playerAIEnabled);
     }
 
     [Command]

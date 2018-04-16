@@ -25,6 +25,20 @@ public class GameController : NetworkBehaviour
 
     private float coinIncreaseTime;
 
+    private bool screenshotEnabled = false;
+    public bool ScreenshotEnabled
+    {
+        get
+        {
+            return screenshotEnabled;
+        }
+    }
+
+    public void SetTeamAIEnabled(bool state)
+    {
+        screenshotEnabled = state;
+    }
+
     void Start()
     {
         currentGameState = GameState.GAME_IN_PROGRESS;
@@ -34,6 +48,12 @@ public class GameController : NetworkBehaviour
 
         teamController1 = GameObject.FindGameObjectWithTag(TeamController.TEAM_CONTROLLER_1_TAG).GetComponent<TeamController>();
         teamController2 = GameObject.FindGameObjectWithTag(TeamController.TEAM_CONTROLLER_2_TAG).GetComponent<TeamController>();
+    }
+
+    public void ToggleScreenShot()
+    {
+        
+        screenshotEnabled = !screenshotEnabled;
     }
         
     public void DeactiveScreenCamera()
