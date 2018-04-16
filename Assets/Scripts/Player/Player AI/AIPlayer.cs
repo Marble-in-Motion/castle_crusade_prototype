@@ -60,6 +60,10 @@ public class AIPlayer : NetworkSetup
                 }
             }
         }
+        else
+        {
+            nextCommand = AICommands.FIND;
+        }
     }
 
     [ClientRpc]
@@ -118,7 +122,7 @@ public class AIPlayer : NetworkSetup
 
     private void KillTarget()
     {
-        if (AITargetEnemy == null || AITargetEnemy.GetComponent<NPCHealth>().IsAlive())
+        if (AITargetEnemy != null && AITargetEnemy.GetComponent<NPCHealth>().IsAlive())
         {
             player.Shoot();
             nextAIActionTime = Time.time + timePerShot;
