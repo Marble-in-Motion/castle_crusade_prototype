@@ -52,6 +52,7 @@ public class GameController : NetworkBehaviour
 
     public void ToggleScreenShot()
     {
+        
         screenshotEnabled = !screenshotEnabled;
     }
         

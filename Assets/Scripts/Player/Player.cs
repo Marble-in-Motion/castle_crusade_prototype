@@ -170,7 +170,6 @@ public class Player : NetworkSetup
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            screenShotEnabled = true;
             CmdToggleScreenShot();
         }
         if (Input.GetKeyDown(KeyCode.Y))
@@ -293,6 +292,7 @@ public class Player : NetworkSetup
             CmdSetVolleyCooldown();
             CmdSetTeamAI();
             CmdSetAIPlayerEnabled();
+            CmdSetEnableScreenShot();
         }
     }
 
@@ -337,7 +337,7 @@ public class Player : NetworkSetup
     [ClientRpc]
     private void RpcSetEnableScreenShot(bool state)
     {
-        teamAIEnabled = state;
+        screenShotEnabled = state;
     }
 
     [Command]
@@ -360,8 +360,6 @@ public class Player : NetworkSetup
         {
             playerAIEnabled = false;
         }
-        //Debug.Log(aIActiveId + id);
-        //Debug.Log(playerAIEnabled);
     }
 
     [Command]
