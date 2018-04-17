@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.AI;
 
 public class SpawnController : NetworkBehaviour
 {
@@ -109,6 +110,10 @@ public class SpawnController : NetworkBehaviour
 		int path = Random.Range(0, numberOfPaths);
         GameObject lane = GetOpponentsSpawn(laneId, myTeamId);
         Vector3 spawn = CalculateSpawn(lane, path, myTeamId);
+		NavMeshHit hit;
+		if (NavMesh.SamplePosition (spawn, out hit, 100f, NavMesh.AllAreas)) {
+			spawn = hit.position;
+		}
 
 		GameObject troop = Instantiate(troopPrefabs[troopId], spawn, lane.transform.rotation) as GameObject;
         NetworkServer.Spawn(troop);
