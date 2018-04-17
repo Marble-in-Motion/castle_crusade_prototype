@@ -7,6 +7,7 @@ public class Params {
 	public static float STARTING_TOWER_HEALTH = 100f;
 	public static int STARTING_COIN = 100;
 	public static float COIN_DELAY = 1f;
+    public static float SEND_TROOP_DELAY = 5f;
 	public static float COIN_INCREASE_INTERVAL = 15f;
 	public static int STARTING_COIN_INCREASE_AMOUNT = 5;
 	public static int COIN_BOOST = 1;

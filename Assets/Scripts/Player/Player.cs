@@ -281,6 +281,9 @@ public class Player : NetworkSetup
                         nextScreenshotTime = Time.time + SCREENSHOT_DELAY;
                     }
                 }
+
+                CmdSendTroopAnim();
+                
             }
         }
 
@@ -297,6 +300,16 @@ public class Player : NetworkSetup
             CmdSetTeamAI();
             CmdSetAIPlayerEnabled();
             CmdSetEnableScreenShot();
+        }
+    }
+
+    [Command]
+    public void CmdSendTroopAnim()
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+        if(myTeamController.PlaySendTroopAnim == true)
+        {
+            Debug.Log("send troops");
         }
     }
 
@@ -519,19 +532,17 @@ public class Player : NetworkSetup
             if (troopId == 0)
             {
                 ClientPlaySound("sword");
-                //audioManager.PlaySound("sword");
             }
             else if (troopId == 2)
             {
                 ClientPlaySound("horn");
-                //audioManager.PlaySound("horn");
             }
             spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
+            myTeamController.ResetSendTroopTime();
         }
         else
         {
             ClientPlaySound("coins");
-            //audioManager.PlaySound("coins");
         }
     }
 

@@ -17,6 +17,8 @@ public class TeamController : NetworkBehaviour
     private float towerHealth;
     private float nextActionTime = 0.0f;
 
+    private float nextSendTroopTime = Params.SEND_TROOP_DELAY;
+
     private float timeToScreenCheck = 0;
     private float maxTimeAtScreen = 2.5f;
 
@@ -27,6 +29,15 @@ public class TeamController : NetworkBehaviour
 
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
+    {
+        get
+        {
+            return teamAIEnabled;
+        }
+    }
+
+    private bool playSendTroopAnim = false;
+    public bool PlaySendTroopAnim
     {
         get
         {
@@ -129,6 +140,7 @@ public class TeamController : NetworkBehaviour
     void Update()
     {
         AddCoinPerSecond();
+        SendTroopAlert();
         currentTime = Time.time;
         if (teamAIEnabled)
         {
@@ -145,6 +157,35 @@ public class TeamController : NetworkBehaviour
             nextActionTime += Params.COIN_DELAY;
             AddGold(coinsPerSecond);
         }
+    }
+
+    private void SendTroopAlert()
+    {
+        if (!isServer) return;
+
+        //Debug.Log(Time.time - nextSendTroopTime);
+
+        if (Time.time > nextSendTroopTime)
+        {
+            if(playSendTroopAnim) {}
+            else
+            {
+                Debug.Log("Send Troops!!!");
+                playSendTroopAnim = true;
+            }
+        }
+    }
+
+    public void ResetSendTroopTime()
+    {
+        Debug.Log("resert");
+        if (!isServer) return;
+
+        playSendTroopAnim = false;
+        nextSendTroopTime = Time.time + Params.SEND_TROOP_DELAY;
+        Debug.Log(nextSendTroopTime);
+        Debug.Log(Time.time);
+
     }
 
     private void CheckChangeAI()
@@ -296,16 +337,16 @@ public class TeamController : NetworkBehaviour
     }
 
     [Command]
-    private void CmdServerSound()
+    public void CmdSeigeSound()
     {
         seigeAudio.PlayOneShot(seigeAudio.clip);
-
     }
 
     public void DeductTowerHealth(int damage)
     {
+
         towerHealth = towerHealth - damage;
-        CmdServerSound();
+        CmdSeigeSound();
 
         if (towerHealth <= 0)
         {
