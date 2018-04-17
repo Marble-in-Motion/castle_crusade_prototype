@@ -49,6 +49,15 @@ public class TeamController : NetworkBehaviour
         }
     }
 
+    private int aIActivePlayer2 = 0;
+    public int AIActivePlayer2
+    {
+        get
+        {
+            return aIActivePlayer2;
+        }
+    }
+
     [SerializeField]
     private AudioSource seigeAudio;
 
@@ -155,7 +164,7 @@ public class TeamController : NetworkBehaviour
             UpdateAIActive();
             timeToScreenCheck = Time.time + maxTimeAtScreen;
         }
-        else if (CheckIfNoTroopsPresent())
+        else if (CheckIfNoTroopsPresent(aIActivePlayer) || CheckIfNoTroopsPresent(aIActivePlayer2))
         {
             UpdateAIActive();
             timeToScreenCheck = Time.time + maxTimeAtScreen;
@@ -165,18 +174,21 @@ public class TeamController : NetworkBehaviour
     private void UpdateAIActive()
     {
         int aiLane = 0;
+        int aiLane2 = 1;
         int maxDanger = 0;
         for(int lane = 0; lane < 5; lane++)
         {
             int index = GetLaneDangerIndex(lane);
             if (index > maxDanger)
             {
+                aiLane2 = aiLane;
                 maxDanger = index;
                 aiLane = lane;
             }
         }
         Debug.Log(maxDanger);
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
+        aIActivePlayer2 = ConvertLaneToPlayerId(aiLane);
     }
 
     public int GetLaneDangerIndex(int lane)
@@ -246,9 +258,9 @@ public class TeamController : NetworkBehaviour
         return (PlayerId - (id - 1))/2;
     }
 
-    private bool CheckIfNoTroopsPresent()
+    private bool CheckIfNoTroopsPresent(int active)
     {
-        int lane = ConvertPlayerIdToLane(aIActivePlayer);
+        int lane = ConvertPlayerIdToLane(active);
         int troops = GetTroopsInLane(lane).Count;
         return (troops == 0);
     }
