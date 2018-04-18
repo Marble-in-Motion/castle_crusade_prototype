@@ -55,9 +55,7 @@ public class Player : NetworkSetup
 
     void Awake()
     {
-        // Audio manager
-        audioManager = GetComponentInChildren<AudioManager>();
-        audioManager.BuildDict();
+
 
         // Canvas Settings
         Canvas canvas = GetComponentInChildren<Canvas>();
@@ -91,6 +89,10 @@ public class Player : NetworkSetup
             // Camera Settings
             Cursor.visible = false;
 
+            // Audio manager
+            audioManager = GetComponentInChildren<AudioManager>();
+            audioManager.BuildDict();
+
         }
         else
         {
@@ -101,7 +103,7 @@ public class Player : NetworkSetup
         if (isServer)
         {
             //audioManager.PlaySound("ambience");
-            RpcClientPlaySound("ambience");
+            ClientPlaySound("ambience");
         }
     }
 
@@ -520,8 +522,8 @@ public class Player : NetworkSetup
         StartCoroutine(crossbowController.HandleVolley(troops));
     }
 
-    [ClientRpc]
-    private void RpcClientPlaySound(string name)
+    [ClientCallback]
+    private void ClientPlaySound(string name)
     {
         audioManager.PlaySound(name);
     }
@@ -538,11 +540,11 @@ public class Player : NetworkSetup
         {
             if (troopId == 0)
             {
-                RpcClientPlaySound("sword");
+                ClientPlaySound("sword");
             }
             else if (troopId == 2)
             {
-                RpcClientPlaySound("horn");
+                ClientPlaySound("horn");
             }
             spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
             myTeamController.ResetSendTroopAlert();
@@ -550,7 +552,7 @@ public class Player : NetworkSetup
         }
         else
         {
-            RpcClientPlaySound("coins");
+            ClientPlaySound("coins");
         }
     }
 
