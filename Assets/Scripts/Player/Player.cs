@@ -199,14 +199,17 @@ public class Player : NetworkSetup
         }
         else if (Input.GetKeyDown(KeyCode.Return))
         {
+            audioManager.PlaySound("sword");
             CmdRequestOffensiveTroopSpawn(0, laneId);
         }
         else if (Input.GetKeyDown(KeyCode.Backspace))
         {
+            audioManager.PlaySound("sword");
             CmdRequestOffensiveTroopSpawn(1, laneId);
         }
         else if (Input.GetKeyDown(KeyCode.V))
         {
+            audioManager.PlaySound("volley");
             CmdVolley();
         }
         else if (vcr.GetKeyDown("left"))
@@ -548,7 +551,7 @@ public class Player : NetworkSetup
             }
             spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
             myTeamController.ResetSendTroopAlert();
-            RpcResetSendTroopAlert();
+            //RpcResetSendTroopAlert();
         }
         else
         {
