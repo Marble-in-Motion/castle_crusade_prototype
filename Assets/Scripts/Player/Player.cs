@@ -197,17 +197,17 @@ public class Player : NetworkSetup
         {
             CmdRequestOffensiveTroopSpawn(0, 4);
         }
-        else if (Input.GetKeyDown(KeyCode.Return))
+        else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.D))
         {
             audioManager.PlaySound("sword");
             CmdRequestOffensiveTroopSpawn(0, laneId);
         }
-        else if (Input.GetKeyDown(KeyCode.Backspace))
+        else if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.F))
         {
             audioManager.PlaySound("sword");
             CmdRequestOffensiveTroopSpawn(1, laneId);
         }
-        else if (Input.GetKeyDown(KeyCode.V))
+        else if (Input.GetKeyDown(KeyCode.V) || Input.GetKeyDown(KeyCode.S))
         {
             audioManager.PlaySound("volley");
             CmdVolley();
@@ -281,7 +281,7 @@ public class Player : NetworkSetup
                 {
                     if (Time.time > nextScreenshotTime)
                     {
-                        TakeScreenshot();
+                        CmdTakeScreenShot();
                         nextScreenshotTime = Time.time + SCREENSHOT_DELAY;
                     }
                 }
@@ -323,6 +323,23 @@ public class Player : NetworkSetup
     public void RpcSetSendTroopAlert()
     {
         canvasController.SetSendTroopAlert();
+    }
+
+    [Command]
+    private void CmdTakeScreenShot()
+    {
+        GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+        bool gameOver = gameController.GetCurrentGameOver();
+        if (!gameOver)
+        {
+            RpcTakeScreenShot();
+        }
+    }
+
+    [ClientRpc]
+    private void RpcTakeScreenShot()
+    {
+        TakeScreenshot();
     }
 
     [Command]
@@ -374,15 +391,15 @@ public class Player : NetworkSetup
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
         int aIActiveId = myTeamController.AIActivePlayer;
-
-        RpcSetAIPlayerEnabled(aIActiveId);
+        int aIActiveId2 = myTeamController.AIActivePlayer2;
+        RpcSetAIPlayerEnabled(aIActiveId, aIActiveId2);
     }
 
 
     [ClientRpc]
-    private void RpcSetAIPlayerEnabled(int aIActiveId)
+    private void RpcSetAIPlayerEnabled(int aIActiveId, int aIActiveId2)
     {
-        if (aIActiveId == id && teamAIEnabled == true) {
+        if ((aIActiveId == id || aIActiveId2 == id) && teamAIEnabled == true) {
             playerAIEnabled = true;
         }
         else

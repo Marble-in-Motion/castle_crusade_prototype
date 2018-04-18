@@ -25,6 +25,11 @@ public class GameController : NetworkBehaviour
 
     private float coinIncreaseTime;
 
+    public bool GetCurrentGameOver()
+    {
+        return currentGameState == GameState.GAME_END;
+    }
+
     private bool screenshotEnabled = false;
     public bool ScreenshotEnabled
     {
@@ -108,6 +113,9 @@ public class GameController : NetworkBehaviour
 
         teamController1.SetTeamResult(team1Result);
         teamController2.SetTeamResult(team2Result);
+
+        teamController1.SetTeamAIEnabled(false);
+        teamController2.SetTeamAIEnabled(false);
 
         currentGameState = GameState.GAME_END;
     }

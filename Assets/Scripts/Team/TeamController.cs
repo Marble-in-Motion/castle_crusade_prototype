@@ -20,7 +20,7 @@ public class TeamController : NetworkBehaviour
     private float nextSendTroopAlert = Params.SEND_TROOP_ALERT_DELAY;
 
     private float timeToScreenCheck = 0;
-    private float maxTimeAtScreen = 2.5f;
+    private float maxTimeAtScreen = Params.MAX_TIME_AT_SCREEN;
 
     //Danger score params
     private int troopCountDivisor = Params.TROOP_COUNT_PER_DANGER_INDEX;
@@ -56,6 +56,15 @@ public class TeamController : NetworkBehaviour
         get
         {
             return aIActivePlayer;
+        }
+    }
+
+    private int aIActivePlayer2 = 0;
+    public int AIActivePlayer2
+    {
+        get
+        {
+            return aIActivePlayer2;
         }
     }
 
@@ -187,7 +196,7 @@ public class TeamController : NetworkBehaviour
             UpdateAIActive();
             timeToScreenCheck = Time.time + maxTimeAtScreen;
         }
-        else if (CheckIfNoTroopsPresent())
+        else if (CheckIfNoTroopsPresent(aIActivePlayer) || CheckIfNoTroopsPresent(aIActivePlayer2))
         {
             UpdateAIActive();
             timeToScreenCheck = Time.time + maxTimeAtScreen;
@@ -197,8 +206,10 @@ public class TeamController : NetworkBehaviour
     private void UpdateAIActive()
     {
         int aiLane = 0;
+        int aiLane2 = 0;
         int maxDanger = 0;
-        for(int lane = 0; lane < 5; lane++)
+        int maxDanger2 = 0;
+        for (int lane = 0; lane < 5; lane++)
         {
             int index = GetLaneDangerIndex(lane);
             if (index > maxDanger)
@@ -206,9 +217,17 @@ public class TeamController : NetworkBehaviour
                 maxDanger = index;
                 aiLane = lane;
             }
+            else
+            {
+                if(index > maxDanger2)
+                {
+                    maxDanger2 = index;
+                    aiLane2 = lane;
+                }
+            }
         }
-        Debug.Log(maxDanger);
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
+        aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
     }
 
     public int GetLaneDangerIndex(int lane)
@@ -244,6 +263,7 @@ public class TeamController : NetworkBehaviour
         foreach (GameObject troop in troops)
         {
             float distanceRatioToTarget = troop.GetComponent<AIController>().GetDistanceRatioToTarget();
+            
             totalDistanceToTower += distanceRatioToTarget;
             if(distanceRatioToTarget > nearestTroopDistance)
             {
@@ -278,9 +298,9 @@ public class TeamController : NetworkBehaviour
         return (PlayerId - (id - 1))/2;
     }
 
-    private bool CheckIfNoTroopsPresent()
+    private bool CheckIfNoTroopsPresent(int active)
     {
-        int lane = ConvertPlayerIdToLane(aIActivePlayer);
+        int lane = ConvertPlayerIdToLane(active);
         int troops = GetTroopsInLane(lane).Count;
         return (troops == 0);
     }
