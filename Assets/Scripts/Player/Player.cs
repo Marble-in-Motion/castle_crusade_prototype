@@ -362,15 +362,15 @@ public class Player : NetworkSetup
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
         int aIActiveId = myTeamController.AIActivePlayer;
-
-        RpcSetAIPlayerEnabled(aIActiveId);
+        int aIActiveId2 = myTeamController.AIActivePlayer2;
+        RpcSetAIPlayerEnabled(aIActiveId, aIActiveId2);
     }
 
 
     [ClientRpc]
-    private void RpcSetAIPlayerEnabled(int aIActiveId)
+    private void RpcSetAIPlayerEnabled(int aIActiveId, int aIActiveId2)
     {
-        if (aIActiveId == id && teamAIEnabled == true) {
+        if ((aIActiveId == id || aIActiveId2 == id) && teamAIEnabled == true) {
             playerAIEnabled = true;
         }
         else
