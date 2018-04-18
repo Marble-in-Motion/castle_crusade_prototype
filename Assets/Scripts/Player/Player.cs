@@ -192,15 +192,15 @@ public class Player : NetworkSetup
         {
             CmdRequestOffensiveTroopSpawn(0, 4);
         }
-        else if (Input.GetKeyDown(KeyCode.Return))
+        else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.D))
         {
             CmdRequestOffensiveTroopSpawn(0, laneId);
         }
-        else if (Input.GetKeyDown(KeyCode.Backspace))
+        else if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.F))
         {
             CmdRequestOffensiveTroopSpawn(1, laneId);
         }
-        else if (Input.GetKeyDown(KeyCode.V))
+        else if (Input.GetKeyDown(KeyCode.V) || Input.GetKeyDown(KeyCode.S))
         {
             CmdVolley();
         }
