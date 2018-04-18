@@ -24,8 +24,8 @@ public class Params {
     public static int TROOP_RATIO_MULTIPLYER = 5;
     public static float CHANGE_DIRECTION_TIME = 0.3f;
     public static float TIME_PER_SHOT = 0.2f;
-    public static int[] TIME_BETWEEN_TROOP_SEND = { 3, 10 };
-    public static int COINS_DIVISOR_FOR_TROOPS_UPPER_BOUND = 20;
+    public static int[] TIME_BETWEEN_TROOP_SEND = { 5, 12 };
+    public static int COINS_DIVISOR_FOR_TROOPS_UPPER_BOUND = 40;
 
     public class Bolt
 	{
