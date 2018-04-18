@@ -42,7 +42,6 @@ public class Player : NetworkSetup
     [SerializeField]
     private GameObject crossbow;
 
-    [SerializeField]
     private GameObject AudioGameObject;
 
     private float nextActionTime = 0.0f;
@@ -57,7 +56,7 @@ public class Player : NetworkSetup
     void Awake()
     {
         // Audio manager
-        audioManager = AudioGameObject.GetComponent<AudioManager>();
+        audioManager = GetComponentInChildren<AudioManager>();
         audioManager.BuildDict();
 
         // Canvas Settings
