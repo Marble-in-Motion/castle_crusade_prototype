@@ -26,6 +26,7 @@ public class Params {
     public static float TIME_PER_SHOT = 0.2f;
     public static int[] TIME_BETWEEN_TROOP_SEND = { 5, 12 };
     public static int COINS_DIVISOR_FOR_TROOPS_UPPER_BOUND = 40;
+    public static float MAX_TIME_AT_SCREEN = 5;
 
 
     public class Bolt
