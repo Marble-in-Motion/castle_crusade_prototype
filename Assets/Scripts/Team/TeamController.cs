@@ -174,21 +174,28 @@ public class TeamController : NetworkBehaviour
     private void UpdateAIActive()
     {
         int aiLane = 0;
-        int aiLane2 = 1;
+        int aiLane2 = 0;
         int maxDanger = 0;
-        for(int lane = 0; lane < 5; lane++)
+        int maxDanger2 = 0;
+        for (int lane = 0; lane < 5; lane++)
         {
             int index = GetLaneDangerIndex(lane);
             if (index > maxDanger)
             {
-                aiLane2 = aiLane;
                 maxDanger = index;
                 aiLane = lane;
             }
+            else
+            {
+                if(index > maxDanger2)
+                {
+                    maxDanger2 = index;
+                    aiLane2 = lane;
+                }
+            }
         }
-        Debug.Log(maxDanger);
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
-        aIActivePlayer2 = ConvertLaneToPlayerId(aiLane);
+        aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
     }
 
     public int GetLaneDangerIndex(int lane)

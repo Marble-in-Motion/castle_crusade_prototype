@@ -70,10 +70,10 @@ public class AIPlayer : NetworkSetup
     private void RpcSetNextTroopSend(int coin)
     {
         System.Random rnd = new System.Random();
-        int interval = rnd.Next(3, 10);
+        int interval = rnd.Next(Params.TIME_BETWEEN_TROOP_SEND[0], Params.TIME_BETWEEN_TROOP_SEND[1]);
         AINextTroopSendTime = Time.time + interval;
 
-        int upperBound = (int)(coin / 20);
+        int upperBound = (int)(coin / Params.COINS_DIVISOR_FOR_TROOPS_UPPER_BOUND);
         AINextNumberTroopsToSend = rnd.Next(0, upperBound);
     }
 
