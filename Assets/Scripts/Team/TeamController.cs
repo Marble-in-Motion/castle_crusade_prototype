@@ -19,7 +19,7 @@ public class TeamController : NetworkBehaviour
     private float nextActionTime = 0.0f;
 
     private float timeToScreenCheck = 0;
-    private float maxTimeAtScreen = 2.5f;
+    private float maxTimeAtScreen = Params.MAX_TIME_AT_SCREEN;
 
     //Danger score params
     private int troopCountDivisor = Params.TROOP_COUNT_PER_DANGER_INDEX;
@@ -231,6 +231,7 @@ public class TeamController : NetworkBehaviour
         foreach (GameObject troop in troops)
         {
             float distanceRatioToTarget = troop.GetComponent<AIController>().GetDistanceRatioToTarget();
+            
             totalDistanceToTower += distanceRatioToTarget;
             if(distanceRatioToTarget > nearestTroopDistance)
             {
