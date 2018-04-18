@@ -38,7 +38,9 @@ public class CrossbowMotor : MonoBehaviour
         GameObject nearestTroop = FindNearestTroopInPath(troopsInLane);
         if (nearestTroop != null)
         {
-            transform.LookAt(nearestTroop.transform.position);
+            Vector3 target = nearestTroop.transform.position;
+            target.y = target.y + (nearestTroop.transform.lossyScale.y / 3);
+            transform.LookAt(target);
         }
     }
 
