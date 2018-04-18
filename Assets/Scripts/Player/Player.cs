@@ -102,7 +102,7 @@ public class Player : NetworkSetup
         if (isServer)
         {
             //audioManager.PlaySound("ambience");
-            ClientPlaySound("ambience");
+            RpcClientPlaySound("ambience");
         }
     }
 
@@ -521,8 +521,8 @@ public class Player : NetworkSetup
         StartCoroutine(crossbowController.HandleVolley(troops));
     }
 
-    [ClientCallback]
-    private void ClientPlaySound(string name)
+    [ClientRpc]
+    private void RpcClientPlaySound(string name)
     {
         audioManager.PlaySound(name);
     }
@@ -539,11 +539,11 @@ public class Player : NetworkSetup
         {
             if (troopId == 0)
             {
-                ClientPlaySound("sword");
+                RpcClientPlaySound("sword");
             }
             else if (troopId == 2)
             {
-                ClientPlaySound("horn");
+                RpcClientPlaySound("horn");
             }
             spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
             myTeamController.ResetSendTroopAlert();
@@ -551,7 +551,7 @@ public class Player : NetworkSetup
         }
         else
         {
-            ClientPlaySound("coins");
+            RpcClientPlaySound("coins");
         }
     }
 
