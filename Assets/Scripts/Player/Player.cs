@@ -253,7 +253,7 @@ public class Player : NetworkSetup
         {
             if (!teamAIEnabled)
             {
-                
+
                 ExecuteControls();
 
                 GameObject[] enemyTroops = FindEnemyTroopsInLane().ToArray();
@@ -281,8 +281,6 @@ public class Player : NetworkSetup
                         nextScreenshotTime = Time.time + SCREENSHOT_DELAY;
                     }
                 }
-
-                CmdSendTroopAnim();
                 
             }
         }
@@ -300,6 +298,7 @@ public class Player : NetworkSetup
             CmdSetTeamAI();
             CmdSetAIPlayerEnabled();
             CmdSetEnableScreenShot();
+            CmdSendTroopAnim();
         }
     }
 
@@ -307,10 +306,19 @@ public class Player : NetworkSetup
     public void CmdSendTroopAnim()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-        if(myTeamController.PlaySendTroopAnim == true)
+
+        if (myTeamController.PlaySendTroopAnim == true)
         {
             Debug.Log("send troops");
+            RpcSetSendTroopAlert();
+            myTeamController.ResetSendTroopAlert();
         }
+    }
+
+    [ClientRpc]
+    public void RpcSetSendTroopAlert()
+    {
+        canvasController.SetSendTroopAlert();
     }
 
     [Command]
@@ -538,12 +546,19 @@ public class Player : NetworkSetup
                 ClientPlaySound("horn");
             }
             spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
-            myTeamController.ResetSendTroopTime();
+            myTeamController.ResetSendTroopAlert();
+            RpcResetSendTroopAlert();
         }
         else
         {
             ClientPlaySound("coins");
         }
+    }
+
+    [ClientRpc]
+    public void RpcResetSendTroopAlert()
+    {
+        canvasController.ResetSendTroopAlert();
     }
 
     [Command]

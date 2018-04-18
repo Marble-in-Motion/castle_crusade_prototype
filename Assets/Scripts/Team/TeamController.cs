@@ -17,7 +17,7 @@ public class TeamController : NetworkBehaviour
     private float towerHealth;
     private float nextActionTime = 0.0f;
 
-    private float nextSendTroopTime = Params.SEND_TROOP_DELAY;
+    private float nextSendTroopAlert = Params.SEND_TROOP_ALERT_DELAY;
 
     private float timeToScreenCheck = 0;
     private float maxTimeAtScreen = 2.5f;
@@ -41,7 +41,7 @@ public class TeamController : NetworkBehaviour
     {
         get
         {
-            return teamAIEnabled;
+            return playSendTroopAnim;
         }
     }
 
@@ -150,8 +150,6 @@ public class TeamController : NetworkBehaviour
 
     private void AddCoinPerSecond()
     {
-        if (!isServer) return;
-
         if (Time.time > nextActionTime)
         {
             nextActionTime += Params.COIN_DELAY;
@@ -161,30 +159,24 @@ public class TeamController : NetworkBehaviour
 
     private void SendTroopAlert()
     {
-        if (!isServer) return;
 
-        //Debug.Log(Time.time - nextSendTroopTime);
-
-        if (Time.time > nextSendTroopTime)
+        if (Time.time > nextSendTroopAlert)
         {
-            if(playSendTroopAnim) {}
-            else
-            {
-                Debug.Log("Send Troops!!!");
-                playSendTroopAnim = true;
-            }
+            playSendTroopAnim = true;
         }
     }
 
-    public void ResetSendTroopTime()
+    public void ResetSendTroopAlert()
     {
-        Debug.Log("resert");
-        if (!isServer) return;
+        Debug.Log("reset");
 
         playSendTroopAnim = false;
-        nextSendTroopTime = Time.time + Params.SEND_TROOP_DELAY;
-        Debug.Log(nextSendTroopTime);
-        Debug.Log(Time.time);
+
+        nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
+
+        //Debug.Log(nextSendTroopAlert);
+
+        //Debug.Log(Time.time);
 
     }
 
