@@ -317,7 +317,7 @@ public class Player : NetworkSetup
         if (myTeamController.PlaySendTroopAnim == 1)
         {
             RpcSetSendTroopAlert();
-            myTeamController.ResetSendTroopAlert();
+            myTeamController.ResetSendTroopAlert(id);
         }
 
     }
@@ -587,7 +587,9 @@ public class Player : NetworkSetup
             spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
 
             RpcResetSendTroopAlert();
-            myTeamController.ResetSendTroopAlert();
+
+            myTeamController.ResetSendTroopAlert(id);
+            
         }
         else
         {

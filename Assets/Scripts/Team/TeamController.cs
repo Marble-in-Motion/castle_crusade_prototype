@@ -169,14 +169,25 @@ public class TeamController : NetworkBehaviour
         }
     }
 
-    public void ResetSendTroopAlert()
+    public void ResetSendTroopAlert(int id)
     {
         Debug.Log("reset");
 
+        string playersTag = Player.PLAYER_TAG + " " + id;
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+
         playSendTroopAnim = 0;
+
+        foreach(GameObject player in players)
+        {
+            Player p = player.GetComponent<Player>();
+            p.RpcResetSendTroopAlert();
+        }
 
         nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
 
+    
         //Debug.Log(nextSendTroopAlert);
 
         //Debug.Log(Time.time);
