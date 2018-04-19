@@ -170,6 +170,30 @@ public class TeamController : NetworkBehaviour
             playSendTroopAnim = 1;
             sendTroopAlerting = true;
             print("send more troops");
+
+            string playersTag = Player.PLAYER_TAG + " " + id;
+
+            //print("id" + id);
+
+            GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+
+            int length = players.Length;
+
+            //print("length" + length.ToString());
+
+            if(length > 0)
+            {
+                int index = Random.Range(0, length);
+
+                //print("index" + index.ToString());
+
+                //playSendTroopAnim = 0;
+                //Convert back to boolean
+
+                Player p = players[index].GetComponent<Player>();
+                p.RpcClientPlaySound("moreTroops");
+            }
+            
         }
     }
 
