@@ -16,7 +16,7 @@ TagManager:
   - Bar
   - Coins
   - Player 1
-  - Player 0
+  - Player 2
   layers:
   - Default
   - TransparentFX

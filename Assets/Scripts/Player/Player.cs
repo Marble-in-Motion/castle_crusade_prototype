@@ -317,7 +317,7 @@ public class Player : NetworkSetup
         if (myTeamController.PlaySendTroopAnim == 1)
         {
             RpcSetSendTroopAlert();
-            myTeamController.ResetSendTroopAlert(id);
+            myTeamController.ResetSendTroopAlert(myTeamId);
         }
 
     }
@@ -588,7 +588,7 @@ public class Player : NetworkSetup
 
             RpcResetSendTroopAlert();
 
-            myTeamController.ResetSendTroopAlert(id);
+            myTeamController.ResetSendTroopAlert(myTeamId);
             
         }
         else
