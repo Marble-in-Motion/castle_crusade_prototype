@@ -145,18 +145,18 @@ public class GameController : NetworkBehaviour
         if (currentGameState == GameState.GAME_END)
         {
             DestroyAllTroops();
-            
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
-                teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+               
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+            teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
 
-                teamController1.Restart();
-                teamController2.Restart();
-                DestroyAllTroops();
-                coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
-                currentGameState = GameState.GAME_IN_PROGRESS;
-            }
+            teamController1.Restart();
+            teamController2.Restart();
+            DestroyAllTroops();
+            coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
+            currentGameState = GameState.GAME_IN_PROGRESS;
         }
     }
 
