@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    [SerializeField]
+    private AudioSource moreTroops;
 
     [SerializeField]
     private AudioSource klaxon;
@@ -41,6 +43,7 @@ public class AudioManager : MonoBehaviour
         audioSources.Add(Params.HORN, horn);
         audioSources.Add(Params.VOLLEY, volley);
         audioSources.Add(Params.MAIN_MUSIC, mainMusic);
+        audioSources.Add("moreTroops", moreTroops);
     }
 
     public void PlaySound(string audioSourceName)

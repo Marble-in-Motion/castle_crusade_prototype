@@ -26,6 +26,8 @@ public class TeamController : NetworkBehaviour
     private float troopTooCloseRatio = Params.TROOP_CLOSE_DISTANCE;
     private int troopDistanceMultiplyer = Params.TROOP_RATIO_MULTIPLYER;
 
+    private bool sendTroopAlerting = false;
+
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
     {
@@ -163,21 +165,24 @@ public class TeamController : NetworkBehaviour
     private void SendTroopAlert()
     {
 
-        if (Time.time > nextSendTroopAlert)
+        if (Time.time > nextSendTroopAlert && sendTroopAlerting == false)
         {
             playSendTroopAnim = 1;
+            sendTroopAlerting = true;
+            print("send more troops");
         }
     }
 
     public void ResetSendTroopAlert(int id)
     {
-        Debug.Log("reset");
+        sendTroopAlerting = false;
 
         string playersTag = Player.PLAYER_TAG + " " + id;
 
         GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
 
         playSendTroopAnim = 0;
+        //Convert back to boolean
 
         foreach(GameObject player in players)
         {
@@ -185,12 +190,8 @@ public class TeamController : NetworkBehaviour
             p.RpcResetSendTroopAlert();
         }
 
+
         nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
-
-    
-        //Debug.Log(nextSendTroopAlert);
-
-        //Debug.Log(Time.time);
 
     }
 

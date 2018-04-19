@@ -570,6 +570,7 @@ public class Player : NetworkSetup
         }
     }
 
+
     [Command]
     public void CmdRequestOffensiveTroopSpawn(int troopId, int laneId)
     {
@@ -590,7 +591,8 @@ public class Player : NetworkSetup
             }
             spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
 
-            RpcResetSendTroopAlert();
+            //shouldn't need this line, test first tho
+            //RpcResetSendTroopAlert();
 
             myTeamController.ResetSendTroopAlert(myTeamId);
             
