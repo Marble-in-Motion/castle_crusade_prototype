@@ -47,6 +47,8 @@ public class Player : NetworkSetup
 
     private float nextActionTime = 0.0f;
 
+    private float nextShotTime = 0.0f;
+
     private bool playerAIEnabled = false;
     private bool teamAIEnabled = false;
     private bool screenShotEnabled = false;
@@ -479,7 +481,11 @@ public class Player : NetworkSetup
 
     public void Shoot()
     {
-        crossbowController.HandleShoot();
+        if (Time.time > nextShotTime)
+        {
+            crossbowController.HandleShoot();
+            nextShotTime = Time.time + Params.MIN_TIME_BETWEEN_SHOTS;
+        }
     }
 
     [Command]
