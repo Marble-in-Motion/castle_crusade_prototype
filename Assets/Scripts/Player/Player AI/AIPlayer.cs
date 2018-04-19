@@ -81,14 +81,22 @@ public class AIPlayer : NetworkSetup
     private void CmdAISendTroops()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(player.GetId());
+        StartCoroutine(AISendTroopDelay());
 
-        for (int i = 0; i < AINextNumberTroopsToSend; i++)
-        {
-            player.CmdRequestOffensiveTroopSpawn(0, player.GetLaneId());
-        }
         int coin = myTeamController.Coin;
         RpcSetNextTroopSend(coin);
         
+    }
+
+
+    private IEnumerator AISendTroopDelay()
+    {
+        for (int i = 0; i < AINextNumberTroopsToSend; i++)
+        {
+            player.CmdRequestOffensiveTroopSpawn(0, player.GetLaneId());
+            yield return new WaitForSeconds(Params.TROOP_SEND_DELAY_PER_TROOP);
+            
+        }
     }
 
     private GameObject FindTarget()
