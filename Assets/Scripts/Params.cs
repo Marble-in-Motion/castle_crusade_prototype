@@ -28,6 +28,7 @@ public class Params {
     public static int[] TIME_BETWEEN_TROOP_SEND = { 5, 12 };
     public static int COINS_DIVISOR_FOR_TROOPS_UPPER_BOUND = 40;
     public static float MAX_TIME_AT_SCREEN = 5;
+    public static float TROOP_SEND_DELAY_PER_TROOP = 0.5f;
 
     //Audio Params
     public static string AMBIENCE = "ambience";
