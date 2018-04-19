@@ -115,8 +115,8 @@ public class TeamController : NetworkBehaviour
 
     private float nextSendTroopAlert;
 
-    private bool playSendTroopAnim = false;
-    public bool PlaySendTroopAnim
+    private int playSendTroopAnim = 0;
+    public int PlaySendTroopAnim
     {
         get
         {
@@ -165,7 +165,7 @@ public class TeamController : NetworkBehaviour
 
         if (Time.time > nextSendTroopAlert)
         {
-            playSendTroopAnim = true;
+            playSendTroopAnim = 1;
         }
     }
 
@@ -173,7 +173,7 @@ public class TeamController : NetworkBehaviour
     {
         Debug.Log("reset");
 
-        playSendTroopAnim = false;
+        playSendTroopAnim = 0;
 
         nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
 

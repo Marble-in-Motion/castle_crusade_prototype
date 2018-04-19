@@ -124,6 +124,9 @@ public class Player : NetworkSetup
         RpcSetPlayerTransform(transform.position, transform.rotation);
 
         myTeamId = gameController.GetMyTeamControllerId(id);
+
+        tag = PLAYER_TAG + " " + myTeamId;
+
         RpcSetRenderTexture(myTeamId);
 
         opponentsTeamId = gameController.GetOpponentsTeamControllerId(id);
@@ -311,16 +314,11 @@ public class Player : NetworkSetup
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
 
-        if (myTeamController.PlaySendTroopAnim == true)
+        if (myTeamController.PlaySendTroopAnim == 1)
         {
             RpcSetSendTroopAlert();
             myTeamController.ResetSendTroopAlert();
         }
-        else
-        {
-            RpcResetSendTroopAlert();
-        }
-
 
     }
 
