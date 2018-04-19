@@ -26,17 +26,21 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     private AudioSource volley;
 
+    [SerializeField]
+    private AudioSource mainMusic;
+
     Dictionary<string, AudioSource> audioSources = new Dictionary<string, AudioSource>();
 
     public void BuildDict()
     {
-        audioSources.Add("ambience", ambience);
-        audioSources.Add("klaxon", klaxon);
-        audioSources.Add("coins", coins);
-        audioSources.Add("sword", sword);
-        audioSources.Add("gong", gong);
-        audioSources.Add("horn", horn);
-        audioSources.Add("volley", volley);
+        audioSources.Add(Params.AMBIENCE, ambience);
+        audioSources.Add(Params.KLAXON, klaxon);
+        audioSources.Add(Params.COINS, coins);
+        audioSources.Add(Params.SWORD, sword);
+        audioSources.Add(Params.GONG, gong);
+        audioSources.Add(Params.HORN, horn);
+        audioSources.Add(Params.VOLLEY, volley);
+        audioSources.Add(Params.MAIN_MUSIC, mainMusic);
     }
 
     public void PlaySound(string audioSourceName)
