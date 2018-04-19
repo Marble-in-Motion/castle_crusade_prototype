@@ -55,6 +55,8 @@ public class Player : NetworkSetup
 	private float nextScreenshotTime;
 	private int currentDangerValue = 0;
 
+    private bool sendTroopAlerting = false;
+
 
     void Awake()
     {
@@ -314,10 +316,11 @@ public class Player : NetworkSetup
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
 
-        if (myTeamController.PlaySendTroopAnim == 1)
+        if (myTeamController.PlaySendTroopAnim == 1 && sendTroopAlerting == false)
         {
             RpcSetSendTroopAlert();
-            myTeamController.ResetSendTroopAlert(myTeamId);
+            sendTroopAlerting = true;
+            //myTeamController.ResetSendTroopAlert(myTeamId);
         }
 
     }
@@ -333,6 +336,7 @@ public class Player : NetworkSetup
     public void RpcResetSendTroopAlert()
     {
         Debug.Log("reset");
+        sendTroopAlerting = false;
         canvasController.ResetSendTroopAlert();      
     }
 
