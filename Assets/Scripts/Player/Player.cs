@@ -313,9 +313,12 @@ public class Player : NetworkSetup
 
         if (myTeamController.PlaySendTroopAnim == true)
         {
-            Debug.Log("send troops");
             RpcSetSendTroopAlert();
             myTeamController.ResetSendTroopAlert();
+        }
+        else
+        {
+            RpcResetSendTroopAlert();
         }
 
 
@@ -324,12 +327,14 @@ public class Player : NetworkSetup
     [ClientRpc]
     public void RpcSetSendTroopAlert()
     {
+        Debug.Log("send troops");
         canvasController.SetSendTroopAlert();
     }
 
     [ClientRpc]
     public void RpcResetSendTroopAlert()
     {
+        Debug.Log("reset");
         canvasController.ResetSendTroopAlert();      
     }
 
