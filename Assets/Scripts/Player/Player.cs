@@ -61,7 +61,6 @@ public class Player : NetworkSetup
         // Audio manager
         audioManager = AudioGameObject.GetComponent<AudioManager>();
         audioManager.BuildDict();
-        audioManager.PlaySound("ambience");
 
         // Canvas Settings
         Canvas canvas = GetComponentInChildren<Canvas>();
@@ -95,11 +94,19 @@ public class Player : NetworkSetup
             // Camera Settings
             Cursor.visible = false;
 
+            // Player join sound
+            //RpcClientPlaySound("gong");
+
         }
         else
         {
             DisableNonLocalCompontents();
             AssignLayer(REMOTE_LAYER_NAME);
+        }
+
+        if (isServer)
+        {
+            audioManager.PlaySound(Params.MAIN_MUSIC);
         }
 
     }
@@ -268,7 +275,7 @@ public class Player : NetworkSetup
                     if ((numCloseTroops >= NUM_TROOPS_FOR_WARNING) && (Time.time > nextActionTime))
                     {
                         nextActionTime = Time.time + KLAXON_FIRE_TIME;
-                        audioManager.PlaySound("klaxon");
+                        RpcClientPlaySound(Params.KLAXON);
                     }
                 }
                 if (screenShotEnabled)
@@ -505,7 +512,7 @@ public class Player : NetworkSetup
             bool successfulPurchase = myTeamController.SpendGold(Params.DESTROY_COST);
             if (successfulPurchase)
             {
-                audioManager.PlaySound("volley");
+                RpcClientPlaySound(Params.VOLLEY);
                 myTeamController.UpdateCoolDown();
                 GameObject[] troops = GetTroopsInLane(opponentsTeamId, laneId).ToArray();
                 RpcShootVolley(troops);
@@ -519,6 +526,14 @@ public class Player : NetworkSetup
         StartCoroutine(crossbowController.HandleVolley(troops));
     }
 
+    [ClientRpc]
+    public void RpcClientPlaySound(string name)
+    {
+        if(isLocalPlayer)
+        {
+            audioManager.PlaySound(name);
+        }
+    }
 
     [Command]
     public void CmdRequestOffensiveTroopSpawn(int troopId, int laneId)
@@ -530,19 +545,19 @@ public class Player : NetworkSetup
         bool successfulPurchase = myTeamController.SpendGold(cost);
         if (successfulPurchase)
         {
-            if (troopId == 0)
+            if (troopId == Params.KING_TROOP_ID)
             {
-                audioManager.PlaySound("sword");
+                RpcClientPlaySound(Params.SWORD);
             }
-            else if (troopId == 2)
+            else if (troopId == Params.RAM_TROOP_ID)
             {
-                audioManager.PlaySound("horn");
+                RpcClientPlaySound(Params.HORN);
             }
             spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
         }
         else
         {
-            audioManager.PlaySound("coins");
+            RpcClientPlaySound(Params.COINS);
         }
     }
 

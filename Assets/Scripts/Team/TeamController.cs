@@ -316,10 +316,16 @@ public class TeamController : NetworkBehaviour
         coin += amount;
     }
 
+    [ClientRpc]
+    public void RpcPlaySeigeSound()
+    {
+            seigeAudio.PlayOneShot(seigeAudio.clip);
+    }
+
     public void DeductTowerHealth(int damage)
     {
         towerHealth = towerHealth - damage;
-        seigeAudio.PlayOneShot(seigeAudio.clip);
+        RpcPlaySeigeSound();
 
         if (towerHealth <= 0)
         {
