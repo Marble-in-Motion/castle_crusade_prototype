@@ -104,7 +104,6 @@ public class Player : NetworkSetup
 
         if (isServer)
         {
-            //RpcClientPlaySound(Params.AMBIENCE);
             audioManager.PlaySound(Params.MAIN_MUSIC);
         }
 
@@ -275,7 +274,6 @@ public class Player : NetworkSetup
                     {
                         nextActionTime = Time.time + KLAXON_FIRE_TIME;
                         RpcClientPlaySound(Params.KLAXON);
-                        //audioManager.PlaySound("klaxon");
                     }
                 }
                 if (screenShotEnabled)
@@ -509,7 +507,6 @@ public class Player : NetworkSetup
             if (successfulPurchase)
             {
                 RpcClientPlaySound(Params.VOLLEY);
-                //audioManager.PlaySound("volley");
                 myTeamController.UpdateCoolDown();
                 GameObject[] troops = GetTroopsInLane(opponentsTeamId, laneId).ToArray();
                 RpcShootVolley(troops);
@@ -542,22 +539,19 @@ public class Player : NetworkSetup
         bool successfulPurchase = myTeamController.SpendGold(cost);
         if (successfulPurchase)
         {
-            if (troopId == 0)
+            if (troopId == Params.KING_TROOP_ID)
             {
                 RpcClientPlaySound(Params.SWORD);
-                //audioManager.PlaySound("sword");
             }
-            else if (troopId == 1)
+            else if (troopId == Params.RAM_TROOP_ID)
             {
                 RpcClientPlaySound(Params.HORN);
-                //audioManager.PlaySound("horn");
             }
             spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
         }
         else
         {
             RpcClientPlaySound(Params.COINS);
-            //audioManager.PlaySound("coins");
         }
     }
 

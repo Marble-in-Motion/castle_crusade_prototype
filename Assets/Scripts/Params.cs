@@ -38,6 +38,13 @@ public class Params {
     public static string SWORD = "sword";
     public static string MAIN_MUSIC = "mainmusic";
 
+    //Troop Params
+    public static int KING_TROOP_ID = 0;
+    public static int RAM_TROOP_ID = 1;
+
+
+
+
 
     public class Bolt
 	{
