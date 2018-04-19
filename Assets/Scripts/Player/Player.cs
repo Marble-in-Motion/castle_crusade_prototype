@@ -317,10 +317,7 @@ public class Player : NetworkSetup
             RpcSetSendTroopAlert();
             myTeamController.ResetSendTroopAlert();
         }
-        else
-        {
-            RpcResetSendTroopAlert();
-        }
+
 
     }
 
