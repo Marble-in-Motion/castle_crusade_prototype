@@ -113,6 +113,17 @@ public class TeamController : NetworkBehaviour
         }
     }
 
+    private float nextSendTroopAlert;
+
+    private bool playSendTroopAnim = false;
+    public bool PlaySendTroopAnim
+    {
+        get
+        {
+            return playSendTroopAnim;
+        }
+    }
+
     private int lastActivePlayerId;
     public int LastActivePlayerId
     {
@@ -129,6 +140,7 @@ public class TeamController : NetworkBehaviour
 
     void Start()
     {
+        nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
         result = TeamResult.UNDECIDED;
 		towerHealth = Params.STARTING_TOWER_HEALTH;
         endOfCoolDown = Time.time;
@@ -139,11 +151,36 @@ public class TeamController : NetworkBehaviour
     void Update()
     {
         AddCoinPerSecond();
+        SendTroopAlert();
+
         currentTime = Time.time;
         if (teamAIEnabled)
         {
             CheckChangeAI();
         }
+    }
+
+    private void SendTroopAlert()
+    {
+
+        if (Time.time > nextSendTroopAlert)
+        {
+            playSendTroopAnim = true;
+        }
+    }
+
+    public void ResetSendTroopAlert()
+    {
+        Debug.Log("reset");
+
+        playSendTroopAnim = false;
+
+        nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
+
+        //Debug.Log(nextSendTroopAlert);
+
+        //Debug.Log(Time.time);
+
     }
 
     private void AddCoinPerSecond()

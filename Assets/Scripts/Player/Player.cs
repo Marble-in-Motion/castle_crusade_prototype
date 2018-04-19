@@ -302,7 +302,38 @@ public class Player : NetworkSetup
             CmdSetTeamAI();
             CmdSetAIPlayerEnabled();
             CmdSetEnableScreenShot();
+            CmdSendTroopAnim();
         }
+    }
+
+    [Command]
+    public void CmdSendTroopAnim()
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+
+        if (myTeamController.PlaySendTroopAnim == true)
+        {
+            Debug.Log("send troops");
+            RpcSetSendTroopAlert();
+            myTeamController.ResetSendTroopAlert();
+        }
+        else
+        {
+            RpcResetSendTroopAlert();
+        }
+
+    }
+
+    [ClientRpc]
+    public void RpcSetSendTroopAlert()
+    {
+        canvasController.SetSendTroopAlert();
+    }
+
+    [ClientRpc]
+    public void RpcResetSendTroopAlert()
+    {
+        canvasController.ResetSendTroopAlert();      
     }
 
     [Command]
@@ -554,6 +585,9 @@ public class Player : NetworkSetup
                 RpcClientPlaySound(Params.HORN);
             }
             spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
+
+            RpcResetSendTroopAlert();
+            myTeamController.ResetSendTroopAlert();
         }
         else
         {
