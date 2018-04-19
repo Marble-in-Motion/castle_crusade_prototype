@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -18,6 +17,8 @@ public class TeamController : NetworkBehaviour
     private float towerHealth;
     private float nextActionTime = 0.0f;
 
+    private float nextSendTroopAlert = Params.SEND_TROOP_ALERT_DELAY;
+
     private float timeToScreenCheck = 0;
     private float maxTimeAtScreen = Params.MAX_TIME_AT_SCREEN;
 
@@ -32,6 +33,15 @@ public class TeamController : NetworkBehaviour
         get
         {
             return teamAIEnabled;
+        }
+    }
+
+    private bool playSendTroopAnim = false;
+    public bool PlaySendTroopAnim
+    {
+        get
+        {
+            return playSendTroopAnim;
         }
     }
 
@@ -139,6 +149,7 @@ public class TeamController : NetworkBehaviour
     void Update()
     {
         AddCoinPerSecond();
+        SendTroopAlert();
         currentTime = Time.time;
         if (teamAIEnabled)
         {
@@ -148,13 +159,34 @@ public class TeamController : NetworkBehaviour
 
     private void AddCoinPerSecond()
     {
-        if (!isServer) return;
-
         if (Time.time > nextActionTime)
         {
             nextActionTime += Params.COIN_DELAY;
             AddGold(coinsPerSecond);
         }
+    }
+
+    private void SendTroopAlert()
+    {
+
+        if (Time.time > nextSendTroopAlert)
+        {
+            playSendTroopAnim = true;
+        }
+    }
+
+    public void ResetSendTroopAlert()
+    {
+        Debug.Log("reset");
+
+        playSendTroopAnim = false;
+
+        nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
+
+        //Debug.Log(nextSendTroopAlert);
+
+        //Debug.Log(Time.time);
+
     }
 
     private void CheckChangeAI()
@@ -316,10 +348,17 @@ public class TeamController : NetworkBehaviour
         coin += amount;
     }
 
+    [Command]
+    public void CmdSeigeSound()
+    {
+        seigeAudio.PlayOneShot(seigeAudio.clip);
+    }
+
     public void DeductTowerHealth(int damage)
     {
+
         towerHealth = towerHealth - damage;
-        seigeAudio.PlayOneShot(seigeAudio.clip);
+        CmdSeigeSound();
 
         if (towerHealth <= 0)
         {

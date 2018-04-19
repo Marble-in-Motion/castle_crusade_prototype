@@ -86,9 +86,22 @@ namespace Assets.Scripts.Player
             }
         }
 
-		public void SetArrowCooldown() {
+		public void SetArrowCooldown()
+        {
 			anim.SetTrigger("Cooldown");
 		}
+
+        public void SetSendTroopAlert()
+        {
+            Debug.Log("trigger set");
+            anim.SetTrigger("SendTroopAlert");
+        }
+
+        public void ResetSendTroopAlert()
+        {
+            Debug.Log("trigger reset");
+            anim.SetTrigger("ResetSendTroopAlert");
+        }
 
     }
 }

@@ -42,7 +42,6 @@ public class Player : NetworkSetup
     [SerializeField]
     private GameObject crossbow;
 
-    [SerializeField]
     private GameObject AudioGameObject;
 
     private float nextActionTime = 0.0f;
@@ -58,10 +57,7 @@ public class Player : NetworkSetup
 
     void Awake()
     {
-        // Audio manager
-        audioManager = AudioGameObject.GetComponent<AudioManager>();
-        audioManager.BuildDict();
-        audioManager.PlaySound("ambience");
+
 
         // Canvas Settings
         Canvas canvas = GetComponentInChildren<Canvas>();
@@ -95,6 +91,10 @@ public class Player : NetworkSetup
             // Camera Settings
             Cursor.visible = false;
 
+            // Audio manager
+            audioManager = GetComponentInChildren<AudioManager>();
+            audioManager.BuildDict();
+
         }
         else
         {
@@ -102,6 +102,11 @@ public class Player : NetworkSetup
             AssignLayer(REMOTE_LAYER_NAME);
         }
 
+        if (isServer)
+        {
+            //audioManager.PlaySound("ambience");
+            ClientPlaySound("ambience");
+        }
     }
 
     [Command]
@@ -196,14 +201,17 @@ public class Player : NetworkSetup
         }
         else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.D))
         {
+            audioManager.PlaySound("sword");
             CmdRequestOffensiveTroopSpawn(0, laneId);
         }
         else if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.F))
         {
+            audioManager.PlaySound("sword");
             CmdRequestOffensiveTroopSpawn(1, laneId);
         }
         else if (Input.GetKeyDown(KeyCode.V) || Input.GetKeyDown(KeyCode.S))
         {
+            audioManager.PlaySound("volley");
             CmdVolley();
         }
         else if (vcr.GetKeyDown("left"))
@@ -251,7 +259,7 @@ public class Player : NetworkSetup
         {
             if (!teamAIEnabled)
             {
-                
+
                 ExecuteControls();
 
                 GameObject[] enemyTroops = FindEnemyTroopsInLane().ToArray();
@@ -279,6 +287,7 @@ public class Player : NetworkSetup
                         nextScreenshotTime = Time.time + SCREENSHOT_DELAY;
                     }
                 }
+                
             }
         }
 
@@ -295,7 +304,27 @@ public class Player : NetworkSetup
             CmdSetTeamAI();
             CmdSetAIPlayerEnabled();
             CmdSetEnableScreenShot();
+            CmdSendTroopAnim();
         }
+    }
+
+    [Command]
+    public void CmdSendTroopAnim()
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+
+        if (myTeamController.PlaySendTroopAnim == true)
+        {
+            Debug.Log("send troops");
+            RpcSetSendTroopAlert();
+            myTeamController.ResetSendTroopAlert();
+        }
+    }
+
+    [ClientRpc]
+    public void RpcSetSendTroopAlert()
+    {
+        canvasController.SetSendTroopAlert();
     }
 
     [Command]
@@ -519,6 +548,11 @@ public class Player : NetworkSetup
         StartCoroutine(crossbowController.HandleVolley(troops));
     }
 
+    [ClientCallback]
+    private void ClientPlaySound(string name)
+    {
+        audioManager.PlaySound(name);
+    }
 
     [Command]
     public void CmdRequestOffensiveTroopSpawn(int troopId, int laneId)
@@ -532,18 +566,26 @@ public class Player : NetworkSetup
         {
             if (troopId == 0)
             {
-                audioManager.PlaySound("sword");
+                ClientPlaySound("sword");
             }
             else if (troopId == 2)
             {
-                audioManager.PlaySound("horn");
+                ClientPlaySound("horn");
             }
             spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
+            myTeamController.ResetSendTroopAlert();
+            //RpcResetSendTroopAlert();
         }
         else
         {
-            audioManager.PlaySound("coins");
+            ClientPlaySound("coins");
         }
+    }
+
+    [ClientRpc]
+    public void RpcResetSendTroopAlert()
+    {
+        canvasController.ResetSendTroopAlert();
     }
 
     [Command]

@@ -8,6 +8,7 @@ public class Params {
     public static float MIN_TIME_BETWEEN_SHOTS = 0.1f;
 	public static int STARTING_COIN = 100;
 	public static float COIN_DELAY = 1f;
+    public static float SEND_TROOP_ALERT_DELAY = 10f;
 	public static float COIN_INCREASE_INTERVAL = 15f;
 	public static int STARTING_COIN_INCREASE_AMOUNT = 5;
 	public static int COIN_BOOST = 1;
