@@ -284,13 +284,13 @@ public class Player : NetworkSetup
                         RpcClientPlaySingleSound(Params.KLAXON);
                     }
                 }
-                if (screenShotEnabled)
+            }
+            if (screenShotEnabled)
+            {
+                if (Time.time > nextScreenshotTime)
                 {
-                    if (Time.time > nextScreenshotTime)
-                    {
-                        CmdTakeScreenShot();
-                        nextScreenshotTime = Time.time + SCREENSHOT_DELAY;
-                    }
+                    CmdTakeScreenShot();
+                    nextScreenshotTime = Time.time + SCREENSHOT_DELAY;
                 }
             }
         }
