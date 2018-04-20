@@ -18,6 +18,9 @@ public class AIPlayer : NetworkSetup
     private float AINextTroopSendTime = 0;
     private int AINextNumberTroopsToSend = 1;
 
+    //Set for ability for AI to play AI by sending to random lanes
+    private bool randomLaneSend = true;
+
     private Player player;
 
     // Use this for initialization
@@ -91,9 +94,17 @@ public class AIPlayer : NetworkSetup
 
     private IEnumerator AISendTroopsWithDelay()
     {
+        int lane = UnityEngine.Random.Range(0, 4);
         for (int i = 0; i < AINextNumberTroopsToSend; i++)
         {
-            player.CmdRequestOffensiveTroopSpawn(0, player.GetLaneId());
+            if (randomLaneSend)
+            {
+                player.CmdRequestOffensiveTroopSpawn(0, lane);
+            }
+            else
+            {
+                player.CmdRequestOffensiveTroopSpawn(0, player.GetLaneId());
+            }
             yield return new WaitForSeconds(Params.TROOP_SEND_DELAY_PER_TROOP);
         }
     }
