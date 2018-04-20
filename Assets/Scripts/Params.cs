@@ -20,7 +20,7 @@ public class Params {
     public static int[] NPC_DAMAGE = { 10, 30, 10 };
 
     //AI Params
-    public static int TROOP_COUNT_PER_DANGER_INDEX = 5;
+    public static int TROOP_COUNT_PER_DANGER_INDEX = 4;
     public static float TROOP_CLOSE_DISTANCE = 0.55f;
     public static int TROOP_RATIO_MULTIPLYER = 12;
     public static float CHANGE_DIRECTION_TIME = 0.3f;
