@@ -127,7 +127,6 @@ public class AIController : NetworkSetup {
     public void RpcSetTarget(int targetTeamId)
     {
         target = targets[targetTeamId - 1];
-        agent.SetDestination(target.transform.position);
         spawnToTargetDistance = Vector3.Distance(transform.position, target.transform.position);
     }
 
