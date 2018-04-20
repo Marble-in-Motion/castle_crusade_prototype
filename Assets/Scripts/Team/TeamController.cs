@@ -117,8 +117,8 @@ public class TeamController : NetworkBehaviour
 
     private float nextSendTroopAlert;
 
-    private int playSendTroopAnim = 0;
-    public int PlaySendTroopAnim
+    private bool playSendTroopAnim = false;
+    public bool PlaySendTroopAnim
     {
         get
         {
@@ -167,31 +167,22 @@ public class TeamController : NetworkBehaviour
 
         if (Time.time > nextSendTroopAlert && sendTroopAlerting == false)
         {
-            playSendTroopAnim = 1;
+            playSendTroopAnim = true;
             sendTroopAlerting = true;
-            print("send more troops");
-
+            
             string playersTag = Player.PLAYER_TAG + " " + id;
-
-            //print("id" + id);
 
             GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
 
             int length = players.Length;
 
-            //print("length" + length.ToString());
-
             if(length > 0)
             {
-                int index = Random.Range(0, length);
+                int playerIndex = Random.Range(0, length);
 
-                //print("index" + index.ToString());
+                Player p = players[playerIndex].GetComponent<Player>();
 
-                //playSendTroopAnim = 0;
-                //Convert back to boolean
-
-                Player p = players[index].GetComponent<Player>();
-                p.RpcClientPlaySound("moreTroops");
+                p.RpcClientPlayArraySound(Params.MORE_TROOPS, Params.PLAY_RANDOM);
             }
             
         }
@@ -205,8 +196,7 @@ public class TeamController : NetworkBehaviour
 
         GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
 
-        playSendTroopAnim = 0;
-        //Convert back to boolean
+        playSendTroopAnim = false;
 
         foreach(GameObject player in players)
         {

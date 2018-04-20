@@ -40,6 +40,10 @@ public class Params {
     public static string GONG = "gong";
     public static string SWORD = "sword";
     public static string MAIN_MUSIC = "mainmusic";
+    //More troop audio
+    public static string MORE_TROOPS = "moretroops";
+
+    public static int PLAY_RANDOM = 808;
 
     //Troop Params
     public static int KING_TROOP_ID = 0;

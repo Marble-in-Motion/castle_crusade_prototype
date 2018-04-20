@@ -62,7 +62,7 @@ public class Player : NetworkSetup
     {
         // Audio manager
         audioManager = AudioGameObject.GetComponent<AudioManager>();
-        audioManager.BuildDict();
+        audioManager.BuildDicts();
 
         // Canvas Settings
         Canvas canvas = GetComponentInChildren<Canvas>();
@@ -108,7 +108,7 @@ public class Player : NetworkSetup
 
         if (isServer)
         {
-            audioManager.PlaySound(Params.MAIN_MUSIC);
+            audioManager.PlaySingleSound(Params.MAIN_MUSIC);
         }
 
     }
@@ -280,7 +280,7 @@ public class Player : NetworkSetup
                     if ((numCloseTroops >= NUM_TROOPS_FOR_WARNING) && (Time.time > nextActionTime))
                     {
                         nextActionTime = Time.time + KLAXON_FIRE_TIME;
-                        RpcClientPlaySound(Params.KLAXON);
+                        RpcClientPlaySingleSound(Params.KLAXON);
                     }
                 }
                 if (screenShotEnabled)
@@ -316,7 +316,7 @@ public class Player : NetworkSetup
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
 
-        if (myTeamController.PlaySendTroopAnim == 1 && sendTroopAlerting == false)
+        if (myTeamController.PlaySendTroopAnim == true && sendTroopAlerting == false)
         {
             RpcSetSendTroopAlert();
             sendTroopAlerting = true;
@@ -547,7 +547,7 @@ public class Player : NetworkSetup
             bool successfulPurchase = myTeamController.SpendGold(Params.DESTROY_COST);
             if (successfulPurchase)
             {
-                RpcClientPlaySound(Params.VOLLEY);
+                RpcClientPlaySingleSound(Params.VOLLEY);
                 myTeamController.UpdateCoolDown();
                 GameObject[] troops = GetTroopsInLane(opponentsTeamId, laneId).ToArray();
                 RpcShootVolley(troops);
@@ -562,11 +562,21 @@ public class Player : NetworkSetup
     }
 
     [ClientRpc]
-    public void RpcClientPlaySound(string name)
+    public void RpcClientPlaySingleSound(string name)
     {
         if(isLocalPlayer)
         {
-            audioManager.PlaySound(name);
+            audioManager.PlaySingleSound(name);
+        }
+    }
+
+    [ClientRpc]
+    public void RpcClientPlayArraySound(string name, int index)
+    {
+        if (isLocalPlayer)
+        {
+            bool success = audioManager.PlayArraySound(name, index);
+            if (!success) { print("audio play array failed"); }
         }
     }
 
@@ -583,11 +593,11 @@ public class Player : NetworkSetup
         {
             if (troopId == Params.KING_TROOP_ID)
             {
-                RpcClientPlaySound(Params.SWORD);
+                RpcClientPlaySingleSound(Params.SWORD);
             }
             else if (troopId == Params.RAM_TROOP_ID)
             {
-                RpcClientPlaySound(Params.HORN);
+                RpcClientPlaySingleSound(Params.HORN);
             }
             spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
 
@@ -599,7 +609,7 @@ public class Player : NetworkSetup
         }
         else
         {
-            RpcClientPlaySound(Params.COINS);
+            RpcClientPlaySingleSound(Params.COINS);
         }
     }
 
