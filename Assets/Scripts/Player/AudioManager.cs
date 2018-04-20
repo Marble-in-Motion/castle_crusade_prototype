@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    [SerializeField]
+    private AudioSource[] moreTroops;
 
     [SerializeField]
     private AudioSource klaxon;
@@ -29,25 +31,57 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     private AudioSource mainMusic;
 
-    Dictionary<string, AudioSource> audioSources = new Dictionary<string, AudioSource>();
+    Dictionary<string, AudioSource> singleAudioSources = new Dictionary<string, AudioSource>();
 
-    public void BuildDict()
+    Dictionary<string, AudioSource[]> arrayAudioSources = new Dictionary<string, AudioSource[]>();
+
+    public void BuildDicts()
     {
-        audioSources.Add(Params.AMBIENCE, ambience);
-        audioSources.Add(Params.KLAXON, klaxon);
-        audioSources.Add(Params.COINS, coins);
-        audioSources.Add(Params.SWORD, sword);
-        audioSources.Add(Params.GONG, gong);
-        audioSources.Add(Params.HORN, horn);
-        audioSources.Add(Params.VOLLEY, volley);
-        audioSources.Add(Params.MAIN_MUSIC, mainMusic);
+        BuildArrayDict();
+        BuildSingleDict();
+    }
+         
+    public void BuildSingleDict()
+    {
+        singleAudioSources.Add(Params.AMBIENCE, ambience);
+        singleAudioSources.Add(Params.KLAXON, klaxon);
+        singleAudioSources.Add(Params.COINS, coins);
+        singleAudioSources.Add(Params.SWORD, sword);
+        singleAudioSources.Add(Params.GONG, gong);
+        singleAudioSources.Add(Params.HORN, horn);
+        singleAudioSources.Add(Params.VOLLEY, volley);
+        singleAudioSources.Add(Params.MAIN_MUSIC, mainMusic);
     }
 
-    public void PlaySound(string audioSourceName)
+    public void BuildArrayDict()
     {
-        AudioSource audioSource = audioSources[audioSourceName];
+        arrayAudioSources.Add(Params.MORE_TROOPS, moreTroops);
+    }
+
+    public void PlaySingleSound(string audioSourceName)
+    {
+        AudioSource audioSource = singleAudioSources[audioSourceName];
         AudioClip audioClip = audioSource.clip;
         audioSource.PlayOneShot(audioClip);
     }
 
+    public bool PlayArraySound(string audioSourceName, int index)
+    {
+        try
+        {
+            if(index == Params.PLAY_RANDOM)
+            {
+                index = UnityEngine.Random.Range(0, arrayAudioSources[audioSourceName].Length);
+            }
+            AudioSource audioSource = arrayAudioSources[audioSourceName][index];
+            AudioClip audioClip = audioSource.clip;
+            audioSource.PlayOneShot(audioClip);
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e, this);
+            return false;
+        }
+        return true;
+    }
 }

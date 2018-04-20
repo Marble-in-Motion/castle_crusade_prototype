@@ -29,6 +29,7 @@ public class Params {
     public static int COINS_DIVISOR_FOR_TROOPS_UPPER_BOUND = 40;
     public static float MAX_TIME_AT_SCREEN = 5;
     public static float TROOP_SEND_DELAY_PER_TROOP = 0.5f;
+    internal static float SEND_TROOP_ALERT_DELAY = 10f;
 
     //Audio Params
     public static string AMBIENCE = "ambience";
@@ -39,14 +40,15 @@ public class Params {
     public static string GONG = "gong";
     public static string SWORD = "sword";
     public static string MAIN_MUSIC = "mainmusic";
+    //More troop audio
+    public static string MORE_TROOPS = "moretroops";
+
+    public static int PLAY_RANDOM = 808;
 
     //Troop Params
     public static int KING_TROOP_ID = 0;
     public static int RAM_TROOP_ID = 1;
-
-
-
-
+    
 
     public class Bolt
 	{
