@@ -256,6 +256,7 @@ public class Player : NetworkSetup
     {
         if (isLocalPlayer)
         {
+            
             if (!teamAIEnabled)
             {
                 
@@ -319,7 +320,10 @@ public class Player : NetworkSetup
     [ClientRpc]
     private void RpcTakeScreenShot()
     {
-        TakeScreenshot();
+        if (isLocalPlayer)
+        {
+            TakeScreenshot();
+        }
     }
 
     [Command]
@@ -334,6 +338,7 @@ public class Player : NetworkSetup
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
         bool state = myTeamController.TeamAIEnabled;
+        
         RpcSetTeamAIEnabled(state);
     }
 
@@ -571,7 +576,7 @@ public class Player : NetworkSetup
     private void TakeScreenshot()
     {
 		Debug.Log ("taking screenshot");
-		CmdGetDanger ();
+		CmdGetDanger();
         string directory = Path.GetFullPath(".");
 		string path = Path.Combine(directory + String.Format("/Screenshots/{0}", currentDangerValue), String.Format("Screenshot_{0}_{1}.png",id, UnityEngine.Random.Range(0,20000)));
         ScreenCapture.CaptureScreenshot(path);
