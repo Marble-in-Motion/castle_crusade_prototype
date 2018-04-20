@@ -115,7 +115,11 @@ public class SpawnController : NetworkBehaviour
 			spawn = hit.position;
 		}
 
+		NavMeshPath navPath = new NavMeshPath();
+
 		GameObject troop = Instantiate(troopPrefabs[troopId], spawn, lane.transform.rotation) as GameObject;
+		NavMesh.CalculatePath(spawn, GetOpponentsTower(myTeamId).transform.position, NavMesh.AllAreas, navPath);
+		troop.GetComponent<NavMeshAgent> ().path = navPath;
         NetworkServer.Spawn(troop);
 
         AIController ai = troop.GetComponent<AIController>();
