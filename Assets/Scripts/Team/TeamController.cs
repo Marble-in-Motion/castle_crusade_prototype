@@ -26,6 +26,8 @@ public class TeamController : NetworkBehaviour
     private float troopTooCloseRatio = Params.TROOP_CLOSE_DISTANCE;
     private int troopDistanceMultiplyer = Params.TROOP_RATIO_MULTIPLYER;
 
+    private bool sendTroopAlerting = false;
+
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
     {
@@ -113,6 +115,17 @@ public class TeamController : NetworkBehaviour
         }
     }
 
+    private float nextSendTroopAlert;
+
+    private bool playSendTroopAnim = false;
+    public bool PlaySendTroopAnim
+    {
+        get
+        {
+            return playSendTroopAnim;
+        }
+    }
+
     private int lastActivePlayerId;
     public int LastActivePlayerId
     {
@@ -129,6 +142,7 @@ public class TeamController : NetworkBehaviour
 
     void Start()
     {
+        nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
         result = TeamResult.UNDECIDED;
 		towerHealth = Params.STARTING_TOWER_HEALTH;
         endOfCoolDown = Time.time;
@@ -139,11 +153,60 @@ public class TeamController : NetworkBehaviour
     void Update()
     {
         AddCoinPerSecond();
+        SendTroopAlert();
+
         currentTime = Time.time;
         if (teamAIEnabled)
         {
             CheckChangeAI();
         }
+    }
+
+    private void SendTroopAlert()
+    {
+
+        if (Time.time > nextSendTroopAlert && sendTroopAlerting == false)
+        {
+            playSendTroopAnim = true;
+            sendTroopAlerting = true;
+            
+            string playersTag = Player.PLAYER_TAG + " " + id;
+
+            GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+
+            int length = players.Length;
+
+            if(length > 0)
+            {
+                int playerIndex = Random.Range(0, length);
+
+                Player p = players[playerIndex].GetComponent<Player>();
+
+                p.RpcClientPlayArraySound(Params.MORE_TROOPS, Params.PLAY_RANDOM);
+            }
+            
+        }
+    }
+
+    public void ResetSendTroopAlert(int id)
+    {
+        sendTroopAlerting = false;
+
+        string playersTag = Player.PLAYER_TAG + " " + id;
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+
+        playSendTroopAnim = false;
+
+        foreach(GameObject player in players)
+        {
+            Player p = player.GetComponent<Player>();
+            p.RpcResetSendTroopAlert();
+        }
+
+
+        nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
+
     }
 
     private void AddCoinPerSecond()
