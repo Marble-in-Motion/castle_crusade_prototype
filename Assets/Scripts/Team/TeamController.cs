@@ -202,6 +202,8 @@ public class TeamController : NetworkBehaviour
     {
         int troopCountDanger = GenerateTroopNumberDangerIndex(lane);
         int troopDistanceDanger = GenerateTroopDistanceDangerIndex(lane);
+        Debug.Log("count: " + troopCountDanger);
+        Debug.Log("distance: " + troopDistanceDanger);
         int index = troopCountDanger + troopDistanceDanger;
         if (index > 10)
         {
