@@ -268,9 +268,9 @@ public class TeamController : NetworkBehaviour
         Debug.Log("count: " + troopCountDanger);
         Debug.Log("distance: " + troopDistanceDanger);
         int index = troopCountDanger + troopDistanceDanger;
-        if (index > 10)
+        if (index > 8)
         {
-            index = 10;
+            index = 8;
         }
         return index;
     }
@@ -315,7 +315,7 @@ public class TeamController : NetworkBehaviour
             }
             if (nearestTroopDistance > troopTooCloseRatio)
             {
-                index = 10;
+                index = 8;
             }
         }
         return index;

@@ -114,8 +114,11 @@ public class GameController : NetworkBehaviour
         teamController1.SetTeamResult(team1Result);
         teamController2.SetTeamResult(team2Result);
 
-        teamController1.SetTeamAIEnabled(false);
-        teamController2.SetTeamAIEnabled(false);
+        if (!screenshotEnabled)
+        {
+            teamController1.SetTeamAIEnabled(false);
+            teamController2.SetTeamAIEnabled(false);
+        }
 
         currentGameState = GameState.GAME_END;
     }
@@ -139,24 +142,33 @@ public class GameController : NetworkBehaviour
         }
     }
 
+    private void RestartGame()
+    {
+        teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+        teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+
+        teamController1.Restart();
+        teamController2.Restart();
+        DestroyAllTroops();
+        coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
+        currentGameState = GameState.GAME_IN_PROGRESS;
+    }
+
     private void Update()
     {
         CheckTime();
         if (currentGameState == GameState.GAME_END)
         {
             DestroyAllTroops();
+            if (screenshotEnabled)
+            {
+                RestartGame();
+            }
                
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
-            teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
-
-            teamController1.Restart();
-            teamController2.Restart();
-            DestroyAllTroops();
-            coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
-            currentGameState = GameState.GAME_IN_PROGRESS;
+            RestartGame();
         }
     }
 
