@@ -627,11 +627,14 @@ public class Player : NetworkSetup
 		
     private void TakeScreenshot()
     {
-		Debug.Log ("taking screenshot");
 		CmdGetDanger();
-        string directory = Path.GetFullPath(".");
-		string path = Path.Combine(directory + String.Format("/Screenshots//Screenshots/{0}", currentDangerValue), String.Format("Screenshot_{0}_{1}.png",id, UnityEngine.Random.Range(0,20000)));
-        ScreenCapture.CaptureScreenshot(path);
+        if (currentDangerValue >= Params.MIN_DANGER_SCORE_SCREENSHOT)
+        {
+            Debug.Log("taking screenshot");
+            string directory = Path.GetFullPath(".");
+            string path = Path.Combine(directory + String.Format("/Screenshots//Screenshots/{0}", currentDangerValue), String.Format("Screenshot_{0}_{1}.png", id, UnityEngine.Random.Range(0, 20000)));
+            ScreenCapture.CaptureScreenshot(path);
+        }
     }
 
 	[Command]

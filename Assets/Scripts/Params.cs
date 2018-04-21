@@ -30,6 +30,8 @@ public class Params {
     public static float MAX_TIME_AT_SCREEN = 5;
     public static float TROOP_SEND_DELAY_PER_TROOP = 0.5f;
 
+    public static int MIN_DANGER_SCORE_SCREENSHOT = 0; 
+
 
     internal static float SEND_TROOP_ALERT_DELAY = 100;//10f;
 
