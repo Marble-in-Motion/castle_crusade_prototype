@@ -94,7 +94,9 @@ public class AIPlayer : NetworkSetup
 
     private IEnumerator AISendTroopsWithDelay()
     {
-        int lane = UnityEngine.Random.Range(0, 4);
+        System.Random rnd = new System.Random();
+
+        int lane = rnd.Next(0, 5);
         for (int i = 0; i < AINextNumberTroopsToSend; i++)
         {
             if (randomLaneSend)
