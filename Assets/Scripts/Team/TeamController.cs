@@ -308,7 +308,7 @@ public class TeamController : NetworkBehaviour
         if (troopCount > 0)
         {
             float averageDistance = totalDistanceToTower / troopCount;
-            index = (int)(averageDistance * troopDistanceMultiplyer);
+            index = 1 + (int)(averageDistance * troopDistanceMultiplyer);
             if (index > 5)
             {
                 index = 5;
