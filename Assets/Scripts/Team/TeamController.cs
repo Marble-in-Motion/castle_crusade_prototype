@@ -308,7 +308,7 @@ public class TeamController : NetworkBehaviour
         if (troopCount > 0)
         {
             float averageDistance = totalDistanceToTower / troopCount;
-            index = (int)(averageDistance * troopDistanceMultiplyer);
+            index = 1 + (int)(averageDistance * troopDistanceMultiplyer);
             if (index > 5)
             {
                 index = 5;
@@ -345,7 +345,7 @@ public class TeamController : NetworkBehaviour
         for (int i = 0; i < allTroops.Length; i++)
         {
             AIController ai = allTroops[i].GetComponent<AIController>();
-            if (ai.OpposingTeamId == id && ai.LaneId == laneId)
+            if (ai.OpposingTeamId == id && ai.LaneId == laneId && allTroops[i].GetComponent<NPCHealth>().IsAlive())
             {
                 troopsInLane.Add(allTroops[i]);
             }
