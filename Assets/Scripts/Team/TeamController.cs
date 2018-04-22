@@ -263,6 +263,10 @@ public class TeamController : NetworkBehaviour
 
     public int GetLaneDangerIndex(int lane)
     {
+        //python bit here
+        string fileName = @"C:\Users\spewa_000\Documents\WORK\GP\castle_crusade_prototype\Assets\Scripts\Python\test.py";
+        print(RunPython.Run(fileName, "pathhh"));
+        
         int troopCountDanger = GenerateTroopNumberDangerIndex(lane);
         int troopDistanceDanger = GenerateTroopDistanceDangerIndex(lane);
         Debug.Log("count: " + troopCountDanger);
