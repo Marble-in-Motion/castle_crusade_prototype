@@ -57,21 +57,22 @@ public class GameController : NetworkBehaviour
 
     private void ToggleSandBox()
     {
-        RestartGame();
         if(currentGameState == GameState.SAND_BOX)
         {
+            RestartGame();
             currentGameState = GameState.GAME_IN_PROGRESS;
             teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
             teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
         }
         else
         {
+            RestartGame();
             currentGameState = GameState.SAND_BOX;
             teamController1.SetTeamResult(TeamController.TeamResult.SAND_BOX);
             teamController2.SetTeamResult(TeamController.TeamResult.SAND_BOX);
-
         }
-        
+
+
     }
 
     public void ToggleScreenShot()

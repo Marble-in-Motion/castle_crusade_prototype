@@ -14,8 +14,6 @@ public class CollisionHandler : NetworkBehaviour {
 	    int troopId = other.gameObject.GetComponent<AIController>().TroopType;
 		int towerDamage = Params.NPC_DAMAGE[troopId]; // need to get troopId
 
-        Debug.Log("Collision");
-
         DeductTowerHealth(towerDamage);
         DestroyTroop(other.gameObject);
 	}
