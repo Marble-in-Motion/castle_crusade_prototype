@@ -1,30 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using UnityEngine.Networking;
 
-public class HiResScreenShot : MonoBehaviour
+public class HiResScreenShot : NetworkBehaviour
 {
     public int resWidth = 1280;
     public int resHeight = 720;
 
-    public Camera camera;
-
     private bool takeHiResShot = false;
-
-    void Start()
-    {
-        camera = this.GetComponentInChildren<Camera>();
-    }
-
-
 
     public static string ScreenShotName(int width, int height, int index)
     {
         string directory = Path.GetFullPath(".");
-        return string.Format("{0}/Screenshots/screen_{1}x{2}_{3}.png",
+        return string.Format("{0}/Screenshots/screen_{1}.png",
                              directory,
-                             width, height,
-                             System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
+                             index);
     }
 
     public void TakeHiResShot()
@@ -32,12 +23,14 @@ public class HiResScreenShot : MonoBehaviour
         takeHiResShot = true;
     }
 
-    void LateUpdate()
+    [Command]
+    public void CmdTakeScreenShots(GameObject[] players)
     {
-        takeHiResShot |= Input.GetKeyDown("k");
-
-        if (takeHiResShot)
+        Debug.Log("Players:" + players.Length);
+        for (int i = 0; i < players.Length; i++)
         {
+            
+            Camera camera = players[i].GetComponentInChildren<Camera>();
             RenderTexture rt = new RenderTexture(resWidth, resHeight, 24);
             camera.targetTexture = rt;
             Texture2D screenShot = new Texture2D(resWidth, resHeight, TextureFormat.RGB24, false);
@@ -48,10 +41,10 @@ public class HiResScreenShot : MonoBehaviour
             RenderTexture.active = null; // JC: added to avoid errors
             Destroy(rt);
             byte[] bytes = screenShot.EncodeToPNG();
-            string filename = ScreenShotName(resWidth, resHeight, 0);
+            string filename = ScreenShotName(resWidth, resHeight, i);
             System.IO.File.WriteAllBytes(filename, bytes);
             Debug.Log(string.Format("Took screenshot to: {0}", filename));
-            takeHiResShot = false;
         }
     }
+
 }
