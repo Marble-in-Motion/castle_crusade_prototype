@@ -29,7 +29,7 @@ public class HiResScreenShot : NetworkBehaviour
         Debug.Log("Players:" + players.Length);
         for (int i = 0; i < players.Length; i++)
         {
-            
+            int playerId = players[i].GetComponent<Player>().GetId();
             Camera camera = players[i].GetComponentInChildren<Camera>();
             RenderTexture rt = new RenderTexture(resWidth, resHeight, 24);
             camera.targetTexture = rt;
@@ -41,7 +41,7 @@ public class HiResScreenShot : NetworkBehaviour
             RenderTexture.active = null; // JC: added to avoid errors
             Destroy(rt);
             byte[] bytes = screenShot.EncodeToPNG();
-            string filename = ScreenShotName(resWidth, resHeight, i);
+            string filename = ScreenShotName(resWidth, resHeight, playerId);
             System.IO.File.WriteAllBytes(filename, bytes);
             Debug.Log(string.Format("Took screenshot to: {0}", filename));
         }

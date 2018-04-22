@@ -237,7 +237,7 @@ public class TeamController : NetworkBehaviour
 
     private void CheckChangeAI()
     {
-        TakeTeamScreenShot();
+        
         if(Time.time > timeToScreenCheck)
         {
             UpdateAIActive();
@@ -252,6 +252,7 @@ public class TeamController : NetworkBehaviour
 
     private void UpdateAIActive()
     {
+        TakeTeamScreenShot();
         int aiLane = 0;
         int aiLane2 = 0;
         int maxDanger = 0;
