@@ -12,7 +12,7 @@ public class TeamController : NetworkBehaviour
     public const int TEAM1 = 1;
     public const int TEAM2 = 2;
 
-    public enum TeamResult { UNDECIDED, LOST, WON }
+    public enum TeamResult { UNDECIDED, LOST, WON, SAND_BOX }
 
     private int coinsPerSecond = Params.STARTING_COIN_INCREASE_AMOUNT;
     private float towerHealth;
@@ -389,7 +389,10 @@ public class TeamController : NetworkBehaviour
 
     public void DeductTowerHealth(int damage)
     {
-        towerHealth = towerHealth - damage;
+        if (result != TeamResult.SAND_BOX)
+        {
+            towerHealth = towerHealth - damage;
+        }
         RpcPlaySeigeSound();
 
         if (towerHealth <= 0)

@@ -10,7 +10,7 @@ public class GameController : NetworkBehaviour
     public const string GAME_CONTROLLER_TAG = "GameController";
     public const string NPC_TAG = "NPC";
 
-    public enum GameState { GAME_IN_PROGRESS, GAME_END }
+    public enum GameState { GAME_IN_PROGRESS, GAME_END, SAND_BOX }
 
     private GameState currentGameState;
 
@@ -53,6 +53,25 @@ public class GameController : NetworkBehaviour
 
         teamController1 = GameObject.FindGameObjectWithTag(TeamController.TEAM_CONTROLLER_1_TAG).GetComponent<TeamController>();
         teamController2 = GameObject.FindGameObjectWithTag(TeamController.TEAM_CONTROLLER_2_TAG).GetComponent<TeamController>();
+    }
+
+    private void ToggleSandBox()
+    {
+        RestartGame();
+        if(currentGameState == GameState.SAND_BOX)
+        {
+            currentGameState = GameState.GAME_IN_PROGRESS;
+            teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+            teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+        }
+        else
+        {
+            currentGameState = GameState.SAND_BOX;
+            teamController1.SetTeamResult(TeamController.TeamResult.SAND_BOX);
+            teamController2.SetTeamResult(TeamController.TeamResult.SAND_BOX);
+
+        }
+        
     }
 
     public void ToggleScreenShot()
@@ -169,6 +188,10 @@ public class GameController : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             RestartGame();
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            ToggleSandBox();
         }
     }
 
