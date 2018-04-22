@@ -8,6 +8,7 @@ public class GameController : NetworkBehaviour
 {
 
     public const string GAME_CONTROLLER_TAG = "GameController";
+    public const string SPAWN_CONTROLLER_TAG = "SpawnController";
     public const string NPC_TAG = "NPC";
 
     public enum GameState { GAME_IN_PROGRESS, GAME_END, SAND_BOX }
@@ -23,7 +24,11 @@ public class GameController : NetworkBehaviour
     
     private Camera sceneCamera;
 
+    private SpawnController spawnController;
+
     private float coinIncreaseTime;
+
+    private float nextTroopSendSandBox = 0;
 
     public bool GetCurrentGameOver()
     {
@@ -50,7 +55,7 @@ public class GameController : NetworkBehaviour
         coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
         sceneCamera = Camera.main;
         sceneCamera.gameObject.SetActive(true);
-
+        spawnController = GameObject.FindGameObjectWithTag(SPAWN_CONTROLLER_TAG).GetComponent<SpawnController>();
         teamController1 = GameObject.FindGameObjectWithTag(TeamController.TEAM_CONTROLLER_1_TAG).GetComponent<TeamController>();
         teamController2 = GameObject.FindGameObjectWithTag(TeamController.TEAM_CONTROLLER_2_TAG).GetComponent<TeamController>();
     }
@@ -73,6 +78,14 @@ public class GameController : NetworkBehaviour
         }
 
 
+    }
+
+    private void RandomTroopSend()
+    {
+        System.Random rnd = new System.Random();
+        int lane = rnd.Next(0, 4);
+        spawnController.SpawnOffensiveTroop(0, lane, 1, 2);
+        spawnController.SpawnOffensiveTroop(0, lane, 2, 1);
     }
 
     public void ToggleScreenShot()
@@ -185,6 +198,14 @@ public class GameController : NetworkBehaviour
                 RestartGame();
             }
                
+        }
+        if(currentGameState == GameState.SAND_BOX)
+        {
+            if(Time.time > nextTroopSendSandBox)
+            {
+                nextTroopSendSandBox = Time.time + Params.TROOP_SEND_INTERVAL_SAND_BOX;
+                RandomTroopSend();
+            }
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
