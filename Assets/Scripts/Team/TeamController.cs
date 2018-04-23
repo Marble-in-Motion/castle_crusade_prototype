@@ -158,10 +158,6 @@ public class TeamController : NetworkBehaviour
         script = new RunPython();
 
         //string imagePath = @"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\tf_files\test_data_resize\5\img57.jpg";
-
-        float [] scores = GetDangerScores();
-        print(scores[0]);
-
         //print("Returned output from python: " + output);
         // print("Time " + Time.time);
         // output = script.Interact2();
@@ -307,8 +303,13 @@ public class TeamController : NetworkBehaviour
 
     public float[] GetDangerScores()
     {
+        float startTime = Time.time;
 
-        string output = script.Interact2(id);
+        script.Start();
+
+        string output = script.Interact(id);
+
+        //print(output);
 
         string[] scoresString = output.Split(',');
 
@@ -319,6 +320,12 @@ public class TeamController : NetworkBehaviour
             scores[i] = float.Parse(scoresString[i]);
         }
 
+        float endTime = Time.time;
+
+        float elapsedTime = endTime - startTime;
+
+        print(elapsedTime);
+
         return scores;
     }
 
@@ -326,6 +333,7 @@ public class TeamController : NetworkBehaviour
     private void UpdateAIActiveNeural()
     {
         TakeTeamScreenShot();
+
         int aiLane = 0;
         int aiLane2 = 0;
         float maxDanger = 0;
@@ -349,18 +357,17 @@ public class TeamController : NetworkBehaviour
             }
         }
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
+        print(aIActivePlayer);
         aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
+        print(aIActivePlayer2);
     }
 
 
     public int GetLaneDangerIndex(int lane)
     {
-        //python bit here
         
         int troopCountDanger = GenerateTroopNumberDangerIndex(lane);
         int troopDistanceDanger = GenerateTroopDistanceDangerIndex(lane);
-        Debug.Log("count: " + troopCountDanger);
-        Debug.Log("distance: " + troopDistanceDanger);
         int index = troopCountDanger + troopDistanceDanger;
         if (index > 8)
         {

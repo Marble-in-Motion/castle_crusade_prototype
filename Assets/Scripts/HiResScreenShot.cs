@@ -5,8 +5,8 @@ using UnityEngine.Networking;
 
 public class HiResScreenShot : NetworkBehaviour
 {
-    public int resWidth = 1280;
-    public int resHeight = 720;
+    private int resWidth = 224;
+    private int resHeight = 224;
 
     private bool takeHiResShot = false;
 

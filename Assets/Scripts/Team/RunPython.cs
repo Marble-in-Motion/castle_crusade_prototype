@@ -18,25 +18,10 @@ public class RunPython
         p.StartInfo.UseShellExecute = false; // make sure we can read the output from stdout
         p.StartInfo.Arguments = @"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\scripts\label_image_spesh.py";
         p.Start(); // start the process (the python program)
-
+        
     }
 
-    public string Interact(string imagePath)
-    {
-        StreamWriter streamWriter = p.StandardInput;
-
-        streamWriter.WriteLine(imagePath);
-
-        string output = p.StandardOutput.ReadToEnd();
-        UnityEngine.Debug.Log(output);
-
-        string err = p.StandardError.ReadToEnd();
-        UnityEngine.Debug.Log(err);
-
-        return output;
-    }
-
-    public string Interact2(int teamId)
+    public string Interact(int teamId)
     {
         StreamWriter streamWriter = p.StandardInput;
 
@@ -45,12 +30,17 @@ public class RunPython
         string output = p.StandardOutput.ReadToEnd();
         //UnityEngine.Debug.Log(output);
 
-        string err = p.StandardError.ReadToEnd();
-        UnityEngine.Debug.Log(err);
+        //string err = p.StandardError.ReadToEnd();
+        //UnityEngine.Debug.Log(err);
 
 
 
         return output;
+    }
+
+    public void Start()
+    {
+        p.Start();
     }
 
 
