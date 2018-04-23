@@ -36927,6 +36927,7 @@ MonoBehaviour:
   towers:
   - {fileID: 542114631}
   - {fileID: 78605721}
+  spawnSmoke: {fileID: 1706925378425126, guid: c623e1302cd3a46cdb4fa4aaad47653e, type: 2}
 --- !u!4 &893616223
 Transform:
   m_ObjectHideFlags: 0
@@ -65354,6 +65355,7 @@ GameObject:
   - component: {fileID: 1551961072}
   - component: {fileID: 1551961071}
   - component: {fileID: 1551961070}
+  - component: {fileID: 1551961073}
   m_Layer: 0
   m_Name: TeamController1
   m_TagString: TeamController1
@@ -65419,6 +65421,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1551961073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1551961069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8f07d269541d64448959032334042d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resWidth: 1280
+  resHeight: 720
 --- !u!1 &1552738940
 GameObject:
   m_ObjectHideFlags: 0
@@ -68275,6 +68290,7 @@ MonoBehaviour:
   - {fileID: 1920473768299774, guid: 6ac104cae32ee7043ae0f98eadec6669, type: 2}
   - {fileID: 1183937305477732, guid: 31477e8ed0704ff48a0d6f949da97497, type: 2}
   - {fileID: 1545292661495648, guid: 8c76574f5f3d67740b461e72149687d5, type: 2}
+  - {fileID: 1706925378425126, guid: c623e1302cd3a46cdb4fa4aaad47653e, type: 2}
   m_CustomConfig: 1
   m_MaxConnections: 12
   m_ConnectionConfig:
@@ -81076,6 +81092,7 @@ GameObject:
   - component: {fileID: 1926188725}
   - component: {fileID: 1926188724}
   - component: {fileID: 1926188723}
+  - component: {fileID: 1926188726}
   m_Layer: 0
   m_Name: TeamController2
   m_TagString: TeamController2
@@ -81141,6 +81158,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1926188726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1926188722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8f07d269541d64448959032334042d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resWidth: 1280
+  resHeight: 720
 --- !u!4 &1927065069 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: a6456b9419960c543890384b83ae02ef, type: 3}
