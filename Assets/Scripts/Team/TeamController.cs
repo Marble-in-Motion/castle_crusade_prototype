@@ -28,6 +28,8 @@ public class TeamController : NetworkBehaviour
 
     private bool sendTroopAlerting = false;
 
+    private const bool NEURAL_NET_ACTIVE = true;
+
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
     {
@@ -162,6 +164,21 @@ public class TeamController : NetworkBehaviour
         }
     }
 
+    private void TakeTeamScreenShot()
+    {
+        GameObject[] players = FindPlayersInTeam();
+        this.GetComponent<HiResScreenShot>().CmdTakeScreenShots(players);
+    }
+
+    private GameObject[] FindPlayersInTeam()
+    {
+        string playersTag = Player.PLAYER_TAG + " " + id;
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+
+        return players;
+    }
+
     private void SendTroopAlert()
     {
 
@@ -169,10 +186,8 @@ public class TeamController : NetworkBehaviour
         {
             playSendTroopAnim = true;
             sendTroopAlerting = true;
-            
-            string playersTag = Player.PLAYER_TAG + " " + id;
 
-            GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+            GameObject[] players = FindPlayersInTeam();
 
             int length = players.Length;
 
@@ -222,6 +237,7 @@ public class TeamController : NetworkBehaviour
 
     private void CheckChangeAI()
     {
+        
         if(Time.time > timeToScreenCheck)
         {
             UpdateAIActive();
@@ -236,6 +252,7 @@ public class TeamController : NetworkBehaviour
 
     private void UpdateAIActive()
     {
+        TakeTeamScreenShot();
         int aiLane = 0;
         int aiLane2 = 0;
         int maxDanger = 0;
