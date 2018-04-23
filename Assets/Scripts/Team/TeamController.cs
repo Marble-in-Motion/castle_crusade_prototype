@@ -184,7 +184,7 @@ public class TeamController : NetworkBehaviour
     private void TakeTeamScreenShot()
     {
         GameObject[] players = FindPlayersInTeam();
-        this.GetComponent<HiResScreenShot>().CmdTakeScreenShots(players);
+        this.GetComponent<HiResScreenShot>().CmdTakeScreenShots(players, id);
     }
 
     private GameObject[] FindPlayersInTeam()
@@ -254,22 +254,32 @@ public class TeamController : NetworkBehaviour
 
     private void CheckChangeAI()
     {
-        
-        if(Time.time > timeToScreenCheck)
+        if (NEURAL_NET_ACTIVE)
         {
-            UpdateAIActive();
-            timeToScreenCheck = Time.time + maxTimeAtScreen;
+            if (Time.time > timeToScreenCheck)
+            {
+                UpdateAIActiveNeural();
+                timeToScreenCheck = Time.time + maxTimeAtScreen;
+            }
         }
-        else if (CheckIfNoTroopsPresent(aIActivePlayer) || CheckIfNoTroopsPresent(aIActivePlayer2))
+        else
         {
-            UpdateAIActive();
-            timeToScreenCheck = Time.time + maxTimeAtScreen;
+            if (Time.time > timeToScreenCheck)
+            {
+                UpdateAIActive();
+                timeToScreenCheck = Time.time + maxTimeAtScreen;
+            }
+            else if (CheckIfNoTroopsPresent(aIActivePlayer) || CheckIfNoTroopsPresent(aIActivePlayer2))
+            {
+                UpdateAIActive();
+                timeToScreenCheck = Time.time + maxTimeAtScreen;
+            }
         }
     }
 
     private void UpdateAIActive()
     {
-        TakeTeamScreenShot();
+        
         int aiLane = 0;
         int aiLane2 = 0;
         int maxDanger = 0;
@@ -315,6 +325,7 @@ public class TeamController : NetworkBehaviour
 
     private void UpdateAIActiveNeural()
     {
+        TakeTeamScreenShot();
         int aiLane = 0;
         int aiLane2 = 0;
         float maxDanger = 0;
@@ -322,7 +333,7 @@ public class TeamController : NetworkBehaviour
         float [] dangers = GetDangerScores();
         for (int lane = 0; lane < 5; lane++)
         {
-            int index = GetLaneDangerIndex(lane);
+            float index = dangers[lane];
             if (index > maxDanger)
             {
                 maxDanger = index;

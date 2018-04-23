@@ -10,11 +10,12 @@ public class HiResScreenShot : NetworkBehaviour
 
     private bool takeHiResShot = false;
 
-    public static string ScreenShotName(int width, int height, int index)
+    public static string ScreenShotName(int width, int height, int index, int teamId)
     {
         string directory = Path.GetFullPath(".");
-        return string.Format("{0}/Screenshots/screen_{1}.png",
+        return string.Format("{0}/Screenshots/Team{1}/screen_{2}.png",
                              directory,
+                             teamId,
                              index);
     }
 
@@ -24,7 +25,7 @@ public class HiResScreenShot : NetworkBehaviour
     }
 
     [Command]
-    public void CmdTakeScreenShots(GameObject[] players)
+    public void CmdTakeScreenShots(GameObject[] players, int teamId)
     {
         Debug.Log("Players:" + players.Length);
         for (int i = 0; i < players.Length; i++)
@@ -41,7 +42,7 @@ public class HiResScreenShot : NetworkBehaviour
             RenderTexture.active = null; // JC: added to avoid errors
             Destroy(rt);
             byte[] bytes = screenShot.EncodeToPNG();
-            string filename = ScreenShotName(resWidth, resHeight, playerId);
+            string filename = ScreenShotName(resWidth, resHeight, playerId, teamId);
             System.IO.File.WriteAllBytes(filename, bytes);
             Debug.Log(string.Format("Took screenshot to: {0}", filename));
         }
