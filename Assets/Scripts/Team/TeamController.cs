@@ -322,7 +322,6 @@ public class TeamController : NetworkBehaviour
         }
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
         aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
-        
     }
 
 
