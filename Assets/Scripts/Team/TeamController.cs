@@ -154,9 +154,13 @@ public class TeamController : NetworkBehaviour
 
         RunPython script = new RunPython();
 
-        string output = script.Interact2();
+        string output = script.Interact2(id);
 
         print("Returned output from python: " + output);
+        // print("Time " + Time.time);
+        // output = script.Interact2();
+        // print("Returned output from python: " + output);
+        // print("Time " + Time.time);
     }
 
     void Update()
@@ -273,7 +277,6 @@ public class TeamController : NetworkBehaviour
     public int GetLaneDangerIndex(int lane)
     {
         //python bit here
-        //RunPython.Run(@"tf_files/test_data_resize/5/img57.jpg");
         
         int troopCountDanger = GenerateTroopNumberDangerIndex(lane);
         int troopDistanceDanger = GenerateTroopDistanceDangerIndex(lane);

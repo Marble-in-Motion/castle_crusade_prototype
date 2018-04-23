@@ -36,11 +36,11 @@ public class RunPython
         return output;
     }
 
-    public string Interact2()
+    public string Interact2(int teamId)
     {
-        //StreamWriter streamWriter = p.StandardInput;
+        StreamWriter streamWriter = p.StandardInput;
 
-        //streamWriter.WriteLine(imagePath);
+        streamWriter.WriteLine(teamId);
 
         string output = p.StandardOutput.ReadToEnd();
         //UnityEngine.Debug.Log(output);
