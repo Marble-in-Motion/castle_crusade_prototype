@@ -45,8 +45,8 @@ public class RunPython
         string output = p.StandardOutput.ReadToEnd();
         //UnityEngine.Debug.Log(output);
 
-        //string err = p.StandardError.ReadToEnd();
-        //UnityEngine.Debug.Log(err);
+        string err = p.StandardError.ReadToEnd();
+        UnityEngine.Debug.Log(err);
 
         return output;
     }
