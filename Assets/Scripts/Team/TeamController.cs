@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -30,6 +31,9 @@ public class TeamController : NetworkBehaviour
     private bool sendTroopAlerting = false;
 
     private const bool NEURAL_NET_ACTIVE = true;
+
+    bool _threadRunning;
+    Thread _thread;
 
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
@@ -301,23 +305,47 @@ public class TeamController : NetworkBehaviour
         aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
     }
 
+    void ThreadedWork()
+    {
+        _threadRunning = true;
+        bool workDone = false;
+
+        // This pattern lets us interrupt the work at a safe point if neeeded.
+        while (_threadRunning && !workDone)
+        {
+            script.Start();
+
+            string output = script.Interact(id);
+
+            print("output thread : " + output);
+            workDone = true;
+        }
+        _threadRunning = false;
+    }
+
     public float[] GetDangerScores()
     {
         float startTime = Time.time;
 
-        script.Start();
+        _thread = new Thread(ThreadedWork);
+        _thread.Start();
 
-        string output = script.Interact(id);
+        //if (!script.IsRunning())
+        //{
+        //    print("script exited");
+        //}
 
-        //print(output);
+        // string output = script.Interact(id);
 
-        string[] scoresString = output.Split(',');
+        // print("output : " + output);
+
+        // string[] scoresString = output.Split(',');
 
         float[] scores = new float[5];
 
         for (int i = 0; i < 5; i++)
         {
-            scores[i] = float.Parse(scoresString[i]);
+            scores[i] = 1.0f; // float.Parse(scoresString[i]);
         }
 
         float endTime = Time.time;

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b43b8a7c-5b6b-4ab3-9078-dae07b570860" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HiResScreenShot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/HiResScreenShot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Team/RunPython.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Team/RunPython.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Team/TeamController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Team/TeamController.cs" afterDir="false" />
     </list>
@@ -18,8 +18,8 @@
       <file leaf-file-name="label_image_spesh.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../tensorflow/tensorflow-for-poets-2/scripts/label_image_spesh.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1137">
-              <caret line="158" column="8" selection-start-line="158" selection-start-column="8" selection-end-line="158" selection-end-column="8" />
+            <state relative-caret-position="763">
+              <caret line="169" lean-forward="true" selection-start-line="169" selection-end-line="169" />
               <folding>
                 <element signature="e#690#728#0" expanded="true" />
               </folding>
@@ -471,8 +471,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../tensorflow/tensorflow-for-poets-2/scripts/label_image_spesh.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1137">
-          <caret line="158" column="8" selection-start-line="158" selection-start-column="8" selection-end-line="158" selection-end-column="8" />
+        <state relative-caret-position="763">
+          <caret line="169" lean-forward="true" selection-start-line="169" selection-end-line="169" />
           <folding>
             <element signature="e#690#728#0" expanded="true" />
           </folding>
