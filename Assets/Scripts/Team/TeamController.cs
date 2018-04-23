@@ -257,7 +257,10 @@ public class TeamController : NetworkBehaviour
         {
             if (Time.time > timeToScreenCheck)
             {
-                UpdateAIActiveNeural();
+                TakeTeamScreenShot();
+                print("thread");
+                _thread = new Thread(ThreadedWork);
+                _thread.Start();
                 timeToScreenCheck = Time.time + maxTimeAtScreen;
             }
         }
@@ -278,7 +281,6 @@ public class TeamController : NetworkBehaviour
 
     private void UpdateAIActive()
     {
-        
         int aiLane = 0;
         int aiLane2 = 0;
         int maxDanger = 0;
@@ -304,8 +306,6 @@ public class TeamController : NetworkBehaviour
         aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
     }
 
-    private bool test = true;
-
     void ThreadedWork()
     {
         _threadRunning = true;
@@ -316,45 +316,32 @@ public class TeamController : NetworkBehaviour
         {
             script.Start();
 
-            string threadOutput = script.Interact(id);
-
-            print("output thread : " + threadOutput);
+            UpdateAIActiveNeural();
             workDone = true;
-            test = !test;
         }
         _threadRunning = false;
     }
 
     public float[] GetDangerScores()
     {
-        float startTime = Time.time;
-
-        _thread = new Thread(ThreadedWork);
-        _thread.Start();
 
         //if (!script.IsRunning())
         //{
         //    print("script exited");
        // }
 
-        // string output = script.Interact(id);
+        string output = script.Interact(id);
 
-        // print("output : " + output);
+        print("output : " + output);
 
-        // string[] scoresString = output.Split(',');
+        string[] scoresString = output.Split(',');
 
         float[] scores = new float[5];
 
         for (int i = 0; i < 5; i++)
         {
-            scores[i] = 1.0f; // float.Parse(scoresString[i]);
+            scores[i] = float.Parse(scoresString[i]);
         }
-
-        float endTime = Time.time;
-
-        float elapsedTime = endTime - startTime;
-
-        print(elapsedTime);
 
         return scores;
     }
@@ -362,8 +349,6 @@ public class TeamController : NetworkBehaviour
 
     private void UpdateAIActiveNeural()
     {
-        TakeTeamScreenShot();
-
         int aiLane = 0;
         int aiLane2 = 0;
         float maxDanger = 0;
