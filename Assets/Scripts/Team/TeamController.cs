@@ -173,7 +173,6 @@ public class TeamController : NetworkBehaviour
     {
         AddCoinPerSecond();
         SendTroopAlert();
-
         currentTime = Time.time;
         if (teamAIEnabled)
         {
@@ -305,6 +304,8 @@ public class TeamController : NetworkBehaviour
         aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
     }
 
+    private bool test = true;
+
     void ThreadedWork()
     {
         _threadRunning = true;
@@ -315,10 +316,11 @@ public class TeamController : NetworkBehaviour
         {
             script.Start();
 
-            string output = script.Interact(id);
+            string threadOutput = script.Interact(id);
 
-            print("output thread : " + output);
+            print("output thread : " + threadOutput);
             workDone = true;
+            test = !test;
         }
         _threadRunning = false;
     }
