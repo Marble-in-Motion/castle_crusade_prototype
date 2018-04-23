@@ -119,7 +119,7 @@ public class SpawnController : NetworkBehaviour
 		if (NavMesh.SamplePosition (spawn, out hit, 100f, NavMesh.AllAreas)) {
 			spawn = hit.position;
 		}
-		GameObject smoke = Instantiate (spawnSmoke, new Vector3(spawn.x, spawn.y-10, spawn.z), Quaternion.identity) as GameObject;
+		GameObject smoke = Instantiate (spawnSmoke, new Vector3(spawn.x, spawn.y-20, spawn.z), Quaternion.identity) as GameObject;
 		NetworkServer.Spawn (smoke);
 		yield return spawnDelay;
 		NavMeshPath navPath = new NavMeshPath();
