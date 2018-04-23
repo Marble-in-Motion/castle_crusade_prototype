@@ -6,7 +6,6 @@ using UnityEngine;
 public class RunPython
 {
     Process p;
-    StreamWriter streamWriter;
 
     public RunPython()
     {
@@ -18,14 +17,14 @@ public class RunPython
         p.StartInfo.RedirectStandardError = true;
         p.StartInfo.UseShellExecute = false; // make sure we can read the output from stdout
         p.StartInfo.Arguments = @"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\scripts\label_image_spesh.py";
-        p.Start(); // start the process (the python program)
-        streamWriter = p.StandardInput;
+        //p.Start(); // start the process (the python program)
 
     }
 
     public string Interact(int teamId)
     {
-        
+
+        StreamWriter streamWriter = p.StandardInput;
 
         streamWriter.WriteLine(teamId);
 

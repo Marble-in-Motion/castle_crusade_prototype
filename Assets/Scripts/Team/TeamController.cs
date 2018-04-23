@@ -333,7 +333,7 @@ public class TeamController : NetworkBehaviour
         //if (!script.IsRunning())
         //{
         //    print("script exited");
-        //}
+       // }
 
         // string output = script.Interact(id);
 
