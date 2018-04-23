@@ -34,7 +34,7 @@ public class Player : NetworkSetup
     private CrossbowController crossbowController;
     private AIController aiController;
     private AudioManager audioManager;
-    private InputVCR vcr;
+    private PlaybackTester playbackTester;
 
     [SerializeField]
     private Behaviour[] componentsToDisable;
@@ -74,7 +74,7 @@ public class Player : NetworkSetup
         crossbowController = crossbow.GetComponent<CrossbowController>();
 
         // VCR Recording
-        vcr = GetComponent<InputVCR>();
+        playbackTester = GetComponent<PlaybackTester>();
     }
 
     void Start()
@@ -202,31 +202,31 @@ public class Player : NetworkSetup
 			CmdRequestOffensiveTroopSpawn (1, laneId);
 		} else if (Input.GetKeyDown (KeyCode.V) || Input.GetKeyDown (KeyCode.S)) {
 			CmdVolley ();
-		} else if (vcr.GetKeyDown("left"))
+		} else if (playbackTester.GetKeyDown("left"))
         {
 			print ("key down left");
             crossbowMotor.MoveLeft();
         }
-        else if (vcr.GetKeyDown("right"))
+		else if (playbackTester.GetKeyDown("right"))
         {
 			print ("key down right");
             crossbowMotor.MoveRight();
         }
-        else if (vcr.GetKeyDown("space"))
+		else if (playbackTester.GetKeyDown("space"))
         {
 			print ("key down space");
             Shoot();
         } else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Debug.Log("start new recording");
-            vcr.NewRecording();
+			playbackTester.NewRecording();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             String path = "exports/";
             // String fullPath = String.Format("{0}{1}_player{2}.json", path, DateTime.Now.Ticks, id);
             String fullPath = String.Format("{0}player{1}.json", path, id);
-            File.WriteAllText(fullPath, vcr.GetRecording().ToString());
+			File.WriteAllText(fullPath, playbackTester.GetRecording().ToString());
             Debug.Log("File written");
         }
 		else if (Input.GetKeyDown(KeyCode.Alpha3))
@@ -238,7 +238,7 @@ public class Player : NetworkSetup
                 string json = r.ReadToEnd();
                 Debug.Log(json);
                 Recording recording = Recording.ParseRecording(json);
-                vcr.Play(recording);
+				playbackTester.Play(recording);
             }
         }
     }
