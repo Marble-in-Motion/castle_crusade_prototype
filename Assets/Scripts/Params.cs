@@ -52,8 +52,6 @@ public class Params {
     //Troop Params
     public static int KING_TROOP_ID = 0;
     public static int RAM_TROOP_ID = 1;
-
-    public static float TROOP_SEND_INTERVAL_SAND_BOX = 1;
     
 
     public class Bolt
