@@ -21093,9 +21093,9 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 489092708}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.01158522, z: 0}
-  m_LocalScale: {x: 0.0020030006, y: 0.0004939783, z: 0.00093773316}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 213.22002, y: -0.94158936, z: 0}
+  m_LocalScale: {x: 0.6053098, y: 0.094973624, z: 0.28338453}
   m_Children: []
   m_Father: {fileID: 482003436}
   m_RootOrder: 0
@@ -21126,7 +21126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89cbb2a594130104dac735c9bcc271c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teamId: 2
+  teamId: 1
 --- !u!114 &489092712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36931,7 +36931,6 @@ MonoBehaviour:
   towers:
   - {fileID: 542114631}
   - {fileID: 78605721}
-  spawnSmoke: {fileID: 1706925378425126, guid: c623e1302cd3a46cdb4fa4aaad47653e, type: 2}
 --- !u!4 &893616223
 Transform:
   m_ObjectHideFlags: 0
@@ -68294,7 +68293,6 @@ MonoBehaviour:
   - {fileID: 1920473768299774, guid: 6ac104cae32ee7043ae0f98eadec6669, type: 2}
   - {fileID: 1183937305477732, guid: 31477e8ed0704ff48a0d6f949da97497, type: 2}
   - {fileID: 1545292661495648, guid: 8c76574f5f3d67740b461e72149687d5, type: 2}
-  - {fileID: 1706925378425126, guid: c623e1302cd3a46cdb4fa4aaad47653e, type: 2}
   m_CustomConfig: 1
   m_MaxConnections: 12
   m_ConnectionConfig:
