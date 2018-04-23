@@ -48,6 +48,8 @@ public class RunPython
         string err = p.StandardError.ReadToEnd();
         UnityEngine.Debug.Log(err);
 
+
+
         return output;
     }
 

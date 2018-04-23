@@ -136,11 +136,14 @@ public class TeamController : NetworkBehaviour
         }
     }
 
+    private RunPython script;
+
     public void SetLastActivePlayerId(int playerId)
     {
         lastActivePlayerId = playerId;
     }
 
+    
     void Start()
     {
         nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
@@ -150,13 +153,14 @@ public class TeamController : NetworkBehaviour
         currentTime = Time.time;
         lastActivePlayerId = -1;
 
+        script = new RunPython();
+
         //string imagePath = @"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\tf_files\test_data_resize\5\img57.jpg";
 
-        RunPython script = new RunPython();
+        float [] scores = GetDangerScores();
+        print(scores[0]);
 
-        string output = script.Interact2(id);
-
-        print("Returned output from python: " + output);
+        //print("Returned output from python: " + output);
         // print("Time " + Time.time);
         // output = script.Interact2();
         // print("Returned output from python: " + output);
@@ -273,6 +277,54 @@ public class TeamController : NetworkBehaviour
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
         aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
     }
+
+    public float[] GetDangerScores()
+    {
+
+        string output = script.Interact2(id);
+
+        string[] scoresString = output.Split(',');
+
+        float[] scores = new float[5];
+
+        for (int i = 0; i < 5; i++)
+        {
+            scores[i] = float.Parse(scoresString[i]);
+        }
+
+        return scores;
+    }
+
+
+    private void UpdateAIActiveNeural()
+    {
+        int aiLane = 0;
+        int aiLane2 = 0;
+        float maxDanger = 0;
+        float maxDanger2 = 0;
+        float [] dangers = GetDangerScores();
+        for (int lane = 0; lane < 5; lane++)
+        {
+            int index = GetLaneDangerIndex(lane);
+            if (index > maxDanger)
+            {
+                maxDanger = index;
+                aiLane = lane;
+            }
+            else
+            {
+                if (index > maxDanger2)
+                {
+                    maxDanger2 = index;
+                    aiLane2 = lane;
+                }
+            }
+        }
+        aIActivePlayer = ConvertLaneToPlayerId(aiLane);
+        aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
+        
+    }
+
 
     public int GetLaneDangerIndex(int lane)
     {
