@@ -7,7 +7,7 @@ public class RunPython
 {
     Process p;
 
-    public RunPython()
+    public RunPython(string scriptPath)
     {
         p = new Process();
         p.StartInfo.CreateNoWindow = true;
@@ -16,9 +16,7 @@ public class RunPython
         p.StartInfo.RedirectStandardInput = true;
         p.StartInfo.RedirectStandardError = true;
         p.StartInfo.UseShellExecute = false; // make sure we can read the output from stdout
-        p.StartInfo.Arguments = @"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\scripts\label_image_spesh.py";
-        //p.Start(); // start the process (the python program)
-
+        p.StartInfo.Arguments = scriptPath;
     }
 
     public string Interact(int teamId)
@@ -39,7 +37,7 @@ public class RunPython
         return output;
     }
 
-    public void Start()
+    public void Run()
     {
         p.Start();
     }

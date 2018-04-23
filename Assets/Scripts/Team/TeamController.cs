@@ -32,8 +32,8 @@ public class TeamController : NetworkBehaviour
 
     private const bool NEURAL_NET_ACTIVE = true;
 
-    bool _threadRunning;
-    Thread _thread;
+    bool threadRunning;
+    Thread thread;
 
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
@@ -159,14 +159,7 @@ public class TeamController : NetworkBehaviour
         currentTime = Time.time;
         lastActivePlayerId = -1;
 
-        script = new RunPython();
-
-        //string imagePath = @"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\tf_files\test_data_resize\5\img57.jpg";
-        //print("Returned output from python: " + output);
-        // print("Time " + Time.time);
-        // output = script.Interact2();
-        // print("Returned output from python: " + output);
-        // print("Time " + Time.time);
+        script = new RunPython(Params.IMAGE_INFERENCE_SCRIPT_PATH);
     }
 
     void Update()
@@ -259,8 +252,8 @@ public class TeamController : NetworkBehaviour
             {
                 TakeTeamScreenShot();
                 print("thread");
-                _thread = new Thread(ThreadedWork);
-                _thread.Start();
+                thread = new Thread(ThreadedWork);
+                thread.Start();
                 timeToScreenCheck = Time.time + maxTimeAtScreen;
             }
         }
@@ -308,27 +301,23 @@ public class TeamController : NetworkBehaviour
 
     void ThreadedWork()
     {
-        _threadRunning = true;
+        threadRunning = true;
         bool workDone = false;
 
         // This pattern lets us interrupt the work at a safe point if neeeded.
-        while (_threadRunning && !workDone)
+        while (threadRunning && !workDone)
         {
-            script.Start();
+            script.Run();
 
             UpdateAIActiveNeural();
+
             workDone = true;
         }
-        _threadRunning = false;
+        threadRunning = false;
     }
 
     public float[] GetDangerScores()
     {
-
-        //if (!script.IsRunning())
-        //{
-        //    print("script exited");
-       // }
 
         string output = script.Interact(id);
 
@@ -345,7 +334,6 @@ public class TeamController : NetworkBehaviour
 
         return scores;
     }
-
 
     private void UpdateAIActiveNeural()
     {

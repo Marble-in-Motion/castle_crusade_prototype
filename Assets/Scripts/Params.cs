@@ -29,6 +29,7 @@ public class Params {
     public static int COINS_DIVISOR_FOR_TROOPS_UPPER_BOUND = 40;
     public static float MAX_TIME_AT_SCREEN = 5;
     public static float TROOP_SEND_DELAY_PER_TROOP = 0.5f;
+    public static string IMAGE_INFERENCE_SCRIPT_PATH = @"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\scripts\label_image_spesh.py";
 
     public static int MIN_DANGER_SCORE_SCREENSHOT = 0; 
 
@@ -44,7 +45,6 @@ public class Params {
     public static string GONG = "gong";
     public static string SWORD = "sword";
     public static string MAIN_MUSIC = "mainmusic";
-    //More troop audio
     public static string MORE_TROOPS = "moretroops";
 
     public static int PLAY_RANDOM = 808;
