@@ -59,7 +59,7 @@ public class Player : NetworkSetup
 
 
     void Awake()
-    {
+	{
         // Audio manager
         audioManager = AudioGameObject.GetComponent<AudioManager>();
         audioManager.BuildDicts();
@@ -186,56 +186,42 @@ public class Player : NetworkSetup
         {
             CmdToggleScreenShot();
         }
-        if (Input.GetKeyDown(KeyCode.Y))
+		if (Input.GetKeyDown (KeyCode.Y)) {
+			CmdRequestOffensiveTroopSpawn (0, 0);
+		} else if (Input.GetKeyDown (KeyCode.J)) {
+			CmdRequestOffensiveTroopSpawn (0, 1);
+		} else if (Input.GetKeyDown (KeyCode.N)) {
+			CmdRequestOffensiveTroopSpawn (0, 2);
+		} else if (Input.GetKeyDown (KeyCode.B)) {
+			CmdRequestOffensiveTroopSpawn (0, 3);
+		} else if (Input.GetKeyDown (KeyCode.G)) {
+			CmdRequestOffensiveTroopSpawn (0, 4);
+		} else if (Input.GetKeyDown (KeyCode.Return) || Input.GetKeyDown (KeyCode.D)) {
+			CmdRequestOffensiveTroopSpawn (0, laneId);
+		} else if (Input.GetKeyDown (KeyCode.Backspace) || Input.GetKeyDown (KeyCode.F)) {
+			CmdRequestOffensiveTroopSpawn (1, laneId);
+		} else if (Input.GetKeyDown (KeyCode.V) || Input.GetKeyDown (KeyCode.S)) {
+			CmdVolley ();
+		} else if (vcr.GetKeyDown("left"))
         {
-            CmdRequestOffensiveTroopSpawn(0, 0);
-        }
-        else if (Input.GetKeyDown(KeyCode.J))
-        {
-            CmdRequestOffensiveTroopSpawn(0, 1);
-        }
-        else if (Input.GetKeyDown(KeyCode.N))
-        {
-            CmdRequestOffensiveTroopSpawn(0, 2);
-        }
-        else if (Input.GetKeyDown(KeyCode.B))
-        {
-            CmdRequestOffensiveTroopSpawn(0, 3);
-        }
-        else if (Input.GetKeyDown(KeyCode.G))
-        {
-            CmdRequestOffensiveTroopSpawn(0, 4);
-        }
-        else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.D))
-        {
-            CmdRequestOffensiveTroopSpawn(0, laneId);
-        }
-        else if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.F))
-        {
-            CmdRequestOffensiveTroopSpawn(1, laneId);
-        }
-        else if (Input.GetKeyDown(KeyCode.V) || Input.GetKeyDown(KeyCode.S))
-        {
-            CmdVolley();
-        }
-        else if (vcr.GetKeyDown("left"))
-        {
+			print ("key down left");
             crossbowMotor.MoveLeft();
         }
         else if (vcr.GetKeyDown("right"))
         {
+			print ("key down right");
             crossbowMotor.MoveRight();
         }
         else if (vcr.GetKeyDown("space"))
         {
+			print ("key down space");
             Shoot();
-        }
-        else if (Input.GetKeyDown(KeyCode.Keypad1))
+        } else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Debug.Log("start new recording");
             vcr.NewRecording();
         }
-        else if (Input.GetKeyDown(KeyCode.Keypad2))
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             String path = "exports/";
             // String fullPath = String.Format("{0}{1}_player{2}.json", path, DateTime.Now.Ticks, id);
@@ -243,7 +229,7 @@ public class Player : NetworkSetup
             File.WriteAllText(fullPath, vcr.GetRecording().ToString());
             Debug.Log("File written");
         }
-        else if (Input.GetKeyDown(KeyCode.Keypad3))
+		else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             string path = String.Format("exports/player{0}.json", id);
             Debug.Log("attempt to playback: " + path);
@@ -252,7 +238,7 @@ public class Player : NetworkSetup
                 string json = r.ReadToEnd();
                 Debug.Log(json);
                 Recording recording = Recording.ParseRecording(json);
-                vcr.Play(recording, 1);
+                vcr.Play(recording);
             }
         }
     }
@@ -261,10 +247,8 @@ public class Player : NetworkSetup
     {
         if (isLocalPlayer)
         {
-            
             if (!teamAIEnabled)
             {
-                
                 ExecuteControls();
 
                 GameObject[] enemyTroops = FindEnemyTroopsInLane().ToArray();

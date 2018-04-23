@@ -119,7 +119,7 @@ public class Recording
     #region Constructors
     public Recording()
     {
-        this.frameRate = 60;
+        this.frameRate = 30;
         frames = new List<RecordingFrame>();
     }
 
@@ -144,7 +144,7 @@ public class Recording
         }
         else
         {
-            frameRate = 60;
+            frameRate = 30;
             frames = new List<RecordingFrame>();
         }
     }
