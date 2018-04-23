@@ -10,6 +10,8 @@ public class SpawnController : NetworkBehaviour
 	public const int maxOffset = 25;
 	public const int numberOfPaths = 3;
 
+	private WaitForSeconds spawnDelay =  new WaitForSeconds(1f);
+
 	//troops
 	[SerializeField]
 	private GameObject[] troopPrefabs;
@@ -21,6 +23,9 @@ public class SpawnController : NetworkBehaviour
 	//targets
 	[SerializeField]
 	private GameObject[] towers;
+
+	[SerializeField]
+	private GameObject spawnSmoke;
 
     private GameObject GetMyLocalSpawn(int laneId, int myTeamId)
     {
@@ -105,7 +110,7 @@ public class SpawnController : NetworkBehaviour
 		return ApplyOffset(lane, targetTower, angle);
 	}
 
-    public void SpawnOffensiveTroop(int troopId, int laneId, int myTeamId, int opponentsTeamId)
+	public IEnumerator SpawnOffensiveTroop(int troopId, int laneId, int myTeamId, int opponentsTeamId)
 	{
 		int path = Random.Range(0, numberOfPaths);
         GameObject lane = GetOpponentsSpawn(laneId, myTeamId);
@@ -114,7 +119,9 @@ public class SpawnController : NetworkBehaviour
 		if (NavMesh.SamplePosition (spawn, out hit, 100f, NavMesh.AllAreas)) {
 			spawn = hit.position;
 		}
-
+		GameObject smoke = Instantiate (spawnSmoke, new Vector3(spawn.x, spawn.y-10, spawn.z), Quaternion.identity) as GameObject;
+		NetworkServer.Spawn (smoke);
+		yield return spawnDelay;
 		NavMeshPath navPath = new NavMeshPath();
 
 		GameObject troop = Instantiate(troopPrefabs[troopId], spawn, lane.transform.rotation) as GameObject;
@@ -130,6 +137,5 @@ public class SpawnController : NetworkBehaviour
         ai.RpcSetPath(path);
         ai.RpcSetTarget(opponentsTeamId);
     }
-
 
 }
