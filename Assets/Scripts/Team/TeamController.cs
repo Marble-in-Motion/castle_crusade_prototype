@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -148,8 +149,14 @@ public class TeamController : NetworkBehaviour
         endOfCoolDown = Time.time;
         currentTime = Time.time;
         lastActivePlayerId = -1;
-        RunPython.Run(@"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\tf_files\test_data_resize\5\img57.jpg");
 
+        //string imagePath = @"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\tf_files\test_data_resize\5\img57.jpg";
+
+        RunPython script = new RunPython();
+
+        string output = script.Interact2();
+
+        print("Returned output from python: " + output);
     }
 
     void Update()
