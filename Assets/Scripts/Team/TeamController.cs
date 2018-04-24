@@ -196,13 +196,20 @@ public class TeamController : NetworkBehaviour
 
     private void TakeTeamTrainScreenShot()
     {
-        int[] dangers = new int[5];
-        for (int lane = 0; lane < 5; lane++)
-        {
-            int index = GetLaneDangerIndex(lane);
-        }
         GameObject[] players = FindPlayersInTeam();
-        this.GetComponent<HiResScreenShot>().CmdTakeScreenShotsTrain(players, dangers);
+    
+        int[] dangers = new int[players.Length];
+        int[] playersIds = new int[players.Length];
+        Camera[] cameras = new Camera[players.Length];
+        for (int lane = 0; lane < players.Length; lane++)
+        {
+            dangers[lane] = GetLaneDangerIndex(lane);
+            playersIds[lane] = players[lane].GetComponent<Player>().GetId();
+            cameras[lane] = players[lane].GetComponentInChildren<Camera>();
+        }
+        
+        HiResScreenShot shot = this.GetComponent<HiResScreenShot>();
+        shot.TakeScreenShotsTrain(players, dangers);
     }
 
     private GameObject[] FindPlayersInTeam()
@@ -339,6 +346,7 @@ public class TeamController : NetworkBehaviour
         }
         threadRunning = false;
     }
+    
 
     public float[] GetDangerScores()
     {

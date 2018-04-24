@@ -2,6 +2,7 @@
 using System.Collections;
 using System.IO;
 using UnityEngine.Networking;
+using System.Threading;
 
 public class HiResScreenShot : NetworkBehaviour
 {
@@ -28,8 +29,9 @@ public class HiResScreenShot : NetworkBehaviour
     }
 
 
-    [Command]
-    public void CmdTakeScreenShotsTrain(GameObject[] players,int[] dangers)
+
+
+    public void TakeScreenShotsTrain(GameObject[] players,int[] dangers)
     {
         for (int i = 0; i < players.Length; i++)
         {
@@ -46,11 +48,18 @@ public class HiResScreenShot : NetworkBehaviour
             Destroy(rt);
             byte[] bytes = screenShot.EncodeToPNG();
             string filename = ScreenShotNameTrainData(resWidth, resHeight, playerId, dangers[i]);
-            System.IO.File.WriteAllBytes(filename, bytes);
-            Debug.Log(string.Format("Took screenshot to: {0}", filename));
+
+            Thread takeScreenShots = new Thread(() => ScreenShotThread(filename, bytes));
+            takeScreenShots.Start();
         }
     }
 
+    private void ScreenShotThread(string filename, byte[] bytes)
+    {
+        
+        System.IO.File.WriteAllBytes(filename, bytes);
+        Debug.Log(string.Format("Took screenshot to: {0}", filename));
+    }
 
     [Command]
     public void CmdTakeScreenShotsRealTime(GameObject[] players, int teamId)
