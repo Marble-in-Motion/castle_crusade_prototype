@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45135373, g: 0.5009382, b: 0.57282805, a: 1}
+  m_IndirectSpecularColor: {r: 0.45135415, g: 0.50093925, b: 0.5728291, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -65432,8 +65432,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f07d269541d64448959032334042d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resWidth: 1280
-  resHeight: 720
 --- !u!1 &1552738940
 GameObject:
   m_ObjectHideFlags: 0
@@ -68271,7 +68269,7 @@ MonoBehaviour:
   m_NetworkPort: 7777
   m_ServerBindToIP: 0
   m_ServerBindAddress: 
-  m_NetworkAddress: 192.168.0.8
+  m_NetworkAddress: 192.168.0.13
   m_DontDestroyOnLoad: 1
   m_RunInBackground: 1
   m_ScriptCRCCheck: 1
@@ -81169,8 +81167,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f07d269541d64448959032334042d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resWidth: 1280
-  resHeight: 720
 --- !u!4 &1927065069 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: a6456b9419960c543890384b83ae02ef, type: 3}
