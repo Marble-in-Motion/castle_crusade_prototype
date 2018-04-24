@@ -30,7 +30,7 @@ public class Params {
     public static float MAX_TIME_AT_SCREEN = 5;
     public static float TROOP_SEND_DELAY_PER_TROOP = 0.5f;
     public static string IMAGE_INFERENCE_SCRIPT_PATH = @"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\scripts\label_image_spesh.py";
-
+    public static float TRAIN_SCREENSHOT_DELAY = 2;
     public static int MIN_DANGER_SCORE_SCREENSHOT = 0; 
 
 

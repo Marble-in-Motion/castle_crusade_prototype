@@ -44,11 +44,6 @@ public class GameController : NetworkBehaviour
         }
     }
 
-    public void SetTeamAIEnabled(bool state)
-    {
-        screenshotEnabled = state;
-    }
-
     void Start()
     {
         currentGameState = GameState.GAME_IN_PROGRESS;
@@ -86,12 +81,6 @@ public class GameController : NetworkBehaviour
         int lane = rnd.Next(0, 4);
         spawnController.SpawnOffensiveTroop(0, lane, 1, 2);
         spawnController.SpawnOffensiveTroop(0, lane, 2, 1);
-    }
-
-    public void ToggleScreenShot()
-    {
-        
-        screenshotEnabled = !screenshotEnabled;
     }
         
     public void DeactiveScreenCamera()
@@ -214,6 +203,12 @@ public class GameController : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             ToggleSandBox();
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            teamController1.ToggleScreenShotEnabled();
+            teamController2.ToggleScreenShotEnabled();
+            screenshotEnabled = !screenshotEnabled;
         }
     }
 

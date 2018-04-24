@@ -32,8 +32,12 @@ public class TeamController : NetworkBehaviour
 
     private static bool NEURAL_NET_ACTIVE = false;
 
+    private bool training = false;
+
     bool threadRunning;
     Thread thread;
+
+    private float nextScreenShot = 0;
 
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
@@ -149,6 +153,10 @@ public class TeamController : NetworkBehaviour
         lastActivePlayerId = playerId;
     }
 
+    public void ToggleScreenShotEnabled()
+    {
+        training = !training;
+    }
     
     void Start()
     {
@@ -173,12 +181,28 @@ public class TeamController : NetworkBehaviour
         {
             CheckChangeAI();
         }
+        if(training && Time.time > nextScreenShot && result == TeamResult.UNDECIDED)
+        {
+            TakeTeamTrainScreenShot();
+            nextScreenShot = Time.time + Params.TRAIN_SCREENSHOT_DELAY;
+        }
     }
 
-    private void TakeTeamScreenShot()
+    private void TakeTeamScreenShotRealTime()
     {
         GameObject[] players = FindPlayersInTeam();
-        this.GetComponent<HiResScreenShot>().CmdTakeScreenShots(players, id);
+        this.GetComponent<HiResScreenShot>().CmdTakeScreenShotsRealTime(players, id);
+    }
+
+    private void TakeTeamTrainScreenShot()
+    {
+        int[] dangers = new int[5];
+        for (int lane = 0; lane < 5; lane++)
+        {
+            int index = GetLaneDangerIndex(lane);
+        }
+        GameObject[] players = FindPlayersInTeam();
+        this.GetComponent<HiResScreenShot>().CmdTakeScreenShotsTrain(players, dangers);
     }
 
     private GameObject[] FindPlayersInTeam()
@@ -252,7 +276,7 @@ public class TeamController : NetworkBehaviour
         {
             if (Time.time > timeToScreenCheck)
             {
-                TakeTeamScreenShot();
+                TakeTeamScreenShotRealTime();
                 thread = new Thread(NeuralAIThread);
                 thread.Start();
                 timeToScreenCheck = Time.time + maxTimeAtScreen;
