@@ -30,7 +30,7 @@ public class TeamController : NetworkBehaviour
 
     private bool sendTroopAlerting = false;
 
-    private const bool NEURAL_NET_ACTIVE = true;
+    private static bool NEURAL_NET_ACTIVE = false;
 
     bool threadRunning;
     Thread thread;
@@ -158,8 +158,10 @@ public class TeamController : NetworkBehaviour
         endOfCoolDown = Time.time;
         currentTime = Time.time;
         lastActivePlayerId = -1;
-
-        script = new RunPython(Params.IMAGE_INFERENCE_SCRIPT_PATH);
+        if (NEURAL_NET_ACTIVE)
+        {
+            script = new RunPython(Params.IMAGE_INFERENCE_SCRIPT_PATH);
+        }
     }
 
     void Update()
@@ -251,8 +253,7 @@ public class TeamController : NetworkBehaviour
             if (Time.time > timeToScreenCheck)
             {
                 TakeTeamScreenShot();
-                print("thread");
-                thread = new Thread(ThreadedWork);
+                thread = new Thread(NeuralAIThread);
                 thread.Start();
                 timeToScreenCheck = Time.time + maxTimeAtScreen;
             }
@@ -299,12 +300,11 @@ public class TeamController : NetworkBehaviour
         aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
     }
 
-    void ThreadedWork()
+    void NeuralAIThread()
     {
         threadRunning = true;
         bool workDone = false;
 
-        // This pattern lets us interrupt the work at a safe point if neeeded.
         while (threadRunning && !workDone)
         {
             script.Run();
@@ -360,9 +360,7 @@ public class TeamController : NetworkBehaviour
             }
         }
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
-        print(aIActivePlayer);
         aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
-        print(aIActivePlayer2);
     }
 
 
