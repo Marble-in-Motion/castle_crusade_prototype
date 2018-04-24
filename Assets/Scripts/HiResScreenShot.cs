@@ -12,7 +12,7 @@ public class HiResScreenShot : NetworkBehaviour
     public static string ScreenShotNameRealTimeData(int width, int height, int index, int teamId)
     {
         string directory = Path.GetFullPath(".");
-        return string.Format("{0}/Screenshots/Team{1}/screen_{2}.png",
+        return string.Format("{0}/Screenshots/Team{1}/screen_{2}.jpg",
                              directory,
                              teamId,
                              index);
@@ -21,7 +21,7 @@ public class HiResScreenShot : NetworkBehaviour
     public static string ScreenShotNameTrainData(int width, int height, int index, int dangerIndex)
     {
         string directory = Path.GetFullPath(".");
-        return string.Format("{0}/Screenshots/ScreenShots/{1}/screen_{2}_{3}.png",
+        return string.Format("{0}/Screenshots/ScreenShots/{1}/screen_{2}_{3}.jpg",
                              directory,
                              dangerIndex,
                              index,
