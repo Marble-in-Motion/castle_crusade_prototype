@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -28,7 +30,10 @@ public class TeamController : NetworkBehaviour
 
     private bool sendTroopAlerting = false;
 
-    private const bool NEURAL_NET_ACTIVE = true;
+    private static bool NEURAL_NET_ACTIVE = false;
+
+    bool threadRunning;
+    Thread thread;
 
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
@@ -137,11 +142,14 @@ public class TeamController : NetworkBehaviour
         }
     }
 
+    private RunPython script;
+
     public void SetLastActivePlayerId(int playerId)
     {
         lastActivePlayerId = playerId;
     }
 
+    
     void Start()
     {
         nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
@@ -150,13 +158,16 @@ public class TeamController : NetworkBehaviour
         endOfCoolDown = Time.time;
         currentTime = Time.time;
         lastActivePlayerId = -1;
+        if (NEURAL_NET_ACTIVE)
+        {
+            script = new RunPython(Params.IMAGE_INFERENCE_SCRIPT_PATH);
+        }
     }
 
     void Update()
     {
         AddCoinPerSecond();
         SendTroopAlert();
-
         currentTime = Time.time;
         if (teamAIEnabled)
         {
@@ -167,7 +178,7 @@ public class TeamController : NetworkBehaviour
     private void TakeTeamScreenShot()
     {
         GameObject[] players = FindPlayersInTeam();
-        this.GetComponent<HiResScreenShot>().CmdTakeScreenShots(players);
+        this.GetComponent<HiResScreenShot>().CmdTakeScreenShots(players, id);
     }
 
     private GameObject[] FindPlayersInTeam()
@@ -237,22 +248,33 @@ public class TeamController : NetworkBehaviour
 
     private void CheckChangeAI()
     {
-        
-        if(Time.time > timeToScreenCheck)
+        if (NEURAL_NET_ACTIVE)
         {
-            UpdateAIActive();
-            timeToScreenCheck = Time.time + maxTimeAtScreen;
+            if (Time.time > timeToScreenCheck)
+            {
+                TakeTeamScreenShot();
+                thread = new Thread(NeuralAIThread);
+                thread.Start();
+                timeToScreenCheck = Time.time + maxTimeAtScreen;
+            }
         }
-        else if (CheckIfNoTroopsPresent(aIActivePlayer) || CheckIfNoTroopsPresent(aIActivePlayer2))
+        else
         {
-            UpdateAIActive();
-            timeToScreenCheck = Time.time + maxTimeAtScreen;
+            if (Time.time > timeToScreenCheck)
+            {
+                UpdateAIActive();
+                timeToScreenCheck = Time.time + maxTimeAtScreen;
+            }
+            else if (CheckIfNoTroopsPresent(aIActivePlayer) || CheckIfNoTroopsPresent(aIActivePlayer2))
+            {
+                UpdateAIActive();
+                timeToScreenCheck = Time.time + maxTimeAtScreen;
+            }
         }
     }
 
     private void UpdateAIActive()
     {
-        TakeTeamScreenShot();
         int aiLane = 0;
         int aiLane2 = 0;
         int maxDanger = 0;
@@ -278,12 +300,75 @@ public class TeamController : NetworkBehaviour
         aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
     }
 
+    void NeuralAIThread()
+    {
+        threadRunning = true;
+        bool workDone = false;
+
+        while (threadRunning && !workDone)
+        {
+            script.Run();
+
+            UpdateAIActiveNeural();
+
+            workDone = true;
+        }
+        threadRunning = false;
+    }
+
+    public float[] GetDangerScores()
+    {
+
+        string output = script.Interact(id);
+
+        print("output : " + output);
+
+        string[] scoresString = output.Split(',');
+
+        float[] scores = new float[5];
+
+        for (int i = 0; i < 5; i++)
+        {
+            scores[i] = float.Parse(scoresString[i]);
+        }
+
+        return scores;
+    }
+
+    private void UpdateAIActiveNeural()
+    {
+        int aiLane = 0;
+        int aiLane2 = 0;
+        float maxDanger = 0;
+        float maxDanger2 = 0;
+        float [] dangers = GetDangerScores();
+        for (int lane = 0; lane < 5; lane++)
+        {
+            float index = dangers[lane];
+            if (index > maxDanger)
+            {
+                maxDanger = index;
+                aiLane = lane;
+            }
+            else
+            {
+                if (index > maxDanger2)
+                {
+                    maxDanger2 = index;
+                    aiLane2 = lane;
+                }
+            }
+        }
+        aIActivePlayer = ConvertLaneToPlayerId(aiLane);
+        aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
+    }
+
+
     public int GetLaneDangerIndex(int lane)
     {
+        
         int troopCountDanger = GenerateTroopNumberDangerIndex(lane);
         int troopDistanceDanger = GenerateTroopDistanceDangerIndex(lane);
-        Debug.Log("count: " + troopCountDanger);
-        Debug.Log("distance: " + troopDistanceDanger);
         int index = troopCountDanger + troopDistanceDanger;
         if (index > 8)
         {
