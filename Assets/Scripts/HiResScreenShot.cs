@@ -61,8 +61,7 @@ public class HiResScreenShot : NetworkBehaviour
         Debug.Log(string.Format("Took screenshot to: {0}", filename));
     }
 
-    [Command]
-    public void CmdTakeScreenShotsRealTime(GameObject[] players, int teamId)
+    public void TakeScreenShotsRealTime(GameObject[] players, int teamId)
     {
         for (int i = 0; i < players.Length; i++)
         {
@@ -78,8 +77,7 @@ public class HiResScreenShot : NetworkBehaviour
             RenderTexture.active = null; // JC: added to avoid errors
             Destroy(rt);
             byte[] bytes = screenShot.EncodeToPNG();
-            string filename;
-            filename = ScreenShotNameRealTimeData(resWidth, resHeight, playerId, teamId);
+            string filename  = ScreenShotNameRealTimeData(resWidth, resHeight, playerId, teamId);
             System.IO.File.WriteAllBytes(filename, bytes);
             Debug.Log(string.Format("Took screenshot to: {0}", filename));
         }

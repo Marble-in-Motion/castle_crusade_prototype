@@ -191,7 +191,7 @@ public class TeamController : NetworkBehaviour
     private void TakeTeamScreenShotRealTime()
     {
         GameObject[] players = FindPlayersInTeam();
-        this.GetComponent<HiResScreenShot>().CmdTakeScreenShotsRealTime(players, id);
+        this.GetComponent<HiResScreenShot>().TakeScreenShotsRealTime(players, id);
     }
 
     private void TakeTeamTrainScreenShot()
@@ -199,17 +199,12 @@ public class TeamController : NetworkBehaviour
         GameObject[] players = FindPlayersInTeam();
     
         int[] dangers = new int[players.Length];
-        int[] playersIds = new int[players.Length];
-        Camera[] cameras = new Camera[players.Length];
         for (int lane = 0; lane < players.Length; lane++)
         {
             dangers[lane] = GetLaneDangerIndex(lane);
-            playersIds[lane] = players[lane].GetComponent<Player>().GetId();
-            cameras[lane] = players[lane].GetComponentInChildren<Camera>();
         }
+        this.GetComponent<HiResScreenShot>().TakeScreenShotsTrain(players, dangers);
         
-        HiResScreenShot shot = this.GetComponent<HiResScreenShot>();
-        shot.TakeScreenShotsTrain(players, dangers);
     }
 
     private GameObject[] FindPlayersInTeam()
