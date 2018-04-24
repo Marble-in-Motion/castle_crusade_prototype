@@ -34,7 +34,7 @@ public class Params {
     public static int MIN_DANGER_SCORE_SCREENSHOT = 1; 
 
 
-    internal static float SEND_TROOP_ALERT_DELAY = 100;//10f;
+    internal static float SEND_TROOP_ALERT_DELAY = 10000;//10f;
 
     //Audio Params
     public static string AMBIENCE = "ambience";
