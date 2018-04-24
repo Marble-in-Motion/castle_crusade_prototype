@@ -11,8 +11,6 @@ public class PlaybackTester : MonoBehaviour
 	private int recordingFrameRate = 60;
 	public TestStatus status = TestStatus.RECORD; // initial mode that vcr is operating in
 
-	float realRecordingTime;
-
 	private enum KeyState {UP, HELD, DOWN};
 	public enum TestStatus { RECORD, PLAYBACK, STOP }
 
@@ -20,84 +18,47 @@ public class PlaybackTester : MonoBehaviour
 	{
 		{"left",KeyState.UP},
 		{"space",KeyState.UP},
-		{"right",KeyState.UP}
+		{"right",KeyState.UP},
+		{"v",KeyState.UP},
+		{"s",KeyState.UP},
+		{"d",KeyState.UP},
+		{"f",KeyState.UP},
+		{"backspace",KeyState.UP},
+		{"return",KeyState.UP},
 	};
 	
-	Recording currentRecording;		// the recording currently in the VCR. Copy or ToString() this to save.
-	public float currentTime{
-		get {
-			return currentFrame / (float) currentFrameRate; }
-	}
+	Recording currentRecording;
 
-	public int currentFrameRate{
-		get {
-			if ( currentRecording == null )
-				return recordingFrameRate;
-			else
-				return currentRecording.frameRate;
-		}
-	}
+	private int currentFrame;
 
-	public int currentFrame{ get; private set; }	// current frame of recording/playback		
-
-	public event System.Action finishedPlayback;	// sent when playback finishes
-
-	public void Record()
+	public void StartRecording()
 	{
-		if ( currentRecording == null || currentRecording.recordingLength == 0 )
-			NewRecording();
-		else
-			status = TestStatus.RECORD;
-	}
-
-	public void NewRecording()
-	{
-		// start recording live input
 		currentRecording = new Recording( recordingFrameRate );
 		currentFrame = 0;
-		realRecordingTime = 0;
-		print ("new recording");
 		status = TestStatus.RECORD;
 	}
-	
-	/// <summary>
-	/// Play the specified recording, from optional specified time
-	/// </summary>
-	/// <param name='recording'>
-	/// Recording.
-	/// </param>
-	/// <param name='startRecordingFromTime'>
-	/// OPTIONAL: Time to start recording at
-	/// </param>
-	public void Play( Recording recording, float startRecordingFromTime = 0 )
+
+	public string SaveRecording()
+	{
+		status = TestStatus.STOP;
+		return currentRecording.ToString();
+	}
+
+	public void StartPlayback(Recording recording)
 	{	
 		currentRecording = recording;
-		currentFrame = recording.GetClosestFrame ( startRecordingFromTime );
+		currentFrame = 0;
 
 		status = TestStatus.PLAYBACK;
-	}
-
-	public void Stop()
-	{			
-		status = TestStatus.STOP;
-		currentFrame = 0;
-	}
-
-	public Recording GetRecording()
-	{
-        return currentRecording;
 	}
 	
 	void LateUpdate()
 	{	
-		if ( status == TestStatus.PLAYBACK )
+		if (status == TestStatus.PLAYBACK)
 		{
-			if ( currentFrame > currentRecording.totalFrames )
+			if (currentFrame > currentRecording.totalFrames)
 			{
-				// end of recording
-				if ( finishedPlayback != null )
-					finishedPlayback( );
-				Stop ();
+				status = TestStatus.STOP;
 			}
 			else
 			{
@@ -114,47 +75,40 @@ public class PlaybackTester : MonoBehaviour
 				}
 				currentFrame += 1;
 			}
-		} else if ( status == TestStatus.RECORD )
+		} else if (status == TestStatus.RECORD)
 		{
-			realRecordingTime += Time.deltaTime;
-			// record current input to frames, until recording catches up with realtime
-			while ( currentTime < realRecordingTime )
+			foreach(var input in inputs)
 			{
-                // and keycodes & buttons defined in inputsToRecord
-				foreach( var input in inputs )
-				{
-					print ("recording move");
-                	input.buttonState = Input.GetKey( input.inputName );
-                    currentRecording.AddInput ( currentFrame, input );
-				}
-				currentFrame++;
+            	input.buttonState = Input.GetKey(input.inputName);
+                currentRecording.AddInput (currentFrame, input);
 			}
+			currentFrame++;
 		}
 	}
 
-    public bool GetKey( string keyName )
+    public bool GetKey(string keyName)
     {
-		if ( status == TestStatus.PLAYBACK)
+		if (status == TestStatus.PLAYBACK)
 			return (keyDownStatuses [keyName] == KeyState.DOWN ||keyDownStatuses [keyName] == KeyState.HELD);
         else
-            return Input.GetKey ( keyName );
+            return Input.GetKey (keyName);
     }
 
-    public bool GetKeyDown( string keyName )
+    public bool GetKeyDown(string keyName)
     {
 		if (status == TestStatus.PLAYBACK)
 		{
 			return keyDownStatuses [keyName] == KeyState.DOWN;
 		}
         else
-            return Input.GetKeyDown ( keyName );
+            return Input.GetKeyDown (keyName);
     }
 
-    public bool GetKeyUp( string keyName )
+    public bool GetKeyUp(string keyName)
     {	
 		if (status == TestStatus.PLAYBACK)
 			return keyDownStatuses [keyName] == KeyState.UP;
         else
-            return Input.GetKeyUp ( keyName );
+            return Input.GetKeyUp (keyName);
     }
 }

@@ -124,7 +124,6 @@ public class Player : NetworkSetup
 
         Transform transform = gameController.GetPlayerTransform(id);
         RpcSetPlayerTransform(transform.position, transform.rotation);
-
         myTeamId = gameController.GetMyTeamControllerId(id);
 
         tag = PLAYER_TAG + " " + myTeamId;
@@ -175,6 +174,35 @@ public class Player : NetworkSetup
         crossbowMotor.SetDefaultTarget(target);
     }
 
+	[Command]
+	private void CmdStartRecording()
+	{
+		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+		gameController.StartRecording ();
+	}
+		
+	[ClientRpc]
+	public void RpcStartRecording()
+	{
+		playbackTester.StartRecording();
+	}
+
+	[Command]
+	private void CmdStopRecording()
+	{
+		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+		gameController.StopRecording ();
+	}
+
+	[ClientRpc]
+	public void RpcStopRecording()
+	{
+		String path = "exports/";
+		String fullPath = String.Format("{0}player{1}.json", path, id);
+		File.WriteAllText(fullPath, playbackTester.SaveRecording());
+		Debug.Log("File written");
+	}
+
     private void ExecuteControls()
     {
         if (Input.GetKeyDown(KeyCode.A))
@@ -196,40 +224,36 @@ public class Player : NetworkSetup
 			CmdRequestOffensiveTroopSpawn (0, 3);
 		} else if (Input.GetKeyDown (KeyCode.G)) {
 			CmdRequestOffensiveTroopSpawn (0, 4);
-		} else if (Input.GetKeyDown (KeyCode.Return) || Input.GetKeyDown (KeyCode.D)) {
+		} else if (playbackTester.GetKeyDown (Params.SK_KEY) || playbackTester.GetKeyDown (Params.SK_KEY_ALT)) {
 			CmdRequestOffensiveTroopSpawn (0, laneId);
-		} else if (Input.GetKeyDown (KeyCode.Backspace) || Input.GetKeyDown (KeyCode.F)) {
+		} else if (playbackTester.GetKeyDown (Params.BR_KEY) || playbackTester.GetKeyDown (Params.BR_KEY_ALT)) {
 			CmdRequestOffensiveTroopSpawn (1, laneId);
-		} else if (Input.GetKeyDown (KeyCode.V) || Input.GetKeyDown (KeyCode.S)) {
+		} else if (playbackTester.GetKeyDown (Params.VOLLEY_KEY) || playbackTester.GetKeyDown (Params.VOLLEY_KEY_ALT)) {
 			CmdVolley ();
-		} else if (playbackTester.GetKeyDown("left"))
+		} else if (playbackTester.GetKeyDown(Params.LEFT_KEY))
         {
 			print ("key down left");
             crossbowMotor.MoveLeft();
         }
-		else if (playbackTester.GetKeyDown("right"))
+		else if (playbackTester.GetKeyDown(Params.RIGHT_KEY))
         {
 			print ("key down right");
             crossbowMotor.MoveRight();
         }
-		else if (playbackTester.GetKeyDown("space"))
+		else if (playbackTester.GetKeyDown(Params.SHOOT_KEY))
         {
 			print ("key down space");
             Shoot();
-        } else if (Input.GetKeyDown(KeyCode.Alpha1))
+		} else if (Input.GetKeyDown(Params.START_RECORDING_KEY))
         {
             Debug.Log("start new recording");
-			playbackTester.NewRecording();
+			CmdStartRecording ();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
+		else if (Input.GetKeyDown(Params.STOP_RECORDING_KEY))
         {
-            String path = "exports/";
-            // String fullPath = String.Format("{0}{1}_player{2}.json", path, DateTime.Now.Ticks, id);
-            String fullPath = String.Format("{0}player{1}.json", path, id);
-			File.WriteAllText(fullPath, playbackTester.GetRecording().ToString());
-            Debug.Log("File written");
+			CmdStopRecording ();
         }
-		else if (Input.GetKeyDown(KeyCode.Alpha3))
+		else if (Input.GetKeyDown(Params.PLAYBACK_KEY))
         {
             string path = String.Format("exports/player{0}.json", id);
             Debug.Log("attempt to playback: " + path);
@@ -238,13 +262,14 @@ public class Player : NetworkSetup
                 string json = r.ReadToEnd();
                 Debug.Log(json);
                 Recording recording = Recording.ParseRecording(json);
-				playbackTester.Play(recording);
+				playbackTester.StartPlayback(recording);
             }
         }
     }
 
     void Update()
     {
+		print (KeyCode.LeftArrow.ToString());
         if (isLocalPlayer)
         {
             if (!teamAIEnabled)

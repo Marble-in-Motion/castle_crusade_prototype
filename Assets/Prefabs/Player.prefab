@@ -2473,7 +2473,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3287c5636faf4e2a95a638f0021a400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputs: []
+  inputs:
+  - inputType: 2
+    inputName: left
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  - inputType: 2
+    inputName: space
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  - inputType: 0
+    inputName: right
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  - inputType: 2
+    inputName: return
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  - inputType: 2
+    inputName: v
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  - inputType: 2
+    inputName: backspace
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  - inputType: 2
+    inputName: f
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  - inputType: 2
+    inputName: d
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
+  - inputType: 2
+    inputName: s
+    mouseButtonNum: 0
+    buttonState: 0
+    axisValue: 0
   status: 2
 --- !u!114 &114164097042165428
 MonoBehaviour:

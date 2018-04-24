@@ -76,9 +76,33 @@ public class GameController : NetworkBehaviour
             teamController1.SetTeamResult(TeamController.TeamResult.SAND_BOX);
             teamController2.SetTeamResult(TeamController.TeamResult.SAND_BOX);
         }
-
-
     }
+
+	public void StartRecording()
+	{
+		for (int i = 1; i < 3; i++)
+		{
+			string playersTag = Player.PLAYER_TAG + " " + i;
+			GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+			for (int j = 0; j < players.Length; j++)
+			{
+				players [j].GetComponent<Player>().RpcStartRecording ();
+			}
+		}
+	}
+
+	public void StopRecording()
+	{
+		for (int i = 1; i < 3; i++)
+		{
+			string playersTag = Player.PLAYER_TAG + " " + i;
+			GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+			for (int j = 0; j < players.Length; j++)
+			{
+				players [j].GetComponent<Player>().RpcStopRecording ();
+			}
+		}
+	}
 
     private void RandomTroopSend()
     {
