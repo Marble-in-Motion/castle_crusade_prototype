@@ -32,8 +32,12 @@ public class TeamController : NetworkBehaviour
 
     private static bool NEURAL_NET_ACTIVE = false;
 
+    private bool training = false;
+
     bool threadRunning;
     Thread thread;
+
+    private float nextScreenShot = 0;
 
     private bool teamAIEnabled = false;
     public bool TeamAIEnabled
@@ -149,6 +153,10 @@ public class TeamController : NetworkBehaviour
         lastActivePlayerId = playerId;
     }
 
+    public void ToggleScreenShotEnabled()
+    {
+        training = !training;
+    }
     
     void Start()
     {
@@ -173,12 +181,30 @@ public class TeamController : NetworkBehaviour
         {
             CheckChangeAI();
         }
+        if(training && Time.time > nextScreenShot && result == TeamResult.UNDECIDED)
+        {
+            TakeTeamTrainScreenShot();
+            nextScreenShot = Time.time + Params.TRAIN_SCREENSHOT_DELAY;
+        }
     }
 
-    private void TakeTeamScreenShot()
+    private void TakeTeamScreenShotRealTime()
     {
         GameObject[] players = FindPlayersInTeam();
-        this.GetComponent<HiResScreenShot>().CmdTakeScreenShots(players, id);
+        this.GetComponent<HiResScreenShot>().TakeScreenShotsRealTime(players, id);
+    }
+
+    private void TakeTeamTrainScreenShot()
+    {
+        GameObject[] players = FindPlayersInTeam();
+    
+        int[] dangers = new int[players.Length];
+        for (int lane = 0; lane < players.Length; lane++)
+        {
+            dangers[lane] = GetLaneDangerIndex(lane);
+        }
+        this.GetComponent<HiResScreenShot>().TakeScreenShotsTrain(players, dangers);
+        
     }
 
     private GameObject[] FindPlayersInTeam()
@@ -252,7 +278,7 @@ public class TeamController : NetworkBehaviour
         {
             if (Time.time > timeToScreenCheck)
             {
-                TakeTeamScreenShot();
+                TakeTeamScreenShotRealTime();
                 thread = new Thread(NeuralAIThread);
                 thread.Start();
                 timeToScreenCheck = Time.time + maxTimeAtScreen;
@@ -315,6 +341,7 @@ public class TeamController : NetworkBehaviour
         }
         threadRunning = false;
     }
+    
 
     public float[] GetDangerScores()
     {
