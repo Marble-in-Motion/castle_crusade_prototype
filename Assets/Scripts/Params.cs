@@ -32,6 +32,7 @@ public class Params {
 	public static string START_RECORDING_KEY = "1";
 	public static string STOP_RECORDING_KEY = "2";
 	public static string PLAYBACK_KEY = "3";
+	public static string TEST_KEY = "4";
 
 
 

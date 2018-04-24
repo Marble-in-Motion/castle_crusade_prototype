@@ -55,8 +55,16 @@ public class Player : NetworkSetup
 	private float nextScreenshotTime;
 	private int currentDangerValue = 0;
 
-    private bool sendTroopAlerting = false;
+	private bool sendTroopAlerting = false;
 
+	private string gameplay;
+	public string Gameplay
+	{
+		get
+		{
+			return gameplay;
+		}
+	}
 
     void Awake()
 	{
@@ -75,6 +83,7 @@ public class Player : NetworkSetup
 
         // VCR Recording
         playbackTester = GetComponent<PlaybackTester>();
+		playbackTester.StartRecording ();
     }
 
     void Start()
@@ -193,14 +202,36 @@ public class Player : NetworkSetup
 		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
 		gameController.StopRecording ();
 	}
-
+		
 	[ClientRpc]
 	public void RpcStopRecording()
 	{
-		String path = "exports/";
-		String fullPath = String.Format("{0}player{1}.json", path, id);
-		File.WriteAllText(fullPath, playbackTester.SaveRecording());
-		Debug.Log("File written");
+		gameplay = playbackTester.StopRecording ();
+		CmdSaveGameplay ();
+	}
+
+	[Command]
+	private void CmdSaveGameplay()
+	{
+		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+		gameController.SaveGameplay (gameplay, id);
+	}
+
+	[Command]
+	private void CmdStartTesting()
+	{
+		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+		gameController.StartTests();
+	}
+
+	[ClientRpc]
+	public void RpcStartTesting()
+	{
+		Debug.Log ("Started Testing");
+		if (isLocalPlayer)
+		{
+			playbackTester.RunTests (id);
+		}
 	}
 
     private void ExecuteControls()
@@ -230,46 +261,37 @@ public class Player : NetworkSetup
 			CmdRequestOffensiveTroopSpawn (1, laneId);
 		} else if (playbackTester.GetKeyDown (Params.VOLLEY_KEY) || playbackTester.GetKeyDown (Params.VOLLEY_KEY_ALT)) {
 			CmdVolley ();
-		} else if (playbackTester.GetKeyDown(Params.LEFT_KEY))
-        {
+		} else if (playbackTester.GetKeyDown (Params.LEFT_KEY)) {
 			print ("key down left");
-            crossbowMotor.MoveLeft();
-        }
-		else if (playbackTester.GetKeyDown(Params.RIGHT_KEY))
-        {
+			crossbowMotor.MoveLeft ();
+		} else if (playbackTester.GetKeyDown (Params.RIGHT_KEY)) {
 			print ("key down right");
-            crossbowMotor.MoveRight();
-        }
-		else if (playbackTester.GetKeyDown(Params.SHOOT_KEY))
-        {
+			crossbowMotor.MoveRight ();
+		} else if (playbackTester.GetKeyDown (Params.SHOOT_KEY)) {
 			print ("key down space");
-            Shoot();
-		} else if (Input.GetKeyDown(Params.START_RECORDING_KEY))
-        {
-            Debug.Log("start new recording");
+			Shoot ();
+		} else if (Input.GetKeyDown (Params.START_RECORDING_KEY)) {
+			Debug.Log ("start new recording");
 			CmdStartRecording ();
-        }
-		else if (Input.GetKeyDown(Params.STOP_RECORDING_KEY))
-        {
+		} else if (Input.GetKeyDown (Params.STOP_RECORDING_KEY)) {
 			CmdStopRecording ();
-        }
-		else if (Input.GetKeyDown(Params.PLAYBACK_KEY))
-        {
-            string path = String.Format("exports/player{0}.json", id);
-            Debug.Log("attempt to playback: " + path);
-            using (StreamReader r = new StreamReader(path))
-            {
-                string json = r.ReadToEnd();
-                Debug.Log(json);
-                Recording recording = Recording.ParseRecording(json);
-				playbackTester.StartPlayback(recording);
-            }
-        }
+		} else if (Input.GetKeyDown (Params.PLAYBACK_KEY)) {
+			string path = String.Format ("exports/player{0}.json", id);
+			Debug.Log ("attempt to playback: " + path);
+			using (StreamReader r = new StreamReader (path)) {
+				string json = r.ReadToEnd ();
+				Debug.Log (json);
+				Recording recording = Recording.ParseRecording (json);
+				playbackTester.StartPlayback (recording);
+			}
+		} else if (Input.GetKeyDown (Params.TEST_KEY))
+		{
+			CmdStartTesting ();
+		}
     }
 
     void Update()
     {
-		print (KeyCode.LeftArrow.ToString());
         if (isLocalPlayer)
         {
             if (!teamAIEnabled)

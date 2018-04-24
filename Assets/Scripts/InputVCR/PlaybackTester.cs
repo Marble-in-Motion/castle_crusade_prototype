@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Text;
+using System;
 using System.IO;
 using System.Collections.Generic;
 
@@ -26,6 +27,11 @@ public class PlaybackTester : MonoBehaviour
 		{"backspace",KeyState.UP},
 		{"return",KeyState.UP},
 	};
+
+	string[] tests = { "Aim_Test", "Shoot_Test", "Spawn_Test", "Volley_Test", "Send_Shoot_Test" };
+	private int currentTest = 0;
+	private int playerId;
+	private bool testing = false;
 	
 	Recording currentRecording;
 
@@ -38,7 +44,7 @@ public class PlaybackTester : MonoBehaviour
 		status = TestStatus.RECORD;
 	}
 
-	public string SaveRecording()
+	public string StopRecording()
 	{
 		status = TestStatus.STOP;
 		return currentRecording.ToString();
@@ -59,6 +65,17 @@ public class PlaybackTester : MonoBehaviour
 			if (currentFrame > currentRecording.totalFrames)
 			{
 				status = TestStatus.STOP;
+				if (testing)
+				{
+					if (currentTest == 8) {
+						currentTest = 0;
+						testing = false;
+					} else
+					{
+						currentTest += 1;
+						LoadNextTest ();
+					}
+				}
 			}
 			else
 			{
@@ -111,4 +128,29 @@ public class PlaybackTester : MonoBehaviour
         else
             return Input.GetKeyUp (keyName);
     }
+
+	private void LoadNextTest ()
+	{
+		string path;
+		if (tests [currentTest] == "Volley_Test" || tests [currentTest] == "Send_Shoot_Test") {
+			path = String.Format ("exports/Recordings/Tests/{0}_{1}.json",tests[currentTest],playerId);
+		} else {
+			path = String.Format ("exports/Recordings/Tests/{0}.json",tests[currentTest]);
+		}
+
+		using (StreamReader r = new StreamReader (path)) {
+			string json = r.ReadToEnd ();
+			Debug.Log (json);
+			Recording recording = Recording.ParseRecording (json);
+			StartPlayback (recording);
+		}
+	}
+
+	public void RunTests(int id)
+	{
+		playerId = id;
+		currentTest = 0;
+		testing = true;
+		LoadNextTest ();
+	}
 }
