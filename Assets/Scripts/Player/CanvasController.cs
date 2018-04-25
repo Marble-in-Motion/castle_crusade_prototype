@@ -105,7 +105,11 @@ namespace Assets.Scripts.Player
 
         public void SetSandboxAlert()
         {
-            anim.ResetTrigger("ResetSandbox");
+			anim.ResetTrigger("GameWin");
+			anim.ResetTrigger("GameOver");
+			anim.SetTrigger("Restart");
+
+			anim.ResetTrigger("ResetSandbox");
             anim.SetTrigger("Sandbox");
         }
 
@@ -113,7 +117,6 @@ namespace Assets.Scripts.Player
         {
             anim.ResetTrigger("Sandbox");
             anim.SetTrigger("ResetSandbox");
-            print("Hello");
         }
 
     }
