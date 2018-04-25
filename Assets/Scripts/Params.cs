@@ -19,6 +19,27 @@ public class Params {
 	public static int[] NPC_REWARD = {5,20,20};
     public static int[] NPC_DAMAGE = { 10, 30, 10 };
 
+	//Input Params
+	public static string SHOOT_KEY = "space";
+	public static string LEFT_KEY = "left";
+	public static string RIGHT_KEY = "right";
+	public static string VOLLEY_KEY = "s";
+	public static string VOLLEY_KEY_ALT = "v";
+	public static string SK_KEY = "d";
+	public static string SK_KEY_ALT = "return";
+	public static string BR_KEY = "backspace";
+	public static string BR_KEY_ALT = "f";
+	public static string START_RECORDING_KEY = "1";
+	public static string STOP_RECORDING_KEY = "2";
+	public static string PLAYBACK_KEY = "3";
+	public static string TEST_KEY = "4";
+
+	//Tests
+	public static string[] TESTS = { "Aim_Test", "Shoot_Test", "Spawn_Test", "Send_Shoot_Test", "Volley_Test", "End_Game_Test" };
+
+
+
+
     //AI Params
     public static int TROOP_COUNT_PER_DANGER_INDEX = 4;
     public static float TROOP_CLOSE_DISTANCE = 0.55f;

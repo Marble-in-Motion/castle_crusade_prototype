@@ -33,7 +33,7 @@ public class Player : NetworkSetup
     private CrossbowController crossbowController;
     private AIController aiController;
     private AudioManager audioManager;
-    private InputVCR vcr;
+    private PlaybackTester playbackTester;
 
     [SerializeField]
     private Behaviour[] componentsToDisable;
@@ -51,11 +51,19 @@ public class Player : NetworkSetup
     private bool playerAIEnabled = false;
     private bool teamAIEnabled = false;
 
-    private bool sendTroopAlerting = false;
+	private bool sendTroopAlerting = false;
 
+	private string gameplay;
+	public string Gameplay
+	{
+		get
+		{
+			return gameplay;
+		}
+	}
 
     void Awake()
-    {
+	{
         // Audio manager
         audioManager = AudioGameObject.GetComponent<AudioManager>();
         audioManager.BuildDicts();
@@ -70,7 +78,8 @@ public class Player : NetworkSetup
         crossbowController = crossbow.GetComponent<CrossbowController>();
 
         // VCR Recording
-        vcr = GetComponent<InputVCR>();
+        playbackTester = GetComponent<PlaybackTester>();
+		playbackTester.StartRecording ();
     }
 
     void Start()
@@ -119,7 +128,6 @@ public class Player : NetworkSetup
 
         Transform transform = gameController.GetPlayerTransform(id);
         RpcSetPlayerTransform(transform.position, transform.rotation);
-
         myTeamId = gameController.GetMyTeamControllerId(id);
 
         tag = PLAYER_TAG + " " + myTeamId;
@@ -170,6 +178,56 @@ public class Player : NetworkSetup
         crossbowMotor.SetDefaultTarget(target);
     }
 
+	[Command]
+	private void CmdStartRecording()
+	{
+		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+		gameController.StartRecording ();
+	}
+		
+	[ClientRpc]
+	public void RpcStartRecording()
+	{
+		playbackTester.StartRecording();
+	}
+
+	[Command]
+	private void CmdStopRecording()
+	{
+		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+		gameController.StopRecording ();
+	}
+		
+	[ClientRpc]
+	public void RpcStopRecording()
+	{
+		gameplay = playbackTester.StopRecording ();
+		CmdSaveGameplay ();
+	}
+
+	[Command]
+	private void CmdSaveGameplay()
+	{
+		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+		gameController.SaveGameplay (gameplay, id);
+	}
+
+	[Command]
+	private void CmdStartTesting()
+	{
+		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+		gameController.StartTests();
+	}
+
+	[ClientRpc]
+	public void RpcStartTesting()
+	{
+		if (isLocalPlayer)
+		{
+			playbackTester.RunTests (id, myTeamId);
+		}
+	}
+
     private void ExecuteControls()
     {
         if (Input.GetKeyDown(KeyCode.A))
@@ -177,74 +235,44 @@ public class Player : NetworkSetup
             playerAIEnabled = true;
             CmdTeamAIActivate(true);
         }
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown (KeyCode.Y)) {
+          CmdRequestOffensiveTroopSpawn (0, 0);
+        } else if (Input.GetKeyDown (KeyCode.J)) {
+          CmdRequestOffensiveTroopSpawn (0, 1);
+        } else if (Input.GetKeyDown (KeyCode.N)) {
+          CmdRequestOffensiveTroopSpawn (0, 2);
+        } else if (Input.GetKeyDown (KeyCode.B)) {
+          CmdRequestOffensiveTroopSpawn (0, 3);
+        } else if (Input.GetKeyDown (KeyCode.G)) {
+          CmdRequestOffensiveTroopSpawn (0, 4);
+        } else if (playbackTester.GetKeyDown (Params.SK_KEY) || playbackTester.GetKeyDown (Params.SK_KEY_ALT)) {
+          CmdRequestOffensiveTroopSpawn (0, laneId);
+        } else if (playbackTester.GetKeyDown (Params.BR_KEY) || playbackTester.GetKeyDown (Params.BR_KEY_ALT)) {
+          CmdRequestOffensiveTroopSpawn (1, laneId);
+        } else if (playbackTester.GetKeyDown (Params.VOLLEY_KEY) || playbackTester.GetKeyDown (Params.VOLLEY_KEY_ALT)) {
+          CmdVolley ();
+        } else if (playbackTester.GetKeyDown (Params.LEFT_KEY)) {
+          crossbowMotor.MoveLeft ();
+        } else if (playbackTester.GetKeyDown (Params.RIGHT_KEY)) {
+          crossbowMotor.MoveRight ();
+        } else if (playbackTester.GetKeyDown (Params.SHOOT_KEY)) {
+          Shoot ();
+        } else if (Input.GetKeyDown (Params.START_RECORDING_KEY)) {
+          CmdStartRecording ();
+        } else if (Input.GetKeyDown (Params.STOP_RECORDING_KEY)) {
+          CmdStopRecording ();
+        } else if (Input.GetKeyDown (Params.PLAYBACK_KEY)) {
+          string path = String.Format ("exports/player{0}.json", id);
+          Debug.Log ("attempt to playback: " + path);
+          using (StreamReader r = new StreamReader (path)) {
+            string json = r.ReadToEnd ();
+            Debug.Log (json);
+            Recording recording = Recording.ParseRecording (json);
+            playbackTester.StartPlayback (recording);
+          }
+        } else if (Input.GetKeyDown (Params.TEST_KEY))
         {
-            CmdRequestOffensiveTroopSpawn(0, 0);
-        }
-        else if (Input.GetKeyDown(KeyCode.J))
-        {
-            CmdRequestOffensiveTroopSpawn(0, 1);
-        }
-        else if (Input.GetKeyDown(KeyCode.N))
-        {
-            CmdRequestOffensiveTroopSpawn(0, 2);
-        }
-        else if (Input.GetKeyDown(KeyCode.B))
-        {
-            CmdRequestOffensiveTroopSpawn(0, 3);
-        }
-        else if (Input.GetKeyDown(KeyCode.G))
-        {
-            CmdRequestOffensiveTroopSpawn(0, 4);
-        }
-        else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.D))
-        {
-            CmdRequestOffensiveTroopSpawn(0, laneId);
-        }
-        else if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.F))
-        {
-            CmdRequestOffensiveTroopSpawn(1, laneId);
-        }
-        else if (Input.GetKeyDown(KeyCode.V) || Input.GetKeyDown(KeyCode.S))
-        {
-            CmdVolley();
-        }
-        else if (vcr.GetKeyDown("left"))
-        {
-            crossbowMotor.MoveLeft();
-        }
-        else if (vcr.GetKeyDown("right"))
-        {
-            crossbowMotor.MoveRight();
-        }
-        else if (vcr.GetKeyDown("space"))
-        {
-            Shoot();
-        }
-        else if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            Debug.Log("start new recording");
-            vcr.NewRecording();
-        }
-        else if (Input.GetKeyDown(KeyCode.Keypad2))
-        {
-            String path = "exports/";
-            // String fullPath = String.Format("{0}{1}_player{2}.json", path, DateTime.Now.Ticks, id);
-            String fullPath = String.Format("{0}player{1}.json", path, id);
-            File.WriteAllText(fullPath, vcr.GetRecording().ToString());
-            Debug.Log("File written");
-        }
-        else if (Input.GetKeyDown(KeyCode.Keypad3))
-        {
-            string path = String.Format("exports/player{0}.json", id);
-            Debug.Log("attempt to playback: " + path);
-            using (StreamReader r = new StreamReader(path))
-            {
-                string json = r.ReadToEnd();
-                Debug.Log(json);
-                Recording recording = Recording.ParseRecording(json);
-                vcr.Play(recording, 1);
-            }
+          CmdStartTesting ();
         }
     }
 
@@ -252,10 +280,8 @@ public class Player : NetworkSetup
     {
         if (isLocalPlayer)
         {
-            
             if (!teamAIEnabled)
             {
-                
                 ExecuteControls();
 
                 GameObject[] enemyTroops = FindEnemyTroopsInLane().ToArray();
