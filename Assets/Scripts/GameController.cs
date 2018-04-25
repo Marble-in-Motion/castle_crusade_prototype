@@ -153,14 +153,6 @@ public class GameController : NetworkBehaviour
 
 
     }
-
-    private void RandomTroopSend()
-    {
-        System.Random rnd = new System.Random();
-        int lane = rnd.Next(0, 4);
-        spawnController.SpawnOffensiveTroop(0, lane, 1, 2);
-        spawnController.SpawnOffensiveTroop(0, lane, 2, 1);
-    }
         
     public void DeactiveScreenCamera()
     {

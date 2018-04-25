@@ -24,7 +24,9 @@ public class SpawnController : NetworkBehaviour
 	[SerializeField]
 	private GameObject[] towers;
 
-<<<<<<< HEAD
+	[SerializeField]
+	private GameObject spawnSmoke;
+
 	void Awake()
 	{
 		int seed = (int)System.DateTime.Now.Ticks;
@@ -37,10 +39,8 @@ public class SpawnController : NetworkBehaviour
 	{
 		Random.InitState (seed);
 	}
-=======
-	[SerializeField]
-	private GameObject spawnSmoke;
->>>>>>> master
+
+
 
     private GameObject GetMyLocalSpawn(int laneId, int myTeamId)
     {

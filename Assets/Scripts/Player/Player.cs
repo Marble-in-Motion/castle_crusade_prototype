@@ -235,10 +235,6 @@ public class Player : NetworkSetup
             playerAIEnabled = true;
             CmdTeamAIActivate(true);
         }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            CmdToggleScreenShot();
-        }
         if (Input.GetKeyDown (KeyCode.Y)) {
           CmdRequestOffensiveTroopSpawn (0, 0);
         } else if (Input.GetKeyDown (KeyCode.J)) {
