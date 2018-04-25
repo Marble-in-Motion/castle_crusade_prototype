@@ -36927,6 +36927,7 @@ MonoBehaviour:
   towers:
   - {fileID: 542114631}
   - {fileID: 78605721}
+  spawnSmoke: {fileID: 1706925378425126, guid: c623e1302cd3a46cdb4fa4aaad47653e, type: 2}
 --- !u!4 &893616223
 Transform:
   m_ObjectHideFlags: 0
@@ -68275,6 +68276,7 @@ MonoBehaviour:
   - {fileID: 1920473768299774, guid: 6ac104cae32ee7043ae0f98eadec6669, type: 2}
   - {fileID: 1183937305477732, guid: 31477e8ed0704ff48a0d6f949da97497, type: 2}
   - {fileID: 1545292661495648, guid: 8c76574f5f3d67740b461e72149687d5, type: 2}
+  - {fileID: 1706925378425126, guid: c623e1302cd3a46cdb4fa4aaad47653e, type: 2}
   m_CustomConfig: 1
   m_MaxConnections: 12
   m_ConnectionConfig:

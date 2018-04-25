@@ -630,7 +630,8 @@ public class Player : NetworkSetup
             {
                 RpcClientPlaySingleSound(Params.HORN);
             }
-            spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId);
+			StartCoroutine(spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId));
+//			spawnController.SpawnOffensiveTroop(troopId, laneId, myTeamId, opponentsTeamId)
 
             //shouldn't need this line, test first tho
             //RpcResetSendTroopAlert();
