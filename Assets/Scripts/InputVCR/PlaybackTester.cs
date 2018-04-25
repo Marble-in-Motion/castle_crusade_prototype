@@ -67,13 +67,13 @@ public class PlaybackTester : MonoBehaviour
 				status = TestStatus.STOP;
 				if (testing)
 				{
-					if (currentTest == 8) {
-						currentTest = 0;
-						testing = false;
-					} else
-					{
+					if (currentTest < 4) {
 						currentTest += 1;
 						LoadNextTest ();
+					} else
+					{
+						currentTest = 0;
+						testing = false;
 					}
 				}
 			}
