@@ -21122,7 +21122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89cbb2a594130104dac735c9bcc271c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teamId: 0
+  teamId: 2
 --- !u!114 &489092712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33587,7 +33587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89cbb2a594130104dac735c9bcc271c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teamId: 0
+  teamId: 1
 --- !u!114 &802235486
 MonoBehaviour:
   m_ObjectHideFlags: 0
