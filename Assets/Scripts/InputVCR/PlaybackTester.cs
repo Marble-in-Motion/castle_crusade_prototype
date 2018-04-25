@@ -28,7 +28,7 @@ public class PlaybackTester : MonoBehaviour
 		{"return",KeyState.UP},
 	};
 
-	string[] tests = { "Aim_Test", "Shoot_Test", "Spawn_Test", "Volley_Test", "Send_Shoot_Test" };
+	string[] tests = { "Aim_Test", "Shoot_Test", "Spawn_Test", "Send_Shoot_Test", "Volley_Test", "End_Game_Test" };
 	private int currentTest = 0;
 	private int playerId;
 	private bool testing = false;
@@ -67,7 +67,7 @@ public class PlaybackTester : MonoBehaviour
 				status = TestStatus.STOP;
 				if (testing)
 				{
-					if (currentTest < 4) {
+					if (currentTest < 5) {
 						currentTest += 1;
 						LoadNextTest ();
 					} else
