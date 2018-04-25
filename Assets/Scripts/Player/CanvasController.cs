@@ -119,5 +119,10 @@ namespace Assets.Scripts.Player
             anim.SetTrigger("ResetSandbox");
         }
 
+        public void SetSpendGold()
+        {
+            anim.SetTrigger("DeductGold");
+        }
+
     }
 }

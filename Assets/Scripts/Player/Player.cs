@@ -363,6 +363,15 @@ public class Player : NetworkSetup
         canvasController.ResetSendTroopAlert();      
     }
 
+    [ClientRpc]
+    public void RpcSetSpendGoldAnim()
+    {
+        if(isLocalPlayer)
+        {
+            canvasController.SetSpendGold();
+        }
+    }
+
 
     [Command]
     public void CmdTeamAIActivate(bool active)
@@ -579,6 +588,7 @@ public class Player : NetworkSetup
         {
             if (troopId == Params.KING_TROOP_ID)
             {
+                RpcSetSpendGoldAnim();
                 RpcClientPlaySingleSound(Params.SWORD);
             }
             else if (troopId == Params.RAM_TROOP_ID)
