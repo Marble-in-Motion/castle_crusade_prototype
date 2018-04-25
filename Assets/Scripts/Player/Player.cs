@@ -227,7 +227,6 @@ public class Player : NetworkSetup
 	[ClientRpc]
 	public void RpcStartTesting()
 	{
-		Debug.Log ("Started Testing");
 		if (isLocalPlayer)
 		{
 			playbackTester.RunTests (id, myTeamId);
@@ -262,16 +261,12 @@ public class Player : NetworkSetup
 		} else if (playbackTester.GetKeyDown (Params.VOLLEY_KEY) || playbackTester.GetKeyDown (Params.VOLLEY_KEY_ALT)) {
 			CmdVolley ();
 		} else if (playbackTester.GetKeyDown (Params.LEFT_KEY)) {
-			print ("key down left");
 			crossbowMotor.MoveLeft ();
 		} else if (playbackTester.GetKeyDown (Params.RIGHT_KEY)) {
-			print ("key down right");
 			crossbowMotor.MoveRight ();
 		} else if (playbackTester.GetKeyDown (Params.SHOOT_KEY)) {
-			print ("key down space");
 			Shoot ();
 		} else if (Input.GetKeyDown (Params.START_RECORDING_KEY)) {
-			Debug.Log ("start new recording");
 			CmdStartRecording ();
 		} else if (Input.GetKeyDown (Params.STOP_RECORDING_KEY)) {
 			CmdStopRecording ();
