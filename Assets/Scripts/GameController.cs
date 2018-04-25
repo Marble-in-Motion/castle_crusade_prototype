@@ -32,10 +32,9 @@ public class GameController : NetworkBehaviour
 
     private float nextTroopSendSandBox = 0;
 
-	//Recording data
-	public int randomSeed;
-	private int testSeed = -995728914;
-
+	  //Recording data
+	  public int randomSeed;
+	  private int testSeed = -995728914;
     public bool GetCurrentGameOver()
     {
         return currentGameState == GameState.GAME_END;
@@ -48,11 +47,6 @@ public class GameController : NetworkBehaviour
         {
             return screenshotEnabled;
         }
-    }
-
-    public void SetTeamAIEnabled(bool state)
-    {
-        screenshotEnabled = state;
     }
 
     void Start()
@@ -142,8 +136,30 @@ public class GameController : NetworkBehaviour
 
     public void ToggleScreenShot()
     {
-        
-        screenshotEnabled = !screenshotEnabled;
+        if(currentGameState == GameState.SAND_BOX)
+        {
+            RestartGame();
+            currentGameState = GameState.GAME_IN_PROGRESS;
+            teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+            teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+        }
+        else
+        {
+            RestartGame();
+            currentGameState = GameState.SAND_BOX;
+            teamController1.SetTeamResult(TeamController.TeamResult.SAND_BOX);
+            teamController2.SetTeamResult(TeamController.TeamResult.SAND_BOX);
+        }
+
+
+    }
+
+    private void RandomTroopSend()
+    {
+        System.Random rnd = new System.Random();
+        int lane = rnd.Next(0, 4);
+        spawnController.SpawnOffensiveTroop(0, lane, 1, 2);
+        spawnController.SpawnOffensiveTroop(0, lane, 2, 1);
     }
         
     public void DeactiveScreenCamera()
@@ -266,6 +282,12 @@ public class GameController : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             ToggleSandBox();
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            teamController1.ToggleScreenShotEnabled();
+            teamController2.ToggleScreenShotEnabled();
+            screenshotEnabled = !screenshotEnabled;
         }
     }
 
