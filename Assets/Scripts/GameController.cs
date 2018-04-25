@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using System;
+using System.IO;
 
 public class GameController : NetworkBehaviour
 {
@@ -29,6 +31,22 @@ public class GameController : NetworkBehaviour
     private float coinIncreaseTime;
 
     private float nextTroopSendSandBox = 0;
+
+  	//Recording data
+  	private int randomSeed;
+	public int RandomSeed
+	{
+		get
+		{
+			return randomSeed;
+		}
+	}
+	public void SetRandomSeed(int seed)
+	{
+		randomSeed = seed;
+	}
+
+  	private int testSeed = -995728914;
 
     public bool GetCurrentGameOver()
     {
@@ -63,6 +81,84 @@ public class GameController : NetworkBehaviour
             currentGameState = GameState.GAME_IN_PROGRESS;
             teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
             teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+            teamController1.ResetSandboxModeAlert();
+            teamController2.ResetSandboxModeAlert();
+        }
+        else
+        {
+            RestartGame();
+            currentGameState = GameState.SAND_BOX;
+            teamController1.SetTeamResult(TeamController.TeamResult.SAND_BOX);
+            teamController2.SetTeamResult(TeamController.TeamResult.SAND_BOX);
+            teamController1.SandboxAlert();
+            teamController2.SandboxAlert();
+        }
+    }
+
+	public void StartTests()
+	{
+		spawnController.SeedRandom (testSeed);
+		for (int i = 1; i < 3; i++)
+		{
+			string playersTag = Player.PLAYER_TAG + " " + i;
+			GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+			for (int j = 0; j < players.Length; j++)
+			{
+				players [j].GetComponent<Player>().RpcStartTesting ();
+			}
+		}
+	}
+
+	public void StartRecording()
+	{
+		for (int i = 1; i < 3; i++)
+		{
+			string playersTag = Player.PLAYER_TAG + " " + i;
+			GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+			for (int j = 0; j < players.Length; j++)
+			{
+				players [j].GetComponent<Player>().RpcStartRecording ();
+			}
+		}
+	}
+
+	public void StopRecording()
+	{
+		for (int i = 1; i < 3; i++)
+		{
+			string playersTag = Player.PLAYER_TAG + " " + i;
+			GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+			for (int j = 0; j < players.Length; j++)
+			{
+				players [j].GetComponent<Player>().RpcStopRecording ();
+			}
+		}
+	}
+
+	public void SaveGameplay(string gameplay, int id)
+	{
+		String path = "exports/Recordings/Current/";
+		String fullPath = String.Format("{0}{1}_player_{2}.json", path, randomSeed, id);
+		File.WriteAllText(fullPath, gameplay);
+		Debug.Log("File written");
+	}
+
+    private void RandomTroopSend()
+    {
+        System.Random rnd = new System.Random();
+        int lane = rnd.Next(0, 4);
+        spawnController.SpawnOffensiveTroop(0, lane, 1, 2);
+        spawnController.SpawnOffensiveTroop(0, lane, 2, 1);
+    }
+
+    public void ToggleScreenShot()
+    {
+        if(currentGameState == GameState.SAND_BOX)
+        {
+            RestartGame();
+            currentGameState = GameState.GAME_IN_PROGRESS;
+            teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+            teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
         }
         else
         {
@@ -73,14 +169,6 @@ public class GameController : NetworkBehaviour
         }
 
 
-    }
-
-    private void RandomTroopSend()
-    {
-        System.Random rnd = new System.Random();
-        int lane = rnd.Next(0, 4);
-        spawnController.SpawnOffensiveTroop(0, lane, 1, 2);
-        spawnController.SpawnOffensiveTroop(0, lane, 2, 1);
     }
         
     public void DeactiveScreenCamera()

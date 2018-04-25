@@ -261,6 +261,32 @@ public class TeamController : NetworkBehaviour
 
     }
 
+    public void ResetSandboxModeAlert()
+    {
+
+        GameObject[] players = FindPlayersInTeam();
+
+        foreach(GameObject player in players)
+        {
+            Player p = player.GetComponent<Player>();
+            p.RpcResetSandboxAlert();
+        }
+
+    }
+
+    public void SandboxAlert()
+    {
+
+        GameObject[] players = FindPlayersInTeam();
+
+        int length = players.Length;
+        foreach(GameObject player in players)
+        {
+            Player p = player.GetComponent<Player>();
+            p.RpcSetSandboxAlert();
+        }
+    }
+
     private void AddCoinPerSecond()
     {
         if (!isServer) return;

@@ -97,10 +97,27 @@ namespace Assets.Scripts.Player
             anim.SetTrigger("SendTroopAlert");
         }
 
-        internal void ResetSendTroopAlert()
+        public void ResetSendTroopAlert()
         {
             anim.ResetTrigger("SendTroopAlert");
             anim.SetTrigger("ResetSendTroopAlert");
         }
+
+        public void SetSandboxAlert()
+        {
+			anim.ResetTrigger("GameWin");
+			anim.ResetTrigger("GameOver");
+			anim.SetTrigger("Restart");
+
+			anim.ResetTrigger("ResetSandbox");
+            anim.SetTrigger("Sandbox");
+        }
+
+        public void ResetSandboxAlert()
+        {
+            anim.ResetTrigger("Sandbox");
+            anim.SetTrigger("ResetSandbox");
+        }
+
     }
 }

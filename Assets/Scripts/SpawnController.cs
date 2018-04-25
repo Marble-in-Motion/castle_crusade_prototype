@@ -27,6 +27,21 @@ public class SpawnController : NetworkBehaviour
 	[SerializeField]
 	private GameObject spawnSmoke;
 
+	void Awake()
+	{
+		int seed = (int)System.DateTime.Now.Ticks;
+		SeedRandom (seed);
+		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
+		gameController.SetRandomSeed(seed);
+	}
+
+	public void SeedRandom(int seed)
+	{
+		Random.InitState (seed);
+	}
+
+
+
     private GameObject GetMyLocalSpawn(int laneId, int myTeamId)
     {
         return (myTeamId == TeamController.TEAM1)
