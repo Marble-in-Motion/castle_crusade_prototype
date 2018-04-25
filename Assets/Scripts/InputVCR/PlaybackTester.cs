@@ -146,9 +146,10 @@ public class PlaybackTester : MonoBehaviour
 		}
 	}
 
-	public void RunTests(int id)
+	public void RunTests(int id, int team)
 	{
-		playerId = id;
+//		playerId = id % team - 1;
+		playerId = team - 1;
 		currentTest = 0;
 		testing = true;
 		LoadNextTest ();

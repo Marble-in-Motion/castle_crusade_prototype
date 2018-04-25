@@ -230,7 +230,7 @@ public class Player : NetworkSetup
 		Debug.Log ("Started Testing");
 		if (isLocalPlayer)
 		{
-			playbackTester.RunTests (id);
+			playbackTester.RunTests (id, myTeamId);
 		}
 	}
 
