@@ -63,6 +63,8 @@ public class GameController : NetworkBehaviour
             currentGameState = GameState.GAME_IN_PROGRESS;
             teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
             teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
+            teamController1.ResetSandboxModeAlert();
+            teamController2.ResetSandboxModeAlert();
         }
         else
         {
@@ -70,6 +72,8 @@ public class GameController : NetworkBehaviour
             currentGameState = GameState.SAND_BOX;
             teamController1.SetTeamResult(TeamController.TeamResult.SAND_BOX);
             teamController2.SetTeamResult(TeamController.TeamResult.SAND_BOX);
+            teamController1.SandboxAlert();
+            teamController2.SandboxAlert();
         }
 
 

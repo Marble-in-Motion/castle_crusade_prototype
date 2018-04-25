@@ -309,6 +309,20 @@ public class Player : NetworkSetup
     }
 
     [ClientRpc]
+    public void RpcSetSandboxAlert()
+    {
+        Debug.Log("Sandbox");
+        canvasController.SetSandboxAlert();
+    }
+
+    [ClientRpc]
+    public void RpcResetSandboxAlert()
+    {
+        Debug.Log("Reset Sandbox");
+        canvasController.ResetSandboxAlert();
+    }
+
+    [ClientRpc]
     public void RpcSetSendTroopAlert()
     {
         Debug.Log("send troops");
