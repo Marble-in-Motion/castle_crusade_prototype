@@ -34,6 +34,10 @@ public class Params {
 	public static string PLAYBACK_KEY = "3";
 	public static string TEST_KEY = "4";
 
+	//Tests
+	public static string[] TESTS = { "Aim_Test", "Shoot_Test", "Spawn_Test", "Send_Shoot_Test", "Volley_Test", "End_Game_Test" };
+
+
 
 
     //AI Params

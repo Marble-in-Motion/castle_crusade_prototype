@@ -17,18 +17,17 @@ public class PlaybackTester : MonoBehaviour
 
 	private Dictionary<string,KeyState> keyDownStatuses = new Dictionary<string, KeyState> ()
 	{
-		{"left",KeyState.UP},
-		{"space",KeyState.UP},
-		{"right",KeyState.UP},
-		{"v",KeyState.UP},
-		{"s",KeyState.UP},
-		{"d",KeyState.UP},
-		{"f",KeyState.UP},
-		{"backspace",KeyState.UP},
-		{"return",KeyState.UP},
+		{Params.LEFT_KEY,KeyState.UP},
+		{Params.SHOOT_KEY,KeyState.UP},
+		{Params.RIGHT_KEY,KeyState.UP},
+		{Params.VOLLEY_KEY,KeyState.UP},
+		{Params.VOLLEY_KEY_ALT,KeyState.UP},
+		{Params.SK_KEY,KeyState.UP},
+		{Params.SK_KEY_ALT,KeyState.UP},
+		{Params.BR_KEY,KeyState.UP},
+		{Params.BR_KEY_ALT,KeyState.UP},
 	};
 
-	string[] tests = { "Aim_Test", "Shoot_Test", "Spawn_Test", "Send_Shoot_Test", "Volley_Test", "End_Game_Test" };
 	private int currentTest = 0;
 	private int playerId;
 	private bool testing = false;
@@ -132,10 +131,10 @@ public class PlaybackTester : MonoBehaviour
 	private void LoadNextTest ()
 	{
 		string path;
-		if (tests [currentTest] == "Volley_Test" || tests [currentTest] == "Send_Shoot_Test") {
-			path = String.Format ("exports/Recordings/Tests/{0}_{1}.json",tests[currentTest],playerId);
+		if (Params.TESTS [currentTest] == "Volley_Test" || Params.TESTS [currentTest] == "Send_Shoot_Test") {
+			path = String.Format ("exports/Recordings/Tests/{0}_{1}.json",Params.TESTS[currentTest],playerId);
 		} else {
-			path = String.Format ("exports/Recordings/Tests/{0}.json",tests[currentTest]);
+			path = String.Format ("exports/Recordings/Tests/{0}.json",Params.TESTS[currentTest]);
 		}
 
 		using (StreamReader r = new StreamReader (path)) {
@@ -148,7 +147,6 @@ public class PlaybackTester : MonoBehaviour
 
 	public void RunTests(int id, int team)
 	{
-//		playerId = id % team - 1;
 		playerId = team - 1;
 		currentTest = 0;
 		testing = true;

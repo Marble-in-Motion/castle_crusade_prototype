@@ -32,7 +32,7 @@ public class SpawnController : NetworkBehaviour
 		int seed = (int)System.DateTime.Now.Ticks;
 		SeedRandom (seed);
 		GameController gameController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>();
-		gameController.randomSeed = seed;
+		gameController.SetRandomSeed(seed);
 	}
 
 	public void SeedRandom(int seed)

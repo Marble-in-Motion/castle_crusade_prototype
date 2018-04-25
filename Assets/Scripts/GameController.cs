@@ -32,9 +32,22 @@ public class GameController : NetworkBehaviour
 
     private float nextTroopSendSandBox = 0;
 
-	  //Recording data
-	  public int randomSeed;
-	  private int testSeed = -995728914;
+  	//Recording data
+  	private int randomSeed;
+	public int RandomSeed
+	{
+		get
+		{
+			return randomSeed;
+		}
+	}
+	public void SetRandomSeed(int seed)
+	{
+		randomSeed = seed;
+	}
+
+  	private int testSeed = -995728914;
+
     public bool GetCurrentGameOver()
     {
         return currentGameState == GameState.GAME_END;
