@@ -25,7 +25,7 @@ public class RunPython
         StreamWriter streamWriter = p.StandardInput;
 
         streamWriter.WriteLine(teamId);
-
+        
         string output = p.StandardOutput.ReadToEnd();
         //UnityEngine.Debug.Log(output);
 
@@ -40,6 +40,7 @@ public class RunPython
     public void Run()
     {
         p.Start();
+        
     }
 
     public bool IsRunning()
