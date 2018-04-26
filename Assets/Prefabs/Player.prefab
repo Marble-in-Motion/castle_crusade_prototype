@@ -2586,7 +2586,7 @@ MonoBehaviour:
     mouseButtonNum: 0
     buttonState: 0
     axisValue: 0
-  - inputType: 0
+  - inputType: 2
     inputName: right
     mouseButtonNum: 0
     buttonState: 0

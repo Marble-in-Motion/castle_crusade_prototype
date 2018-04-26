@@ -1447,8 +1447,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AIName: King
   targets:
-  - {fileID: 1569264582030364, guid: c738f34b9b7288147b29b5c1766d24e7, type: 2}
-  - {fileID: 1556732296233700, guid: e5b8afeca8c93e346953bf10e71e7b1a, type: 2}
+  - {fileID: 1709674577364684, guid: c738f34b9b7288147b29b5c1766d24e7, type: 2}
+  - {fileID: 1537656999167448, guid: e5b8afeca8c93e346953bf10e71e7b1a, type: 2}
   target: {fileID: 0}
 --- !u!136 &136365292485456224
 CapsuleCollider:
