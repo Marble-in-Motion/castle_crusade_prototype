@@ -327,8 +327,10 @@ public class Player : NetworkSetup
 
         if (myTeamController.PlaySendTroopAnim == true && sendTroopAlerting == false)
         {
-            RpcSetSendTroopAlert();
-            sendTroopAlerting = true;
+			if (myTeamController.Result == 0) { 
+				RpcSetSendTroopAlert ();
+				sendTroopAlerting = true;
+			}
             //myTeamController.ResetSendTroopAlert(myTeamId);
         }
 
