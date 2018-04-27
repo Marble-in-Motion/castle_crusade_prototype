@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -30,7 +34,7 @@ public class TeamController : NetworkBehaviour
 
     private bool sendTroopAlerting = false;
 
-    private static bool NEURAL_NET_ACTIVE = false;
+    private static bool NEURAL_NET_ACTIVE = true;
 
     private bool training = false;
 
@@ -146,8 +150,6 @@ public class TeamController : NetworkBehaviour
         }
     }
 
-    private RunPython script;
-
     public void SetLastActivePlayerId(int playerId)
     {
         lastActivePlayerId = playerId;
@@ -157,6 +159,8 @@ public class TeamController : NetworkBehaviour
     {
         training = !training;
     }
+
+    private Socket sender;
     
     void Start()
     {
@@ -166,9 +170,10 @@ public class TeamController : NetworkBehaviour
         endOfCoolDown = Time.time;
         currentTime = Time.time;
         lastActivePlayerId = -1;
-        if (NEURAL_NET_ACTIVE)
+
+        if (NEURAL_NET_ACTIVE && id == TEAM1)
         {
-            script = new RunPython(Params.IMAGE_INFERENCE_SCRIPT_PATH);
+            StartClient();
         }
     }
 
@@ -180,6 +185,11 @@ public class TeamController : NetworkBehaviour
         if (teamAIEnabled)
         {
             CheckChangeAI();
+        }
+        if(workDone)
+        {
+            print("end of thread: " + Time.time);
+            workDone = false;
         }
         if(training && Time.time > nextScreenShot && result == TeamResult.UNDECIDED)
         {
@@ -230,7 +240,7 @@ public class TeamController : NetworkBehaviour
 
             if(length > 0)
             {
-                int playerIndex = Random.Range(0, length);
+                int playerIndex = UnityEngine.Random.Range(0, length);
 
                 Player p = players[playerIndex].GetComponent<Player>();
 
@@ -298,15 +308,24 @@ public class TeamController : NetworkBehaviour
         }
     }
 
+    bool workDone = false;
+
     private void CheckChangeAI()
     {
         if (NEURAL_NET_ACTIVE)
         {
             if (Time.time > timeToScreenCheck)
             {
+                //print("time to sc: " + timeToScreenCheck);
+
                 TakeTeamScreenShotRealTime();
-                thread = new Thread(NeuralAIThread);
+
+                print("start of thread: " + Time.time);
+
+
+                Thread thread = new Thread(NeuralAIThread);
                 thread.Start();
+
                 timeToScreenCheck = Time.time + maxTimeAtScreen;
             }
         }
@@ -327,6 +346,9 @@ public class TeamController : NetworkBehaviour
 
     private void UpdateAIActive()
     {
+        var watch = new Stopwatch();
+        watch.Start();
+
         int aiLane = 0;
         int aiLane2 = 0;
         int maxDanger = 0;
@@ -350,32 +372,83 @@ public class TeamController : NetworkBehaviour
         }
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
         aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
+
+        watch.Stop();
+        print("end of thread");
+        print("elapsed: " + watch.Elapsed);
     }
 
-    void NeuralAIThread()
-    {
-        threadRunning = true;
-        bool workDone = false;
 
-        while (threadRunning && !workDone)
+    private void StartClient()
+    {
+        // Connect to a remote device.  
+        try
         {
-            script.Run();
+            // Establish the remote endpoint for the socket.  
+            // This example uses port 11000 on the local computer.  
+            IPHostEntry ipHostInfo = Dns.GetHostEntry("localhost");
+            IPAddress ipAddress = ipHostInfo.AddressList[1];
+            IPEndPoint remoteEP = new IPEndPoint(ipAddress, 9999);
 
-            UpdateAIActiveNeural();
+            // Create a TCP/IP  socket.  
+            sender = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            
+            // Connect the socket to the remote endpoint. Catch any errors.  
+            try
+            {
+                sender.Connect(remoteEP);
+                print(string.Format("Socket connected to {0}", sender.RemoteEndPoint.ToString()));
 
-            workDone = true;
+            }
+            catch (ArgumentNullException ane)
+            {
+                print(string.Format("ArgumentNullException : {0}", ane.ToString()));
+            }
+            catch (SocketException se)
+            {
+                print(string.Format("SocketException : {0}", se.ToString()));
+            }
+            catch (Exception e)
+            {
+                print(string.Format("Unexpected exception : {0}", e.ToString()));
+            }
+
         }
-        threadRunning = false;
+        catch (Exception e)
+        {
+            print(e.ToString());
+        }
     }
-    
 
-    public float[] GetDangerScores()
+
+
+    private void NeuralAIThread()
     {
+        // Data buffer for incoming data.  
+        byte[] bytes = new byte[1024];
 
-        string output = script.Interact(id);
+        workDone = false;
 
-        print("output : " + output);
+        // Encode the data string into a byte array.
+        byte[] msg = Encoding.ASCII.GetBytes("run");
 
+        // Send the data through the socket.
+        int bytesSent = sender.Send(msg);
+
+        // Receive the response from the remote device.  
+        int bytesRec = sender.Receive(bytes);
+        string output = Encoding.ASCII.GetString(bytes, 0, bytesRec);
+
+        print(output);
+
+        float[] dangers = GetDangerScores(output);
+        UpdateAIActiveNeural(dangers);
+        workDone = true;
+
+    }
+
+    public float[] GetDangerScores(string output)
+    {
         string[] scoresString = output.Split(',');
 
         float[] scores = new float[5];
@@ -388,13 +461,12 @@ public class TeamController : NetworkBehaviour
         return scores;
     }
 
-    private void UpdateAIActiveNeural()
+    private void UpdateAIActiveNeural(float[] dangers)
     {
         int aiLane = 0;
         int aiLane2 = 0;
         float maxDanger = 0;
         float maxDanger2 = 0;
-        float [] dangers = GetDangerScores();
         for (int lane = 0; lane < 5; lane++)
         {
             float index = dangers[lane];
