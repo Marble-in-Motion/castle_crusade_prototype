@@ -588,7 +588,10 @@ public class Player : NetworkSetup
         {
             if (troopId == Params.KING_TROOP_ID)
             {
-                RpcSetSpendGoldAnim();
+				if (teamAIEnabled == false) 
+				{
+					RpcSetSpendGoldAnim ();
+				}
                 RpcClientPlaySingleSound(Params.SWORD);
             }
             else if (troopId == Params.RAM_TROOP_ID)
