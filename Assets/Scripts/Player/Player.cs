@@ -592,7 +592,9 @@ public class Player : NetworkSetup
             {
 				if (teamAIEnabled == false) 
 				{
-					RpcSetSpendGoldAnim ();
+					if (myTeamController.Result == 0) {
+						RpcSetSpendGoldAnim ();
+					}
 				}
                 RpcClientPlaySingleSound(Params.SWORD);
             }
