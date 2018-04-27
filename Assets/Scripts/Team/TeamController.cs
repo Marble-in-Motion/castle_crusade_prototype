@@ -34,7 +34,7 @@ public class TeamController : NetworkBehaviour
 
     private bool sendTroopAlerting = false;
 
-    private static bool NEURAL_NET_ACTIVE = true;
+    private static bool NEURAL_NET_ACTIVE = false;
 
     private bool training = false;
 
@@ -639,5 +639,10 @@ public class TeamController : NetworkBehaviour
         towerHealth = Params.STARTING_TOWER_HEALTH;
         coin = Params.STARTING_COIN;
         coinsPerSecond = 5;
+        GameObject[] players = FindPlayersInTeam();
+        foreach (GameObject player in players)
+        {
+            player.GetComponentInChildren<CrossbowMotor>().ResetAim();
+        }
     }
 }

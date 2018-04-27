@@ -22,6 +22,12 @@ public class CrossbowMotor : MonoBehaviour
         activePath = 1;
     }
 
+    public void ResetAim()
+    {
+        activePath = 1;
+        transform.LookAt(defaultTargets[activePath]);
+    }
+
     void Update()
     {
         LookAtTroop();
@@ -81,11 +87,7 @@ public class CrossbowMotor : MonoBehaviour
             transform.LookAt(defaultTargets[activePath]);
         }
     }
-
-
-    // AI IMPLEMENTATION ##############################
-
-    // THIS HAS BEEN DUPLICATED - ADAM FIX PLEASE
+    
     public GameObject AIFindTarget(List<GameObject> troopsInLane)
     {
         float minDist = float.MaxValue;

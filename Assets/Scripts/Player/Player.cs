@@ -461,6 +461,7 @@ public class Player : NetworkSetup
     private void RpcSetTeamResult(TeamController.TeamResult teamResult)
     {
         canvasController.SetGameOverValue(teamResult);
+
     }
 
     [Command]
