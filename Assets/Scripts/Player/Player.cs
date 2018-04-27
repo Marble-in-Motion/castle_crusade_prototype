@@ -327,8 +327,10 @@ public class Player : NetworkSetup
 
         if (myTeamController.PlaySendTroopAnim == true && sendTroopAlerting == false)
         {
-            RpcSetSendTroopAlert();
-            sendTroopAlerting = true;
+			if (myTeamController.Result == 0) { 
+				RpcSetSendTroopAlert ();
+				sendTroopAlerting = true;
+			}
             //myTeamController.ResetSendTroopAlert(myTeamId);
         }
 
@@ -361,6 +363,15 @@ public class Player : NetworkSetup
         Debug.Log("reset");
         sendTroopAlerting = false;
         canvasController.ResetSendTroopAlert();      
+    }
+
+    [ClientRpc]
+    public void RpcSetSpendGoldAnim()
+    {
+        if(isLocalPlayer)
+        {
+            canvasController.SetSpendGold();
+        }
     }
 
 
@@ -580,6 +591,12 @@ public class Player : NetworkSetup
         {
             if (troopId == Params.KING_TROOP_ID)
             {
+				if (teamAIEnabled == false) 
+				{
+					if (myTeamController.Result == 0) {
+						RpcSetSpendGoldAnim ();
+					}
+				}
                 RpcClientPlaySingleSound(Params.SWORD);
             }
             else if (troopId == Params.RAM_TROOP_ID)

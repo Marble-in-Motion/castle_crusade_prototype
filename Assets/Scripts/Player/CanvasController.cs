@@ -73,11 +73,13 @@ namespace Assets.Scripts.Player
                 case TeamController.TeamResult.LOST:
                     anim.ResetTrigger("Restart");
                     anim.SetTrigger("GameOver");
+					anim.SetTrigger("ResetSendTroopAlert");
                     break;
                 case TeamController.TeamResult.WON:
                     anim.ResetTrigger("Restart");
                     anim.SetTrigger("GameWin");
-                    break;
+					anim.SetTrigger("ResetSendTroopAlert");
+				    break;
                 case TeamController.TeamResult.UNDECIDED:
                     anim.ResetTrigger("GameWin");
                     anim.ResetTrigger("GameOver");
@@ -117,6 +119,11 @@ namespace Assets.Scripts.Player
         {
             anim.ResetTrigger("Sandbox");
             anim.SetTrigger("ResetSandbox");
+        }
+
+        public void SetSpendGold()
+        {
+            anim.SetTrigger("DeductGold");
         }
 
     }
