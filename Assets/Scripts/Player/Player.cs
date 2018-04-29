@@ -149,6 +149,16 @@ public class Player : NetworkSetup
         RpcHighlightSector(myTeamId, laneId);
 
     }
+    [ClientRpc]
+    public void RpcResetAimPlayer()
+    {
+        if (isLocalPlayer)
+        {
+            crossbowMotor.ResetAim();
+            
+        }
+        
+    }
 
     [ClientRpc]
     private void RpcHighlightSector(int myTeamId, int laneId)
