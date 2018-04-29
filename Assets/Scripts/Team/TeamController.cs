@@ -34,7 +34,7 @@ public class TeamController : NetworkBehaviour
 
     private bool sendTroopAlerting = false;
 
-    private static bool NEURAL_NET_ACTIVE = true;
+    private bool NEURAL_NET_ACTIVE = true;
 
     private bool training = false;
 
@@ -164,6 +164,10 @@ public class TeamController : NetworkBehaviour
     
     void Start()
     {
+        if(id == TEAM2)
+        {
+            NEURAL_NET_ACTIVE = false;
+        }
         nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
         result = TeamResult.UNDECIDED;
 		towerHealth = Params.STARTING_TOWER_HEALTH;
@@ -423,7 +427,8 @@ public class TeamController : NetworkBehaviour
         workDone = false;
 
         // Encode the data string into a byte array.
-        byte[] msg = Encoding.ASCII.GetBytes("run");
+        String m = "run" + id;
+        byte[] msg = Encoding.ASCII.GetBytes(m);
 
         // Send the data through the socket.
         int bytesSent = sender.Send(msg);
