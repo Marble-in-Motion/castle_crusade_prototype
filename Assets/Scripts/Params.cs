@@ -44,7 +44,6 @@ public class Params {
     public static int TROOP_COUNT_PER_DANGER_INDEX = 4;
     public static float TROOP_CLOSE_DISTANCE = 0.55f;
     public static int TROOP_RATIO_MULTIPLYER = 12;
-    public static float CHANGE_DIRECTION_TIME = 0.3f;
     public static int[] TIME_BETWEEN_TROOP_SEND = { 5, 12 };
     public static int COINS_DIVISOR_FOR_TROOPS_UPPER_BOUND = 40;
     public static float TROOP_SEND_DELAY_PER_TROOP = 0.5f;
@@ -57,10 +56,12 @@ public class Params {
     //OLD AI
     public static float TIME_PER_SHOT = 0.2f;
     public static float MAX_TIME_AT_SCREEN = 5;
+    public static float CHANGE_DIRECTION_TIME = 0.3f;
 
     //NEURAL
     public static float TIME_PER_SHOT_NEURAL = 0.1f;
     public static float MAX_TIME_AT_SCREEN_NEURAL = 2.5f;
+    public static float CHANGE_DIRECTION_TIME_NEURAL = 0.15f;
 
     internal static float SEND_TROOP_ALERT_DELAY = 15000000000f;
 
