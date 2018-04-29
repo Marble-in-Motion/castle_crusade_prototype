@@ -360,7 +360,6 @@ public class Player : NetworkSetup
     [ClientRpc]
     public void RpcResetSendTroopAlert()
     {
-        Debug.Log("reset");
         sendTroopAlerting = false;
         canvasController.ResetSendTroopAlert();      
     }
