@@ -27,16 +27,19 @@ public class AIPlayer : NetworkSetup
     void Start () {
         player = this.gameObject.GetComponent<Player>();
     }
+
+    public void SetNeuralParams()
+    {
+        timePerShot = Params.TIME_PER_SHOT_NEURAL;
+        changeDirectionTime = Params.CHANGE_DIRECTION_TIME_NEURAL;
+        
+    }
 	
 	// Update is called once per frame
 	void Update () {
         if (isLocalPlayer)
         {
-            if (player.GetTeamNeuralNet())
-            {
-                timePerShot = Params.TIME_PER_SHOT_NEURAL;
-                changeDirectionTime = Params.CHANGE_DIRECTION_TIME_NEURAL;
-            }
+            
             if (Input.GetKeyDown(KeyCode.B))
             {
                 player.DeactivateAI();

@@ -351,6 +351,10 @@ public class Player : NetworkSetup
     private void RpcSetTeamNeuralNet(bool state)
     {
         teamNeuralNet = state;
+        if (teamNeuralNet)
+        {
+            this.GetComponent<AIPlayer>().SetNeuralParams();
+        }
     }
 
     [Command]
