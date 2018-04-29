@@ -34,7 +34,7 @@ public class TeamController : NetworkBehaviour
 
     private bool sendTroopAlerting = false;
 
-    private static bool NEURAL_NET_ACTIVE = false;
+    private static bool NEURAL_NET_ACTIVE = true;
 
     private bool training = false;
 
@@ -346,9 +346,6 @@ public class TeamController : NetworkBehaviour
 
     private void UpdateAIActive()
     {
-        var watch = new Stopwatch();
-        watch.Start();
-
         int aiLane = 0;
         int aiLane2 = 0;
         int maxDanger = 0;
@@ -372,10 +369,6 @@ public class TeamController : NetworkBehaviour
         }
         aIActivePlayer = ConvertLaneToPlayerId(aiLane);
         aIActivePlayer2 = ConvertLaneToPlayerId(aiLane2);
-
-        watch.Stop();
-        print("end of thread");
-        print("elapsed: " + watch.Elapsed);
     }
 
 

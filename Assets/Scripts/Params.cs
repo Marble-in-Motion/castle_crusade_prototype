@@ -54,10 +54,10 @@ public class Params {
     public static string SINGLE_IMAGE_INFERENCE_SCRIPT_PATH = @"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\scripts\label_image_single.py";
     public static string TEST_SCRIPT_PATH = @"C:\Users\SP\Documents\WORK\GP\castle_crusade_prototype\Assets\Scripts\Python\test.py";
     public static float TRAIN_SCREENSHOT_DELAY = 2;
-    public static int MIN_DANGER_SCORE_SCREENSHOT = 2; 
+    public static int MIN_DANGER_SCORE_SCREENSHOT = 0; 
 
 
-    internal static float SEND_TROOP_ALERT_DELAY = 15f;
+    internal static float SEND_TROOP_ALERT_DELAY = 15000000000f;
 
     //Audio Params
     public static string AMBIENCE = "ambience";
