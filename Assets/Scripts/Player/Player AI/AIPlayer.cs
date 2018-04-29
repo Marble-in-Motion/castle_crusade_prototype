@@ -19,7 +19,7 @@ public class AIPlayer : NetworkSetup
     private int AINextNumberTroopsToSend = 1;
 
     //Set for ability for AI to play AI by sending to random lanes
-    private bool randomLaneSend = false;
+    private bool randomLaneSend = true;
 
     private Player player;
 
@@ -27,50 +27,56 @@ public class AIPlayer : NetworkSetup
     void Start () {
         player = this.gameObject.GetComponent<Player>();
     }
+
+    public void SetNeuralParams()
+    {
+        timePerShot = Params.TIME_PER_SHOT_NEURAL;
+        changeDirectionTime = Params.CHANGE_DIRECTION_TIME_NEURAL;
+        
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if (player.GetTeamNeuralNet())
+        if (isLocalPlayer)
         {
-            timePerShot = Params.TIME_PER_SHOT_NEURAL;
-            changeDirectionTime = Params.CHANGE_DIRECTION_TIME_NEURAL;
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            player.DeactivateAI();
-            player.CmdTeamAIActivate(false);
-            nextCommand = AICommands.FIND;
-        }
-        if (player.GetAIEnabled())
-        {
-            if (Time.time > AINextTroopSendTime)
+            
+            if (Input.GetKeyDown(KeyCode.B))
             {
-                CmdAISendTroops();
+                player.DeactivateAI();
+                player.CmdTeamAIActivate(false);
+                nextCommand = AICommands.FIND;
             }
-            if (Time.time > nextAIActionTime)
+            if (player.GetAIEnabled())
             {
-                if (nextCommand == AICommands.FIND)
+                if (Time.time > AINextTroopSendTime)
                 {
-                    AITargetEnemy = FindTarget();
-                    if (AITargetEnemy != null)
+                    CmdAISendTroops();
+                }
+                if (Time.time > nextAIActionTime)
+                {
+                    if (nextCommand == AICommands.FIND)
                     {
-                        nextCommand = AICommands.AIM;
+                        AITargetEnemy = FindTarget();
+                        if (AITargetEnemy != null)
+                        {
+                            nextCommand = AICommands.AIM;
+                        }
+                    }
+                    else if (nextCommand == AICommands.AIM)
+                    {
+                        MoveTowardsTarget();
+
+                    }
+                    else if (nextCommand == AICommands.KILL)
+                    {
+                        KillTarget();
                     }
                 }
-                else if (nextCommand == AICommands.AIM)
-                {
-                    MoveTowardsTarget();
-
-                }
-                else if (nextCommand == AICommands.KILL)
-                {
-                    KillTarget();
-                }
             }
-        }
-        else
-        {
-            nextCommand = AICommands.FIND;
+            else
+            {
+                nextCommand = AICommands.FIND;
+            }
         }
     }
 

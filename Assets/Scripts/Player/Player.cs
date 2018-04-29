@@ -155,8 +155,7 @@ public class Player : NetworkSetup
 
         RpcHighlightSector(myTeamId, laneId);
 
-        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-        teamNeuralNet = myTeamController.IsNeuralNetActive();
+        
 
     }
     [ClientRpc]
@@ -337,6 +336,24 @@ public class Player : NetworkSetup
             CmdSetTeamAI();
             CmdSetAIPlayerEnabled();
             CmdSendTroopAnim();
+            CmdGetNeuralNet();
+        }
+    }
+
+    [Command]
+    public void CmdGetNeuralNet()
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+        RpcSetTeamNeuralNet(myTeamController.IsNeuralNetActive());
+    }
+
+    [ClientRpc]
+    private void RpcSetTeamNeuralNet(bool state)
+    {
+        teamNeuralNet = state;
+        if (teamNeuralNet)
+        {
+            this.GetComponent<AIPlayer>().SetNeuralParams();
         }
     }
 
