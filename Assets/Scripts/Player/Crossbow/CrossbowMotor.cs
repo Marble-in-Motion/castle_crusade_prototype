@@ -15,7 +15,7 @@ public class CrossbowMotor : MonoBehaviour
         }
     }
 
-    private List<Vector3> defaultTargets = new List<Vector3>();
+    public List<Vector3> defaultTargets = new List<Vector3>();
 
     void Start()
     {
@@ -26,6 +26,7 @@ public class CrossbowMotor : MonoBehaviour
     {
         activePath = 1;
         transform.LookAt(defaultTargets[activePath]);
+
     }
 
     void Update()

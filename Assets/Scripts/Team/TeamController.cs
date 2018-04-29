@@ -642,7 +642,7 @@ public class TeamController : NetworkBehaviour
         GameObject[] players = FindPlayersInTeam();
         foreach (GameObject player in players)
         {
-            player.GetComponentInChildren<CrossbowMotor>().ResetAim();
+            player.GetComponent<Player>().RpcResetAimPlayer();
         }
     }
 }
