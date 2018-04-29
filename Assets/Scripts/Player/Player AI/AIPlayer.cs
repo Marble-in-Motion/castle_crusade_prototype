@@ -19,22 +19,22 @@ public class AIPlayer : NetworkSetup
     private int AINextNumberTroopsToSend = 1;
 
     //Set for ability for AI to play AI by sending to random lanes
-    private bool randomLaneSend = true;
+    private bool randomLaneSend = false;
 
     private Player player;
 
     // Use this for initialization
     void Start () {
         player = this.gameObject.GetComponent<Player>();
-
-        if (player.GetTeamNeuralNet())
-        {
-            timePerShot = Params.TIME_PER_SHOT_NEURAL;
-        }
     }
 	
 	// Update is called once per frame
 	void Update () {
+        if (player.GetTeamNeuralNet())
+        {
+            timePerShot = Params.TIME_PER_SHOT_NEURAL;
+            changeDirectionTime = Params.CHANGE_DIRECTION_TIME_NEURAL;
+        }
         if (Input.GetKeyDown(KeyCode.B))
         {
             player.DeactivateAI();
