@@ -45,17 +45,22 @@ public class Params {
     public static float TROOP_CLOSE_DISTANCE = 0.55f;
     public static int TROOP_RATIO_MULTIPLYER = 12;
     public static float CHANGE_DIRECTION_TIME = 0.3f;
-    public static float TIME_PER_SHOT = 0.2f;
     public static int[] TIME_BETWEEN_TROOP_SEND = { 5, 12 };
     public static int COINS_DIVISOR_FOR_TROOPS_UPPER_BOUND = 40;
-    public static float MAX_TIME_AT_SCREEN = 5;
     public static float TROOP_SEND_DELAY_PER_TROOP = 0.5f;
     public static string MULTI_IMAGE_INFERENCE_SCRIPT_PATH = @"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\scripts\label_image_spesh.py";
     public static string SINGLE_IMAGE_INFERENCE_SCRIPT_PATH = @"C:\Users\SP\Documents\WORK\GP\tensorflow\tensorflow-for-poets-2\scripts\label_image_single.py";
     public static string TEST_SCRIPT_PATH = @"C:\Users\SP\Documents\WORK\GP\castle_crusade_prototype\Assets\Scripts\Python\test.py";
     public static float TRAIN_SCREENSHOT_DELAY = 2;
-    public static int MIN_DANGER_SCORE_SCREENSHOT = 0; 
+    public static int MIN_DANGER_SCORE_SCREENSHOT = 0;
 
+    //OLD AI
+    public static float TIME_PER_SHOT = 0.2f;
+    public static float MAX_TIME_AT_SCREEN = 5;
+
+    //NEURAL
+    public static float TIME_PER_SHOT_NEURAL = 0.1f;
+    public static float MAX_TIME_AT_SCREEN_NEURAL = 2.5f;
 
     internal static float SEND_TROOP_ALERT_DELAY = 15000000000f;
 

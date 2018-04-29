@@ -26,7 +26,12 @@ public class AIPlayer : NetworkSetup
     // Use this for initialization
     void Start () {
         player = this.gameObject.GetComponent<Player>();
-	}
+
+        if (player.GetTeamNeuralNet())
+        {
+            timePerShot = Params.TIME_PER_SHOT_NEURAL;
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {
