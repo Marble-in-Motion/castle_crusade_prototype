@@ -25,7 +25,7 @@ public class TeamController : NetworkBehaviour
     private float nextActionTime = 0.0f;
 
     private float timeToScreenCheck = 0;
-    private float maxTimeAtScreen = Params.MAX_TIME_AT_SCREEN;
+    private float maxTimeAtScreen; 
 
     //Danger score params
     private int troopCountDivisor = Params.TROOP_COUNT_PER_DANGER_INDEX;
@@ -175,10 +175,20 @@ public class TeamController : NetworkBehaviour
         currentTime = Time.time;
         lastActivePlayerId = -1;
 
-        if (NEURAL_NET_ACTIVE && id == TEAM1)
+        if (NEURAL_NET_ACTIVE)
         {
             StartClient();
+            maxTimeAtScreen = Params.MAX_TIME_AT_SCREEN_NEURAL;
         }
+        else
+        {
+            maxTimeAtScreen = Params.MAX_TIME_AT_SCREEN;
+        }
+    }
+
+    public bool IsNeuralNetActive()
+    {
+        return NEURAL_NET_ACTIVE;
     }
 
     void Update()

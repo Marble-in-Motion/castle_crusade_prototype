@@ -50,8 +50,9 @@ public class Player : NetworkSetup
 
     private bool playerAIEnabled = false;
     private bool teamAIEnabled = false;
+    private bool teamNeuralNet = false;
 
-	private bool sendTroopAlerting = false;
+    private bool sendTroopAlerting = false;
 
 	private string gameplay;
 	public string Gameplay
@@ -80,6 +81,11 @@ public class Player : NetworkSetup
         // VCR Recording
         playbackTester = GetComponent<PlaybackTester>();
 		playbackTester.StartRecording ();
+    }
+
+    public bool GetTeamNeuralNet()
+    {
+        return teamNeuralNet;
     }
 
     void Start()
@@ -115,6 +121,7 @@ public class Player : NetworkSetup
             audioManager.PlaySingleSound(Params.MAIN_MUSIC);
         }
 
+
     }
 
     [Command]
@@ -147,6 +154,9 @@ public class Player : NetworkSetup
         }
 
         RpcHighlightSector(myTeamId, laneId);
+
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+        teamNeuralNet = myTeamController.IsNeuralNetActive();
 
     }
     [ClientRpc]
