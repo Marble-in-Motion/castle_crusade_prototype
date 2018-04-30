@@ -410,6 +410,15 @@ public class Player : NetworkSetup
         }
     }
 
+    [ClientRpc]
+    public void RpcResetVolleyAnim()
+    {
+        if (isLocalPlayer)
+        {
+            canvasController.ResetVolleyAnim();
+        }
+    }
+
 
     [Command]
     public void CmdTeamAIActivate(bool active)

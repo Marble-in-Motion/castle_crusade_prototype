@@ -126,5 +126,10 @@ namespace Assets.Scripts.Player
             anim.SetTrigger("DeductGold");
         }
 
+        public void ResetVolleyAnim()
+        {
+            anim.Play("IdleVolley", -1, 0f);
+        }
+
     }
 }
