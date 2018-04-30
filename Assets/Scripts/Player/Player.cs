@@ -614,11 +614,6 @@ public class Player : NetworkSetup
         }
     }
 
-    public void RpcResetCanvas()
-    {
-        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-        myTeamController.ResetSendTroopAlert(myTeamId);
-    }
 
     [Command]
     public void CmdRequestOffensiveTroopSpawn(int troopId, int laneId)

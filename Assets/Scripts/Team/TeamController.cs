@@ -651,7 +651,7 @@ public class TeamController : NetworkBehaviour
         foreach (GameObject player in players)
         {
             player.GetComponent<Player>().RpcResetAimPlayer();
-            player.GetComponent<Player>().RpcResetCanvas();
         }
+        ResetSendTroopAlert(id);
     }
 }
