@@ -96,8 +96,19 @@ public class TeamController : NetworkBehaviour
             return coin;
         }
     }
-    
-	private TeamResult result;
+
+    private float leaderboardTime = 0.0f;
+    public float LeaderboardTime
+    {
+        get
+        {
+            return leaderboardTime;
+        }
+    }
+
+
+
+    private TeamResult result;
     public TeamResult Result
     {
         get
@@ -193,6 +204,7 @@ public class TeamController : NetworkBehaviour
 
     void Update()
     {
+        UpdateLeaderboardTimer();
         AddCoinPerSecond();
         SendTroopAlert();
         currentTime = Time.time;
@@ -588,6 +600,11 @@ public class TeamController : NetworkBehaviour
         return troopsInLane;
     }
 
+    //Start LeaderboardTimer.
+    public void InitializeLeaderboardTimer() {
+
+    }
+
     public void UpdateCoolDown()
     {
         endOfCoolDown = Time.time + Params.DESTROY_COOL_DOWN;
@@ -609,6 +626,11 @@ public class TeamController : NetworkBehaviour
             return true;
         }
         return false;
+    }
+
+    public void UpdateLeaderboardTimer()
+    {
+        leaderboardTime += Time.deltaTime;
     }
 
     public void AddGold(int amount)
@@ -640,6 +662,16 @@ public class TeamController : NetworkBehaviour
     public float GetTowerHealthRatio()
     {
         return towerHealth / Params.STARTING_TOWER_HEALTH;
+    }
+
+    private void InitializeLeaderboard()
+    {
+        GameObject[] players = FindPlayersInTeam();
+        foreach (GameObject player in players)
+        {
+            //player.GetComponent<Player>().GetComponent<Camera>().GetComponent<Canvas>().GetComponent<UI>().GetComponenet<Leaderboard>().GetComponent<LeaderboardText>.Color = new Color(1f, 0.5f, 0.8f);
+            player.GetComponent<Player>().CmdSetLeaderboardText();
+        }
     }
        
     public void Restart()

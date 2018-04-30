@@ -23,6 +23,9 @@ namespace Assets.Scripts.Player
         private Text CurrencyText;
 
         [SerializeField]
+        private Text LeaderboardText;
+
+        [SerializeField]
         private Animator anim;
 
         [SerializeField]
@@ -48,6 +51,11 @@ namespace Assets.Scripts.Player
         public void SetCurrencyText(string text)
         {
             CurrencyText.text = text;
+        }
+
+        public void SetLeaderboardText(string text)
+        {
+            LeaderboardText.text = text;
         }
 
         public void SetBlueHealthBar(float health)

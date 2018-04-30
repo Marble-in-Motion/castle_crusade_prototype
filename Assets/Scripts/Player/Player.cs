@@ -473,10 +473,24 @@ public class Player : NetworkSetup
         RpcSetCurrencyText(coin);
     }
 
+    [Command]
+    public void CmdSetLeaderboardText()
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+        float leaderboardTimer = myTeamController.LeaderboardTime;
+        RpcSetLeaderboardText(leaderboardTimer);
+    }
+
     [ClientRpc]
     private void RpcSetCurrencyText(int coin)
     {
         canvasController.SetCurrencyText(coin.ToString());
+    }
+
+    [ClientRpc]
+    private void RpcSetLeaderboardText(float time)
+    {
+        canvasController.SetLeaderboardText(time.ToString("#.00"));
     }
 
     [Command]
