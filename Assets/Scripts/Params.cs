@@ -63,7 +63,7 @@ public class Params {
     public static float MAX_TIME_AT_SCREEN_NEURAL = 2.5f;
     public static float CHANGE_DIRECTION_TIME_NEURAL = 0.15f;
 
-    internal static float SEND_TROOP_ALERT_DELAY = 15000000000f;
+    internal static float SEND_TROOP_ALERT_DELAY = 10f;
 
     //Audio Params
     public static string AMBIENCE = "ambience";

@@ -652,5 +652,6 @@ public class TeamController : NetworkBehaviour
         {
             player.GetComponent<Player>().RpcResetAimPlayer();
         }
+        ResetSendTroopAlert(id);
     }
 }
