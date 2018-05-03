@@ -204,7 +204,11 @@ public class TeamController : NetworkBehaviour
 
     void Update()
     {
-        UpdateLeaderboardTimer();
+        if (teamAIEnabled)
+        {
+            InitializeLeaderboard();
+        }
+        
         AddCoinPerSecond();
         SendTroopAlert();
         currentTime = Time.time;
@@ -600,10 +604,6 @@ public class TeamController : NetworkBehaviour
         return troopsInLane;
     }
 
-    //Start LeaderboardTimer.
-    public void InitializeLeaderboardTimer() {
-
-    }
 
     public void UpdateCoolDown()
     {
@@ -664,7 +664,7 @@ public class TeamController : NetworkBehaviour
         return towerHealth / Params.STARTING_TOWER_HEALTH;
     }
 
-    private void InitializeLeaderboard()
+    public void InitializeLeaderboard()
     {
         GameObject[] players = FindPlayersInTeam();
         foreach (GameObject player in players)
