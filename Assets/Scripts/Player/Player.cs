@@ -506,7 +506,7 @@ public class Player : NetworkSetup
     private void RpcSetLeaderboardText(float time, bool isOpponentAiEnabled)
     {
         String displayString = String.Format("{0} : {1:00}", (int)time / 60, (int)time % 60);
-        canvasController.SetLeaderboardText(displayString, isOpponentAiEnabled);
+        canvasController.SetLeaderboardText(displayString, isOpponentAiEnabled, teamAIEnabled);
     }
 
     [Command]
