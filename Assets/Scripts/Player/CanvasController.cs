@@ -9,6 +9,7 @@ namespace Assets.Scripts.Player
 {
     public class CanvasController : MonoBehaviour
     {
+        private bool displayTime = false;
 
         [SerializeField]
         private RenderTexture[] renderTextures;
@@ -83,12 +84,22 @@ namespace Assets.Scripts.Player
                     anim.ResetTrigger("Restart");
                     anim.SetTrigger("GameOver");
 					anim.SetTrigger("ResetSendTroopAlert");
+                    if (!displayTime)
+                    {
+                        SetAITimerAlert();
+                    }
+                    displayTime = true;
                     break;
                 case TeamController.TeamResult.WON:
                     anim.ResetTrigger("Restart");
                     anim.SetTrigger("GameWin");
 					anim.SetTrigger("ResetSendTroopAlert");
-				    break;
+                    if (!displayTime)
+                    {
+                        SetAITimerAlert();
+                    }
+                    displayTime = true;
+                    break;
                 case TeamController.TeamResult.UNDECIDED:
                     anim.ResetTrigger("GameWin");
                     anim.ResetTrigger("GameOver");
@@ -128,6 +139,19 @@ namespace Assets.Scripts.Player
         {
             anim.ResetTrigger("Sandbox");
             anim.SetTrigger("ResetSandbox");
+        }
+
+        public void ResetAITimerAlert()
+        {
+            anim.ResetTrigger("SetAITimer");
+            anim.SetTrigger("ResetAITimer");
+        }
+
+        public void SetAITimerAlert()
+        {
+            Debug.Log("Setting Ai Alert");
+            anim.ResetTrigger("ResetAITimer");
+            anim.SetTrigger("SetAITimer");
         }
 
         public void SetSpendGold()

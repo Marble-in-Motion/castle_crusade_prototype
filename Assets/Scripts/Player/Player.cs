@@ -420,6 +420,15 @@ public class Player : NetworkSetup
         }
     }
 
+    [ClientRpc]
+    public void RpcResetAITimerAnim()
+    {
+        if (isLocalPlayer)
+        {
+            canvasController.ResetAITimerAlert();
+        }
+    }
+
 
     [Command]
     public void CmdTeamAIActivate(bool active)
@@ -536,7 +545,6 @@ public class Player : NetworkSetup
     private void RpcSetTeamResult(TeamController.TeamResult teamResult)
     {
         canvasController.SetGameOverValue(teamResult);
-
     }
 
     [Command]
