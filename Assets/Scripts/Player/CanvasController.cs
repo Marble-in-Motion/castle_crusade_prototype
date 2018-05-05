@@ -53,9 +53,10 @@ namespace Assets.Scripts.Player
             CurrencyText.text = text;
         }
 
-        public void SetLeaderboardText(string text)
+        public void SetLeaderboardText(string text, bool isOpponentAiEnabled)
         {
             LeaderboardText.text = text;
+            LeaderboardText.enabled = !isOpponentAiEnabled;
         }
 
         public void SetBlueHealthBar(float health)

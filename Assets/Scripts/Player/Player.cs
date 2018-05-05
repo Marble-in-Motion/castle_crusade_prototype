@@ -478,8 +478,11 @@ public class Player : NetworkSetup
     public void CmdSetLeaderboardText()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+        TeamController enemyTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetOpponentsTeamController(id);
+        //extract second team controller
+        //check if ai is enabled, if so 
         float leaderboardTimer = myTeamController.AiTime;
-        RpcSetLeaderboardText(leaderboardTimer);
+        RpcSetLeaderboardText(leaderboardTimer, enemyTeamController.TeamAIEnabled);
     }
 
     [ClientRpc]
@@ -489,9 +492,10 @@ public class Player : NetworkSetup
     }
 
     [ClientRpc]
-    private void RpcSetLeaderboardText(float time)
+    private void RpcSetLeaderboardText(float time, bool isOpponentAiEnabled)
     {
-        canvasController.SetLeaderboardText(time.ToString("#.00"));
+        String displayString = String.Format("{0} : {1:00}", (int)time / 60, (int)time % 60);
+        canvasController.SetLeaderboardText(displayString, isOpponentAiEnabled);
     }
 
     [Command]
