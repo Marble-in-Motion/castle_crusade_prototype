@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -182,8 +183,6 @@ public class TeamController : NetworkBehaviour
         training = !training;
     }
 
-    private Socket sender;
-    
     void Start()
     {
         if(id == TEAM2)
@@ -196,16 +195,7 @@ public class TeamController : NetworkBehaviour
         endOfCoolDown = Time.time;
         currentTime = Time.time;
         lastActivePlayerId = -1;
-
-        if (NEURAL_NET_ACTIVE)
-        {
-            StartClient();
-            maxTimeAtScreen = Params.MAX_TIME_AT_SCREEN_NEURAL;
-        }
-        else
-        {
-            maxTimeAtScreen = Params.MAX_TIME_AT_SCREEN;
-        }
+        maxTimeAtScreen = (NEURAL_NET_ACTIVE) ? Params.MAX_TIME_AT_SCREEN_NEURAL : Params.MAX_TIME_AT_SCREEN;
 
         aiTime = 0;
     }
@@ -411,73 +401,24 @@ public class TeamController : NetworkBehaviour
     }
 
 
-    private void StartClient()
-    {
-        // Connect to a remote device.  
-        try
-        {
-            // Establish the remote endpoint for the socket.  
-            // This example uses port 11000 on the local computer.  
-            IPHostEntry ipHostInfo = Dns.GetHostEntry("localhost");
-            IPAddress ipAddress = ipHostInfo.AddressList[1];
-            IPEndPoint remoteEP = new IPEndPoint(ipAddress, 9999);
-
-            // Create a TCP/IP  socket.  
-            sender = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            
-            // Connect the socket to the remote endpoint. Catch any errors.  
-            try
-            {
-                sender.Connect(remoteEP);
-                print(string.Format("Socket connected to {0}", sender.RemoteEndPoint.ToString()));
-
-            }
-            catch (ArgumentNullException ane)
-            {
-                print(string.Format("ArgumentNullException : {0}", ane.ToString()));
-            }
-            catch (SocketException se)
-            {
-                print(string.Format("SocketException : {0}", se.ToString()));
-            }
-            catch (Exception e)
-            {
-                print(string.Format("Unexpected exception : {0}", e.ToString()));
-            }
-
-        }
-        catch (Exception e)
-        {
-            print(e.ToString());
-        }
-    }
-
-
-
     private void NeuralAIThread()
     {
-        // Data buffer for incoming data.  
-        byte[] bytes = new byte[1024];
-
         workDone = false;
-
+        string output = "";
+        
         // Encode the data string into a byte array.
-        String m = "run" + id;
-        byte[] msg = Encoding.ASCII.GetBytes(m);
-
-        // Send the data through the socket.
-        int bytesSent = sender.Send(msg);
-
-        // Receive the response from the remote device.  
-        int bytesRec = sender.Receive(bytes);
-        string output = Encoding.ASCII.GetString(bytes, 0, bytesRec);
-
-        print(output);
+        string url = "http://127.0.0.1:5000/inference/" + id;
+        HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
+        HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+        Stream stream = response.GetResponseStream();
+        using (StreamReader reader = new StreamReader(stream))
+        {
+            output = reader.ReadToEnd();
+        }
 
         float[] dangers = GetDangerScores(output);
         UpdateAIActiveNeural(dangers);
         workDone = true;
-
     }
 
     public float[] GetDangerScores(string output)
