@@ -403,29 +403,22 @@ public class TeamController : NetworkBehaviour
 
     private void NeuralAIThread()
     {
-        // Data buffer for incoming data.  
-        byte[] bytes = new byte[1024];
-
         workDone = false;
-
+        string output = "";
+        
         // Encode the data string into a byte array.
-        string url = "http://127.0.0.1:5000/inference/1";
+        string url = "http://127.0.0.1:5000/inference/" + id;
         HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
         HttpWebResponse response = (HttpWebResponse) request.GetResponse();
         Stream stream = response.GetResponseStream();
-
-        string output = "";
         using (StreamReader reader = new StreamReader(stream))
         {
             output = reader.ReadToEnd();
         }
 
-        print(output);
-
         float[] dangers = GetDangerScores(output);
         UpdateAIActiveNeural(dangers);
         workDone = true;
-
     }
 
     public float[] GetDangerScores(string output)
