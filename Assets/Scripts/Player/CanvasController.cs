@@ -57,7 +57,7 @@ namespace Assets.Scripts.Player
         public void SetLeaderboardText(string text, bool isOpponentAiEnabled)
         {
             LeaderboardText.text = text;
-            LeaderboardText.enabled = !isOpponentAiEnabled;
+            LeaderboardText.enabled = isOpponentAiEnabled;
         }
 
         public void SetBlueHealthBar(float health)

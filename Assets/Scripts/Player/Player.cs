@@ -488,10 +488,12 @@ public class Player : NetworkSetup
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
         TeamController enemyTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetOpponentsTeamController(id);
-        //extract second team controller
-        //check if ai is enabled, if so 
+        TeamController.TeamResult teamResult = myTeamController.Result;
         float leaderboardTimer = myTeamController.AiTime;
-        RpcSetLeaderboardText(leaderboardTimer, enemyTeamController.TeamAIEnabled);
+        if(teamResult == TeamController.TeamResult.UNDECIDED)
+        {
+            RpcSetLeaderboardText(leaderboardTimer, enemyTeamController.TeamAIEnabled);
+        }
     }
 
     [ClientRpc]
