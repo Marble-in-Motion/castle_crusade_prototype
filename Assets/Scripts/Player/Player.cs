@@ -337,6 +337,7 @@ public class Player : NetworkSetup
             CmdSetAIPlayerEnabled();
             CmdSendTroopAnim();
             CmdGetNeuralNet();
+            CmdSetLeaderboardText();
         }
     }
 
@@ -477,7 +478,7 @@ public class Player : NetworkSetup
     public void CmdSetLeaderboardText()
     {
         TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
-        float leaderboardTimer = myTeamController.LeaderboardTime;
+        float leaderboardTimer = myTeamController.AiTime;
         RpcSetLeaderboardText(leaderboardTimer);
     }
 

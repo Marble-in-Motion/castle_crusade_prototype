@@ -36,6 +36,17 @@ public class TeamController : NetworkBehaviour
 
     private bool NEURAL_NET_ACTIVE = true;
 
+    private float timeAtRestart = 0;
+
+    private float aiTime;
+    public float AiTime
+    {
+        get
+        {
+            return aiTime;
+        }
+    }
+
     private bool training = false;
 
     bool threadRunning;
@@ -195,6 +206,8 @@ public class TeamController : NetworkBehaviour
         {
             maxTimeAtScreen = Params.MAX_TIME_AT_SCREEN;
         }
+
+        aiTime = 0;
     }
 
     public bool IsNeuralNetActive()
@@ -204,11 +217,7 @@ public class TeamController : NetworkBehaviour
 
     void Update()
     {
-        if (teamAIEnabled)
-        {
-            InitializeLeaderboard();
-        }
-        
+        aiTime = Time.time - timeAtRestart;
         AddCoinPerSecond();
         SendTroopAlert();
         currentTime = Time.time;
@@ -664,21 +673,13 @@ public class TeamController : NetworkBehaviour
         return towerHealth / Params.STARTING_TOWER_HEALTH;
     }
 
-    public void InitializeLeaderboard()
-    {
-        GameObject[] players = FindPlayersInTeam();
-        foreach (GameObject player in players)
-        {
-            //player.GetComponent<Player>().GetComponent<Camera>().GetComponent<Canvas>().GetComponent<UI>().GetComponenet<Leaderboard>().GetComponent<LeaderboardText>.Color = new Color(1f, 0.5f, 0.8f);
-            player.GetComponent<Player>().CmdSetLeaderboardText();
-        }
-    }
        
     public void Restart()
     {
         towerHealth = Params.STARTING_TOWER_HEALTH;
         coin = Params.STARTING_COIN;
         coinsPerSecond = 5;
+        timeAtRestart = Time.time;
         GameObject[] players = FindPlayersInTeam();
         foreach (GameObject player in players)
         {
