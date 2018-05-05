@@ -36,6 +36,17 @@ public class TeamController : NetworkBehaviour
 
     private bool NEURAL_NET_ACTIVE = true;
 
+    private float timeAtRestart = 0;
+
+    private float aiTime;
+    public float AiTime
+    {
+        get
+        {
+            return aiTime;
+        }
+    }
+
     private bool training = false;
 
     bool threadRunning;
@@ -96,8 +107,19 @@ public class TeamController : NetworkBehaviour
             return coin;
         }
     }
-    
-	private TeamResult result;
+
+    private float leaderboardTime = 0.0f;
+    public float LeaderboardTime
+    {
+        get
+        {
+            return leaderboardTime;
+        }
+    }
+
+
+
+    private TeamResult result;
     public TeamResult Result
     {
         get
@@ -184,6 +206,8 @@ public class TeamController : NetworkBehaviour
         {
             maxTimeAtScreen = Params.MAX_TIME_AT_SCREEN;
         }
+
+        aiTime = 0;
     }
 
     public bool IsNeuralNetActive()
@@ -193,6 +217,7 @@ public class TeamController : NetworkBehaviour
 
     void Update()
     {
+        aiTime = Time.time - timeAtRestart;
         AddCoinPerSecond();
         SendTroopAlert();
         currentTime = Time.time;
@@ -588,6 +613,7 @@ public class TeamController : NetworkBehaviour
         return troopsInLane;
     }
 
+
     public void UpdateCoolDown()
     {
         endOfCoolDown = Time.time + Params.DESTROY_COOL_DOWN;
@@ -609,6 +635,11 @@ public class TeamController : NetworkBehaviour
             return true;
         }
         return false;
+    }
+
+    public void UpdateLeaderboardTimer()
+    {
+        leaderboardTime += Time.deltaTime;
     }
 
     public void AddGold(int amount)
@@ -641,17 +672,20 @@ public class TeamController : NetworkBehaviour
     {
         return towerHealth / Params.STARTING_TOWER_HEALTH;
     }
+
        
     public void Restart()
     {
         towerHealth = Params.STARTING_TOWER_HEALTH;
         coin = Params.STARTING_COIN;
         coinsPerSecond = 5;
+        timeAtRestart = Time.time;
         GameObject[] players = FindPlayersInTeam();
         foreach (GameObject player in players)
         {
             player.GetComponent<Player>().RpcResetAimPlayer();
             player.GetComponent<Player>().RpcResetVolleyAnim();
+            player.GetComponent<Player>().RpcResetAITimerAnim();
         }
         ResetSendTroopAlert(id);
         endOfCoolDown = 0;

@@ -337,6 +337,7 @@ public class Player : NetworkSetup
             CmdSetAIPlayerEnabled();
             CmdSendTroopAnim();
             CmdGetNeuralNet();
+            CmdSetLeaderboardText();
         }
     }
 
@@ -419,6 +420,15 @@ public class Player : NetworkSetup
         }
     }
 
+    [ClientRpc]
+    public void RpcResetAITimerAnim()
+    {
+        if (isLocalPlayer)
+        {
+            canvasController.ResetAITimerAlert();
+        }
+    }
+
 
     [Command]
     public void CmdTeamAIActivate(bool active)
@@ -473,10 +483,30 @@ public class Player : NetworkSetup
         RpcSetCurrencyText(coin);
     }
 
+    [Command]
+    public void CmdSetLeaderboardText()
+    {
+        TeamController myTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetMyTeamController(id);
+        TeamController enemyTeamController = GameObject.FindGameObjectWithTag(GameController.GAME_CONTROLLER_TAG).GetComponent<GameController>().GetOpponentsTeamController(id);
+        TeamController.TeamResult teamResult = myTeamController.Result;
+        float leaderboardTimer = myTeamController.AiTime;
+        if(teamResult == TeamController.TeamResult.UNDECIDED)
+        {
+            RpcSetLeaderboardText(leaderboardTimer, enemyTeamController.TeamAIEnabled);
+        }
+    }
+
     [ClientRpc]
     private void RpcSetCurrencyText(int coin)
     {
         canvasController.SetCurrencyText(coin.ToString());
+    }
+
+    [ClientRpc]
+    private void RpcSetLeaderboardText(float time, bool isOpponentAiEnabled)
+    {
+        String displayString = String.Format("{0} : {1:00}", (int)time / 60, (int)time % 60);
+        canvasController.SetLeaderboardText(displayString, isOpponentAiEnabled, teamAIEnabled);
     }
 
     [Command]
@@ -517,7 +547,6 @@ public class Player : NetworkSetup
     private void RpcSetTeamResult(TeamController.TeamResult teamResult)
     {
         canvasController.SetGameOverValue(teamResult);
-
     }
 
     [Command]
