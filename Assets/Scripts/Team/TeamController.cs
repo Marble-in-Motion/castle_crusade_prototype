@@ -627,8 +627,10 @@ public class TeamController : NetworkBehaviour
             player.GetComponent<Player>().RpcResetAimPlayer();
             player.GetComponent<Player>().RpcResetVolleyAnim();
             player.GetComponent<Player>().RpcResetAITimerAnim();
+            player.GetComponent<Player>().RpcResetMainMusic();
         }
         ResetSendTroopAlert(id);
         endOfCoolDown = 0;
     }
+
 }

@@ -23,7 +23,7 @@ public class GameController : NetworkBehaviour
     private TeamController teamController1;
 
     private TeamController teamController2;
-    
+
     private Camera sceneCamera;
 
     private SpawnController spawnController;
@@ -32,21 +32,21 @@ public class GameController : NetworkBehaviour
 
     private float nextTroopSendSandBox = 0;
 
-  	//Recording data
-  	private int randomSeed;
-	public int RandomSeed
-	{
-		get
-		{
-			return randomSeed;
-		}
-	}
-	public void SetRandomSeed(int seed)
-	{
-		randomSeed = seed;
-	}
+    //Recording data
+    private int randomSeed;
+    public int RandomSeed
+    {
+        get
+        {
+            return randomSeed;
+        }
+    }
+    public void SetRandomSeed(int seed)
+    {
+        randomSeed = seed;
+    }
 
-  	private int testSeed = -995728914;
+    private int testSeed = -995728914;
 
     public bool GetCurrentGameOver()
     {
@@ -75,7 +75,7 @@ public class GameController : NetworkBehaviour
 
     private void ToggleSandBox()
     {
-        if(currentGameState == GameState.SAND_BOX)
+        if (currentGameState == GameState.SAND_BOX)
         {
             RestartGame();
             currentGameState = GameState.GAME_IN_PROGRESS;
@@ -95,53 +95,53 @@ public class GameController : NetworkBehaviour
         }
     }
 
-	public void StartTests()
-	{
-		spawnController.SeedRandom (testSeed);
-		for (int i = 1; i < 3; i++)
-		{
-			string playersTag = Player.PLAYER_TAG + " " + i;
-			GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
-			for (int j = 0; j < players.Length; j++)
-			{
-				players [j].GetComponent<Player>().RpcStartTesting ();
-			}
-		}
-	}
+    public void StartTests()
+    {
+        spawnController.SeedRandom(testSeed);
+        for (int i = 1; i < 3; i++)
+        {
+            string playersTag = Player.PLAYER_TAG + " " + i;
+            GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+            for (int j = 0; j < players.Length; j++)
+            {
+                players[j].GetComponent<Player>().RpcStartTesting();
+            }
+        }
+    }
 
-	public void StartRecording()
-	{
-		for (int i = 1; i < 3; i++)
-		{
-			string playersTag = Player.PLAYER_TAG + " " + i;
-			GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
-			for (int j = 0; j < players.Length; j++)
-			{
-				players [j].GetComponent<Player>().RpcStartRecording ();
-			}
-		}
-	}
+    public void StartRecording()
+    {
+        for (int i = 1; i < 3; i++)
+        {
+            string playersTag = Player.PLAYER_TAG + " " + i;
+            GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+            for (int j = 0; j < players.Length; j++)
+            {
+                players[j].GetComponent<Player>().RpcStartRecording();
+            }
+        }
+    }
 
-	public void StopRecording()
-	{
-		for (int i = 1; i < 3; i++)
-		{
-			string playersTag = Player.PLAYER_TAG + " " + i;
-			GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
-			for (int j = 0; j < players.Length; j++)
-			{
-				players [j].GetComponent<Player>().RpcStopRecording ();
-			}
-		}
-	}
+    public void StopRecording()
+    {
+        for (int i = 1; i < 3; i++)
+        {
+            string playersTag = Player.PLAYER_TAG + " " + i;
+            GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
+            for (int j = 0; j < players.Length; j++)
+            {
+                players[j].GetComponent<Player>().RpcStopRecording();
+            }
+        }
+    }
 
-	public void SaveGameplay(string gameplay, int id)
-	{
-		String path = "exports/Recordings/Current/";
-		String fullPath = String.Format("{0}{1}_player_{2}.json", path, randomSeed, id);
-		File.WriteAllText(fullPath, gameplay);
-		Debug.Log("File written");
-	}
+    public void SaveGameplay(string gameplay, int id)
+    {
+        String path = "exports/Recordings/Current/";
+        String fullPath = String.Format("{0}{1}_player_{2}.json", path, randomSeed, id);
+        File.WriteAllText(fullPath, gameplay);
+        Debug.Log("File written");
+    }
 
     private void RandomTroopSend()
     {
@@ -153,7 +153,7 @@ public class GameController : NetworkBehaviour
 
     public void ToggleScreenShot()
     {
-        if(currentGameState == GameState.SAND_BOX)
+        if (currentGameState == GameState.SAND_BOX)
         {
             RestartGame();
             currentGameState = GameState.GAME_IN_PROGRESS;
@@ -170,7 +170,7 @@ public class GameController : NetworkBehaviour
 
 
     }
-        
+
     public void DeactiveScreenCamera()
     {
         sceneCamera.gameObject.SetActive(false);
@@ -217,7 +217,7 @@ public class GameController : NetworkBehaviour
         return (playerId % 2 == 0) ? TeamController.TEAM1 : TeamController.TEAM2;
     }
 
-	public void GameIsOver(int losingTeamId) {
+    public void GameIsOver(int losingTeamId) {
         TeamController.TeamResult team1Result = (losingTeamId == TeamController.TEAM1) ? TeamController.TeamResult.LOST : TeamController.TeamResult.WON;
         TeamController.TeamResult team2Result = (losingTeamId == TeamController.TEAM2) ? TeamController.TeamResult.LOST : TeamController.TeamResult.WON;
 
@@ -248,12 +248,13 @@ public class GameController : NetworkBehaviour
         {
             coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
             teamController1.IncreaseCoinPerInterval(Params.COIN_BOOST);
-			teamController2.IncreaseCoinPerInterval(Params.COIN_BOOST);
+            teamController2.IncreaseCoinPerInterval(Params.COIN_BOOST);
         }
     }
 
     private void RestartGame()
     {
+        StopAllSounds();
         teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
         teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
 
@@ -262,6 +263,17 @@ public class GameController : NetworkBehaviour
         DestroyAllTroops();
         coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
         currentGameState = GameState.GAME_IN_PROGRESS;
+    }
+
+    public void StopAllSounds()
+    {
+        AudioSource[] allAudioSources;
+
+        allAudioSources = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
+
+        foreach(AudioSource audioS in allAudioSources) {
+            audioS.Stop();
+        }
     }
 
     private void Update()
