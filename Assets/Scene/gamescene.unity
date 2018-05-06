@@ -3577,7 +3577,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: a6456b9419960c543890384b83ae02ef, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: a6456b9419960c543890384b83ae02ef, type: 3}
       propertyPath: m_Name
@@ -15903,7 +15903,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 8f7b31d29216f0c4d95b8a78535aba59, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 8f7b31d29216f0c4d95b8a78535aba59, type: 3}
       propertyPath: m_LocalScale.x
@@ -69328,19 +69328,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 471012, guid: 19b412c20413f7647bfa520a3517013c, type: 2}
       propertyPath: m_LocalRotation.x
-      value: -0.0000000055599303
+      value: -0.0000000055599307
       objectReference: {fileID: 0}
     - target: {fileID: 471012, guid: 19b412c20413f7647bfa520a3517013c, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -0.5059125
+      value: -0.50591254
       objectReference: {fileID: 0}
     - target: {fileID: 471012, guid: 19b412c20413f7647bfa520a3517013c, type: 2}
       propertyPath: m_LocalRotation.z
-      value: -0.00000002113667
+      value: -0.000000021136671
       objectReference: {fileID: 0}
     - target: {fileID: 471012, guid: 19b412c20413f7647bfa520a3517013c, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 0.86258477
+      value: 0.8625848
       objectReference: {fileID: 0}
     - target: {fileID: 471012, guid: 19b412c20413f7647bfa520a3517013c, type: 2}
       propertyPath: m_RootOrder
@@ -85966,7 +85966,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 8f7b31d29216f0c4d95b8a78535aba59, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 8f7b31d29216f0c4d95b8a78535aba59, type: 3}
       propertyPath: m_LocalScale.x
