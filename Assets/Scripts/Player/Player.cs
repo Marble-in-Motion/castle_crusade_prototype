@@ -121,6 +121,18 @@ public class Player : NetworkSetup
             audioManager.PlaySingleSound(Params.MAIN_MUSIC);
         }
 
+        //RpcResetMainMusic();
+
+
+    }
+
+    [ClientRpc]
+    public void RpcResetMainMusic()
+    {
+        if (isServer)
+        {
+            audioManager.PlaySingleSound(Params.MAIN_MUSIC);
+        }
 
     }
 
