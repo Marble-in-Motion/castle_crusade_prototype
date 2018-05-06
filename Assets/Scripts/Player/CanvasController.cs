@@ -105,6 +105,7 @@ namespace Assets.Scripts.Player
                     anim.ResetTrigger("GameWin");
                     anim.ResetTrigger("GameOver");
                     anim.SetTrigger("Restart");
+                    displayTime = false;
                     break;
             }
         }
@@ -144,15 +145,12 @@ namespace Assets.Scripts.Player
 
         public void ResetAITimerAlert()
         {
-            anim.ResetTrigger("SetAITimer");
-            anim.SetTrigger("ResetAITimer");
+            anim.Play("Start_AI", -1, 0f);
         }
 
         public void SetAITimerAlert()
         {
-            Debug.Log("Setting Ai Alert");
-            anim.ResetTrigger("ResetAITimer");
-            anim.SetTrigger("SetAITimer");
+            anim.Play("SetAITimer", -1, 0f);
         }
 
         public void SetSpendGold()
