@@ -147,8 +147,8 @@ public class GameController : NetworkBehaviour
     {
         System.Random rnd = new System.Random();
         int lane = rnd.Next(0, 4);
-        spawnController.SpawnOffensiveTroop(0, lane, 1, 2);
-        spawnController.SpawnOffensiveTroop(0, lane, 2, 1);
+        StartCoroutine(spawnController.SpawnOffensiveTroop(0, lane, 1, 2));
+        StartCoroutine(spawnController.SpawnOffensiveTroop(0, lane, 2, 1));
     }
 
     public void ToggleScreenShot()
