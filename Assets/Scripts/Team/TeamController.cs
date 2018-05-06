@@ -598,8 +598,10 @@ public class TeamController : NetworkBehaviour
         if (result != TeamResult.SAND_BOX)
         {
             towerHealth = towerHealth - damage;
+            RpcPlaySeigeSound();
+
         }
-        RpcPlaySeigeSound();
+
 
         if (towerHealth <= 0)
         {
