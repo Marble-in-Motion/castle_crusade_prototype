@@ -413,9 +413,9 @@ public class TeamController : NetworkBehaviour
         Stream stream = response.GetResponseStream();
         using (StreamReader reader = new StreamReader(stream))
         {
-            output = reader.ReadToEnd();
+            output = reader.ReadLine().Replace("\"", "");
         }
-
+        print(output);
         float[] dangers = GetDangerScores(output);
         UpdateAIActiveNeural(dangers);
         workDone = true;
@@ -424,7 +424,6 @@ public class TeamController : NetworkBehaviour
     public float[] GetDangerScores(string output)
     {
         string[] scoresString = output.Split(',');
-
         float[] scores = new float[5];
 
         for (int i = 0; i < 5; i++)
