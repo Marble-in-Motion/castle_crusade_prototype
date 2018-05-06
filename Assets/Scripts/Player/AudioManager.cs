@@ -11,6 +11,9 @@ public class AudioManager : MonoBehaviour
     private AudioSource klaxon;
 
     [SerializeField]
+    private AudioSource lobbyMusic;
+
+    [SerializeField]
     private AudioSource coins;
 
     [SerializeField]
@@ -51,6 +54,8 @@ public class AudioManager : MonoBehaviour
         singleAudioSources.Add(Params.HORN, horn);
         singleAudioSources.Add(Params.VOLLEY, volley);
         singleAudioSources.Add(Params.MAIN_MUSIC, mainMusic);
+        singleAudioSources.Add(Params.LOBBY_MUSIC, lobbyMusic);
+
     }
 
     public void BuildArrayDict()

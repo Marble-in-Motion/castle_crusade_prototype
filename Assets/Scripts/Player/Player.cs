@@ -136,6 +136,16 @@ public class Player : NetworkSetup
 
     }
 
+    [ClientRpc]
+    public void RpcResetLobbyMusic()
+    {
+        if (isServer)
+        {
+            audioManager.PlaySingleSound(Params.LOBBY_MUSIC);
+        }
+
+    }
+
     [Command]
     private void CmdInitialisePlayer()
     {
@@ -167,9 +177,8 @@ public class Player : NetworkSetup
 
         RpcHighlightSector(myTeamId, laneId);
 
-        
-
     }
+
     [ClientRpc]
     public void RpcResetAimPlayer()
     {

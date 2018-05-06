@@ -77,7 +77,7 @@ public class GameController : NetworkBehaviour
     {
         if (currentGameState == GameState.SAND_BOX)
         {
-            RestartGame();
+            RestartGame(1);
             currentGameState = GameState.GAME_IN_PROGRESS;
             teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
             teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
@@ -86,7 +86,7 @@ public class GameController : NetworkBehaviour
         }
         else
         {
-            RestartGame();
+            RestartGame(0);
             currentGameState = GameState.SAND_BOX;
             teamController1.SetTeamResult(TeamController.TeamResult.SAND_BOX);
             teamController2.SetTeamResult(TeamController.TeamResult.SAND_BOX);
@@ -155,14 +155,14 @@ public class GameController : NetworkBehaviour
     {
         if (currentGameState == GameState.SAND_BOX)
         {
-            RestartGame();
+            RestartGame(1);
             currentGameState = GameState.GAME_IN_PROGRESS;
             teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
             teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
         }
         else
         {
-            RestartGame();
+            RestartGame(0);
             currentGameState = GameState.SAND_BOX;
             teamController1.SetTeamResult(TeamController.TeamResult.SAND_BOX);
             teamController2.SetTeamResult(TeamController.TeamResult.SAND_BOX);
@@ -252,14 +252,14 @@ public class GameController : NetworkBehaviour
         }
     }
 
-    private void RestartGame()
+    private void RestartGame(int isSandbox)
     {
         StopAllSounds();
         teamController1.SetTeamResult(TeamController.TeamResult.UNDECIDED);
         teamController2.SetTeamResult(TeamController.TeamResult.UNDECIDED);
 
-        teamController1.Restart();
-        teamController2.Restart();
+        teamController1.Restart(isSandbox);
+        teamController2.Restart(isSandbox);
         DestroyAllTroops();
         coinIncreaseTime = Time.time + Params.COIN_INCREASE_INTERVAL;
         currentGameState = GameState.GAME_IN_PROGRESS;
@@ -284,7 +284,7 @@ public class GameController : NetworkBehaviour
             DestroyAllTroops();
             if (screenshotEnabled)
             {
-                RestartGame();
+                RestartGame(0);
             }
                
         }
@@ -298,7 +298,7 @@ public class GameController : NetworkBehaviour
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            RestartGame();
+            RestartGame(1);
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
