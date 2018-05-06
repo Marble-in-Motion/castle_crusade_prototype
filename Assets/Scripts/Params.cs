@@ -75,6 +75,7 @@ public class Params {
     public static string SWORD = "sword";
     public static string MAIN_MUSIC = "mainmusic";
     public static string MORE_TROOPS = "moretroops";
+    public static string LOBBY_MUSIC = "lobbymusic";
 
     public static int PLAY_RANDOM = 808;
 

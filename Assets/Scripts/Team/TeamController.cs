@@ -614,7 +614,7 @@ public class TeamController : NetworkBehaviour
     }
 
        
-    public void Restart()
+    public void Restart(int isSandbox)
     {
         towerHealth = Params.STARTING_TOWER_HEALTH;
         coin = Params.STARTING_COIN;
@@ -626,7 +626,14 @@ public class TeamController : NetworkBehaviour
             player.GetComponent<Player>().RpcResetAimPlayer();
             player.GetComponent<Player>().RpcResetVolleyAnim();
             player.GetComponent<Player>().RpcResetAITimerAnim();
-            player.GetComponent<Player>().RpcResetMainMusic();
+            if(isSandbox == 1)
+            {
+                player.GetComponent<Player>().RpcResetMainMusic();
+            }
+            else
+            {
+                player.GetComponent<Player>().RpcResetLobbyMusic();
+            }
         }
         ResetSendTroopAlert(id);
         endOfCoolDown = 0;
