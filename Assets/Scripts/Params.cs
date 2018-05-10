@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿
 public class Params {
 
 	public static float STARTING_TOWER_HEALTH = 100f;
@@ -13,11 +10,11 @@ public class Params {
 	public static int COIN_BOOST = 1;
 	public static float DESTROY_COOL_DOWN = 30f;
 	public static int DESTROY_COST = 100;
-	public static int[] NPC_COST = {10,400,40};
-	public static float[] NPC_HEALTH = {200f,3000f,800f};
-	public static float[] NPC_SPEED = {12f,4f,12f};
-	public static int[] NPC_REWARD = {5,20,20};
-    public static int[] NPC_DAMAGE = { 10, 30, 10 };
+	public static int[] NPC_COST = {10};
+	public static float[] NPC_HEALTH = {200f};
+	public static float[] NPC_SPEED = {12f};
+	public static int[] NPC_REWARD = {5};
+    public static int[] NPC_DAMAGE = {10};
 
 	//Input Params
 	public static string SHOOT_KEY = "space";
@@ -27,8 +24,6 @@ public class Params {
 	public static string VOLLEY_KEY_ALT = "v";
 	public static string SK_KEY = "d";
 	public static string SK_KEY_ALT = "return";
-	public static string BR_KEY = "backspace";
-	public static string BR_KEY_ALT = "f";
 	public static string START_RECORDING_KEY = "1";
 	public static string STOP_RECORDING_KEY = "2";
 	public static string PLAYBACK_KEY = "3";
@@ -36,8 +31,6 @@ public class Params {
 
 	//Tests
 	public static string[] TESTS = { "Aim_Test", "Shoot_Test", "Spawn_Test", "Send_Shoot_Test", "Volley_Test", "End_Game_Test" };
-
-
 
 
     //AI Params

@@ -14,7 +14,6 @@ public class CrossbowController : MonoBehaviour {
 
 	private AudioSource shootAudio;
     private AudioClip arrowSound;
-	private WaitForSeconds singleShotDuration = new WaitForSeconds(0.05f);
 	private WaitForSeconds volleyShotDuration = new WaitForSeconds(0.0025f);
 
 	void Start() {
