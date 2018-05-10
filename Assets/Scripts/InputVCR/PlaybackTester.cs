@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using System.Text;
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -24,8 +22,6 @@ public class PlaybackTester : MonoBehaviour
 		{Params.VOLLEY_KEY_ALT,KeyState.UP},
 		{Params.SK_KEY,KeyState.UP},
 		{Params.SK_KEY_ALT,KeyState.UP},
-		{Params.BR_KEY,KeyState.UP},
-		{Params.BR_KEY_ALT,KeyState.UP},
 	};
 
 	private int currentTest = 0;
