@@ -1,11 +1,11 @@
 ﻿using UnityEngine.Networking;
 using UnityEngine;
-using System;
-using Assets.Scripts.Player;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 
+/**
+ * Heuristic AI player
+ **/
 public class AIPlayer : NetworkSetup
 {
 
@@ -23,8 +23,8 @@ public class AIPlayer : NetworkSetup
 
     private Player player;
 
-    // Use this for initialization
-    void Start () {
+    void Start()
+    {
         player = this.gameObject.GetComponent<Player>();
     }
 
@@ -32,14 +32,13 @@ public class AIPlayer : NetworkSetup
     {
         timePerShot = Params.TIME_PER_SHOT_NEURAL;
         changeDirectionTime = Params.CHANGE_DIRECTION_TIME_NEURAL;
-        
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    void Update()
+    {
         if (isLocalPlayer)
         {
-            
+
             if (Input.GetKeyDown(KeyCode.B))
             {
                 player.DeactivateAI();
@@ -99,7 +98,7 @@ public class AIPlayer : NetworkSetup
 
         int coin = myTeamController.Coin;
         RpcSetNextTroopSend(coin);
-        
+
     }
 
 

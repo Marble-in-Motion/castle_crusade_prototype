@@ -1,8 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
+/**
+ * Controller for crossbow motor functions
+ **/
 [RequireComponent(typeof(Rigidbody))]
 public class CrossbowMotor : MonoBehaviour
 {
@@ -88,7 +89,7 @@ public class CrossbowMotor : MonoBehaviour
             transform.LookAt(defaultTargets[activePath]);
         }
     }
-    
+
     public GameObject AIFindTarget(List<GameObject> troopsInLane)
     {
         float minDist = float.MaxValue;

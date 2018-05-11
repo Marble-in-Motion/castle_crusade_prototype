@@ -2,7 +2,9 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-
+/**
+ * Custom network configuration helper class
+ **/
 public class NetworkSetup : NetworkBehaviour
 {
     [SyncVar(hook = "SetTransformName")]

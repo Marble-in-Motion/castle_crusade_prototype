@@ -1,11 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 using System;
 using System.IO;
 
+/**
+ * Game controller, monitors game state
+ * Server only
+ **/
 public class GameController : NetworkBehaviour
 {
 
@@ -167,8 +169,6 @@ public class GameController : NetworkBehaviour
             teamController1.SetTeamResult(TeamController.TeamResult.SAND_BOX);
             teamController2.SetTeamResult(TeamController.TeamResult.SAND_BOX);
         }
-
-
     }
 
     public void DeactiveScreenCamera()
@@ -217,7 +217,8 @@ public class GameController : NetworkBehaviour
         return (playerId % 2 == 0) ? TeamController.TEAM1 : TeamController.TEAM2;
     }
 
-    public void GameIsOver(int losingTeamId) {
+    public void GameIsOver(int losingTeamId)
+    {
         TeamController.TeamResult team1Result = (losingTeamId == TeamController.TEAM1) ? TeamController.TeamResult.LOST : TeamController.TeamResult.WON;
         TeamController.TeamResult team2Result = (losingTeamId == TeamController.TEAM2) ? TeamController.TeamResult.LOST : TeamController.TeamResult.WON;
 
@@ -271,7 +272,8 @@ public class GameController : NetworkBehaviour
 
         allAudioSources = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
 
-        foreach(AudioSource audioS in allAudioSources) {
+        foreach (AudioSource audioS in allAudioSources)
+        {
             audioS.Stop();
         }
     }
@@ -286,11 +288,11 @@ public class GameController : NetworkBehaviour
             {
                 RestartGame(0);
             }
-               
+
         }
-        if(currentGameState == GameState.SAND_BOX)
+        if (currentGameState == GameState.SAND_BOX)
         {
-            if(Time.time > nextTroopSendSandBox)
+            if (Time.time > nextTroopSendSandBox)
             {
                 nextTroopSendSandBox = Time.time + Params.TROOP_SEND_INTERVAL_SAND_BOX;
                 RandomTroopSend();
