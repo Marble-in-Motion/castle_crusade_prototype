@@ -1,22 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 
+/**
+ * Handler for tower collisions
+ * Deduct health if troop collides with target
+ **/
+public class CollisionHandler : NetworkBehaviour
+{
 
-public class CollisionHandler : NetworkBehaviour {
+    [SerializeField]
+    private int teamId;
 
-	[SerializeField]
-	private int teamId;
-    
-	void OnTriggerEnter(Collider other)
-	{
-	    int troopId = other.gameObject.GetComponent<AIController>().TroopType;
-		int towerDamage = Params.NPC_DAMAGE[troopId]; // need to get troopId
+    void OnTriggerEnter(Collider other)
+    {
+        int troopId = other.gameObject.GetComponent<AIController>().TroopType;
+        int towerDamage = Params.NPC_DAMAGE[troopId]; // need to get troopId
 
         DeductTowerHealth(towerDamage);
         DestroyTroop(other.gameObject);
-	}
+    }
 
 
     void DeductTowerHealth(int damage)

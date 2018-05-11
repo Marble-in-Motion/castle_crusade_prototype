@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Player
 {
+    /**
+     * UI canvas controller for a single player
+     **/
     public class CanvasController : MonoBehaviour
     {
         private bool displayTime = false;
@@ -17,8 +16,8 @@ namespace Assets.Scripts.Player
         [SerializeField]
         private Image blueHealthBar;
 
-		[SerializeField]
-		private Image redHealthBar;
+        [SerializeField]
+        private Image redHealthBar;
 
         [SerializeField]
         private Text CurrencyText;
@@ -32,8 +31,8 @@ namespace Assets.Scripts.Player
         [SerializeField]
         private GameObject miniMapView;
 
-		[SerializeField]
-		private GameObject[] sectors; 
+        [SerializeField]
+        private GameObject[] sectors;
 
         private GameObject GetSector(int teamId, int laneId)
         {
@@ -42,13 +41,14 @@ namespace Assets.Scripts.Player
             : sectors[laneId + 5];
         }
 
-		public void HighlightSector(int teamId, int laneId) {
+        public void HighlightSector(int teamId, int laneId)
+        {
 
             GameObject sectorprefab = GetSector(teamId, laneId);
-			Instantiate(sectorprefab, sectorprefab.transform.position, sectorprefab.transform.rotation);
-            
-		}
-		        
+            Instantiate(sectorprefab, sectorprefab.transform.position, sectorprefab.transform.rotation);
+
+        }
+
         public void SetCurrencyText(string text)
         {
             CurrencyText.text = text;
@@ -58,7 +58,7 @@ namespace Assets.Scripts.Player
         {
             LeaderboardText.text = text;
             LeaderboardText.enabled = (!teamAiEnabled && isOpponentAiEnabled);
-            
+
         }
 
         public void SetBlueHealthBar(float health)
@@ -66,9 +66,10 @@ namespace Assets.Scripts.Player
             blueHealthBar.transform.localScale = new Vector3(Mathf.Clamp(health, 0f, 1f), blueHealthBar.transform.localScale.y, blueHealthBar.transform.localScale.z);
         }
 
-		public void SetRedHealthBar(float health) {
+        public void SetRedHealthBar(float health)
+        {
             redHealthBar.transform.localScale = new Vector3(Mathf.Clamp(health, 0f, 1f), redHealthBar.transform.localScale.y, redHealthBar.transform.localScale.z);
-		}
+        }
 
         public void SetRenderTexture(int teamId)
         {
@@ -84,7 +85,7 @@ namespace Assets.Scripts.Player
                 case TeamController.TeamResult.LOST:
                     anim.ResetTrigger("Restart");
                     anim.SetTrigger("GameOver");
-					anim.SetTrigger("ResetSendTroopAlert");
+                    anim.SetTrigger("ResetSendTroopAlert");
                     if (!displayTime)
                     {
                         SetAITimerAlert();
@@ -94,7 +95,7 @@ namespace Assets.Scripts.Player
                 case TeamController.TeamResult.WON:
                     anim.ResetTrigger("Restart");
                     anim.SetTrigger("GameWin");
-					anim.SetTrigger("ResetSendTroopAlert");
+                    anim.SetTrigger("ResetSendTroopAlert");
                     if (!displayTime)
                     {
                         SetAITimerAlert();
@@ -110,10 +111,10 @@ namespace Assets.Scripts.Player
             }
         }
 
-		public void SetArrowCooldown()
+        public void SetArrowCooldown()
         {
-			anim.SetTrigger("Cooldown");
-		}
+            anim.SetTrigger("Cooldown");
+        }
 
         public void SetSendTroopAlert()
         {
@@ -129,11 +130,11 @@ namespace Assets.Scripts.Player
 
         public void SetSandboxAlert()
         {
-			anim.ResetTrigger("GameWin");
-			anim.ResetTrigger("GameOver");
-			anim.SetTrigger("Restart");
+            anim.ResetTrigger("GameWin");
+            anim.ResetTrigger("GameOver");
+            anim.SetTrigger("Restart");
 
-			anim.ResetTrigger("ResetSandbox");
+            anim.ResetTrigger("ResetSandbox");
             anim.SetTrigger("Sandbox");
         }
 

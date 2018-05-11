@@ -3,15 +3,19 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
 
-public class AIController : NetworkSetup {
+/**
+ * Controller for NPC units i.e. SpartanKing
+ **/
+public class AIController : NetworkSetup
+{
 
     [SerializeField]
     private string AIName;
 
     private NavMeshAgent agent;
 
-  	[SerializeField]
-  	public GameObject[] targets;
+    [SerializeField]
+    public GameObject[] targets;
 
     private float spawnToTargetDistance;
     public GameObject target;
@@ -66,26 +70,27 @@ public class AIController : NetworkSetup {
         agent = GetComponent<NavMeshAgent>();
     }
 
-    void Start() {
+    void Start()
+    {
         RegisterModel(AIName);
         if (GetComponent<Animation>() != null)
         {
-          if(GetComponent<Animation>().Play("run") != false){
-              GetComponent<Animation>().Play("run");
-          }
+            if (GetComponent<Animation>().Play("run") != false)
+            {
+                GetComponent<Animation>().Play("run");
+            }
         }
         else
         {
             GetComponent<Animator>().SetTrigger("Run");
         }
-	}
+    }
 
     public float GetDistanceRatioToTarget()
-	{
-
-		float currentDistanceToTarget = Vector3.Distance(transform.position, target.transform.position);
-		float temp = 1 - (currentDistanceToTarget / spawnToTargetDistance);
-		return temp;
+    {
+        float currentDistanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+        float temp = 1 - (currentDistanceToTarget / spawnToTargetDistance);
+        return temp;
     }
 
     [ClientRpc]

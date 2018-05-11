@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
 
-
+/**
+ * Team controller, keeps track of team parameters i.e. tower health
+ * Server only
+ **/
 public class TeamController : NetworkBehaviour
 {
     public const string TEAM_CONTROLLER_1_TAG = "TeamController1";
@@ -26,7 +24,7 @@ public class TeamController : NetworkBehaviour
     private float nextActionTime = 0.0f;
 
     private float timeToScreenCheck = 0;
-    private float maxTimeAtScreen; 
+    private float maxTimeAtScreen;
 
     //Danger score params
     private int troopCountDivisor = Params.TROOP_COUNT_PER_DANGER_INDEX;
@@ -185,18 +183,17 @@ public class TeamController : NetworkBehaviour
 
     void Start()
     {
-        if(id == TEAM2)
+        if (id == TEAM2)
         {
             NEURAL_NET_ACTIVE = false;
         }
         nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
         result = TeamResult.UNDECIDED;
-		towerHealth = Params.STARTING_TOWER_HEALTH;
+        towerHealth = Params.STARTING_TOWER_HEALTH;
         endOfCoolDown = Time.time;
         currentTime = Time.time;
         lastActivePlayerId = -1;
         maxTimeAtScreen = (NEURAL_NET_ACTIVE) ? Params.MAX_TIME_AT_SCREEN_NEURAL : Params.MAX_TIME_AT_SCREEN;
-
         aiTime = 0;
     }
 
@@ -215,12 +212,12 @@ public class TeamController : NetworkBehaviour
         {
             CheckChangeAI();
         }
-        if(workDone)
+        if (workDone)
         {
             print("end of thread: " + Time.time);
             workDone = false;
         }
-        if(training && Time.time > nextScreenShot && result == TeamResult.UNDECIDED)
+        if (training && Time.time > nextScreenShot && result == TeamResult.UNDECIDED)
         {
             TakeTeamTrainScreenShot();
             nextScreenShot = Time.time + Params.TRAIN_SCREENSHOT_DELAY;
@@ -236,22 +233,20 @@ public class TeamController : NetworkBehaviour
     private void TakeTeamTrainScreenShot()
     {
         GameObject[] players = FindPlayersInTeam();
-    
+
         int[] dangers = new int[players.Length];
         for (int lane = 0; lane < players.Length; lane++)
         {
             dangers[lane] = GetLaneDangerIndex(lane);
         }
         this.GetComponent<HiResScreenShot>().TakeScreenShotsTrain(players, dangers);
-        
+
     }
 
     private GameObject[] FindPlayersInTeam()
     {
         string playersTag = Player.PLAYER_TAG + " " + id;
-
         GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
-
         return players;
     }
 
@@ -267,7 +262,7 @@ public class TeamController : NetworkBehaviour
 
             int length = players.Length;
 
-            if(length > 0)
+            if (length > 0)
             {
                 int playerIndex = UnityEngine.Random.Range(0, length);
 
@@ -275,7 +270,6 @@ public class TeamController : NetworkBehaviour
 
                 p.RpcClientPlayArraySound(Params.MORE_TROOPS, Params.PLAY_RANDOM);
             }
-            
         }
     }
 
@@ -284,17 +278,15 @@ public class TeamController : NetworkBehaviour
         sendTroopAlerting = false;
 
         string playersTag = Player.PLAYER_TAG + " " + id;
-
         GameObject[] players = GameObject.FindGameObjectsWithTag(playersTag);
 
         playSendTroopAnim = false;
 
-        foreach(GameObject player in players)
+        foreach (GameObject player in players)
         {
             Player p = player.GetComponent<Player>();
             p.RpcResetSendTroopAlert();
         }
-
 
         nextSendTroopAlert = Time.time + Params.SEND_TROOP_ALERT_DELAY;
 
@@ -302,10 +294,9 @@ public class TeamController : NetworkBehaviour
 
     public void ResetSandboxModeAlert()
     {
-
         GameObject[] players = FindPlayersInTeam();
 
-        foreach(GameObject player in players)
+        foreach (GameObject player in players)
         {
             Player p = player.GetComponent<Player>();
             p.RpcResetSandboxAlert();
@@ -315,11 +306,10 @@ public class TeamController : NetworkBehaviour
 
     public void SandboxAlert()
     {
-
         GameObject[] players = FindPlayersInTeam();
 
         int length = players.Length;
-        foreach(GameObject player in players)
+        foreach (GameObject player in players)
         {
             Player p = player.GetComponent<Player>();
             p.RpcSetSandboxAlert();
@@ -345,13 +335,9 @@ public class TeamController : NetworkBehaviour
         {
             if (Time.time > timeToScreenCheck)
             {
-                //print("time to sc: " + timeToScreenCheck);
-
                 TakeTeamScreenShotRealTime();
 
                 print("start of thread: " + Time.time);
-
-
                 Thread thread = new Thread(NeuralAIThread);
                 thread.Start();
 
@@ -389,7 +375,7 @@ public class TeamController : NetworkBehaviour
             }
             else
             {
-                if(index > maxDanger2)
+                if (index > maxDanger2)
                 {
                     maxDanger2 = index;
                     aiLane2 = lane;
@@ -405,11 +391,10 @@ public class TeamController : NetworkBehaviour
     {
         workDone = false;
         string output = "";
-        
-        // Encode the data string into a byte array.
+
         string url = "http://127.0.0.1:5000/inference/" + id;
-        HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
-        HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
         Stream stream = response.GetResponseStream();
         using (StreamReader reader = new StreamReader(stream))
         {
@@ -464,7 +449,7 @@ public class TeamController : NetworkBehaviour
 
     public int GetLaneDangerIndex(int lane)
     {
-        
+
         int troopCountDanger = GenerateTroopNumberDangerIndex(lane);
         int troopDistanceDanger = GenerateTroopDistanceDangerIndex(lane);
         int index = troopCountDanger + troopDistanceDanger;
@@ -480,7 +465,7 @@ public class TeamController : NetworkBehaviour
         List<GameObject> troops = GetTroopsInLane(lane);
         int troopCount = troops.Count;
         int danger = troopCount / troopCountDivisor;
-        if(danger > 5)
+        if (danger > 5)
         {
             danger = 5;
         }
@@ -496,9 +481,9 @@ public class TeamController : NetworkBehaviour
         foreach (GameObject troop in troops)
         {
             float distanceRatioToTarget = troop.GetComponent<AIController>().GetDistanceRatioToTarget();
-            
+
             totalDistanceToTower += distanceRatioToTarget;
-            if(distanceRatioToTarget > nearestTroopDistance)
+            if (distanceRatioToTarget > nearestTroopDistance)
             {
                 nearestTroopDistance = distanceRatioToTarget;
             }
@@ -528,7 +513,7 @@ public class TeamController : NetworkBehaviour
 
     private int ConvertPlayerIdToLane(int PlayerId)
     {
-        return (PlayerId - (id - 1))/2;
+        return (PlayerId - (id - 1)) / 2;
     }
 
     private bool CheckIfNoTroopsPresent(int active)
@@ -590,7 +575,7 @@ public class TeamController : NetworkBehaviour
     [ClientRpc]
     public void RpcPlaySeigeSound()
     {
-            seigeAudio.PlayOneShot(seigeAudio.clip);
+        seigeAudio.PlayOneShot(seigeAudio.clip);
     }
 
     public void DeductTowerHealth(int damage)
@@ -615,7 +600,7 @@ public class TeamController : NetworkBehaviour
         return towerHealth / Params.STARTING_TOWER_HEALTH;
     }
 
-       
+
     public void Restart(int isSandbox)
     {
         towerHealth = Params.STARTING_TOWER_HEALTH;
@@ -628,7 +613,7 @@ public class TeamController : NetworkBehaviour
             player.GetComponent<Player>().RpcResetAimPlayer();
             player.GetComponent<Player>().RpcResetVolleyAnim();
             player.GetComponent<Player>().RpcResetAITimerAnim();
-            if(isSandbox == 1)
+            if (isSandbox == 1)
             {
                 player.GetComponent<Player>().RpcResetMainMusic();
             }

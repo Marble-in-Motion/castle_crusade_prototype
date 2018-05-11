@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * Central audio controller, contains all game audio sources
+ **/
 public class AudioManager : MonoBehaviour
 {
     [SerializeField]
@@ -43,7 +46,7 @@ public class AudioManager : MonoBehaviour
         BuildArrayDict();
         BuildSingleDict();
     }
-         
+
     public void BuildSingleDict()
     {
         singleAudioSources.Add(Params.AMBIENCE, ambience);
@@ -74,7 +77,7 @@ public class AudioManager : MonoBehaviour
     {
         try
         {
-            if(index == Params.PLAY_RANDOM)
+            if (index == Params.PLAY_RANDOM)
             {
                 index = UnityEngine.Random.Range(0, arrayAudioSources[audioSourceName].Length);
             }
