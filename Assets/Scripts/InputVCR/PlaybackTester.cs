@@ -23,9 +23,7 @@ public class PlaybackTester : MonoBehaviour
 		{Params.VOLLEY_KEY,KeyState.UP},
 		{Params.VOLLEY_KEY_ALT,KeyState.UP},
 		{Params.SK_KEY,KeyState.UP},
-		{Params.SK_KEY_ALT,KeyState.UP},
-		{Params.BR_KEY,KeyState.UP},
-		{Params.BR_KEY_ALT,KeyState.UP},
+		{Params.SK_KEY_ALT,KeyState.UP}
 	};
 
 	private int currentTest = 0;

@@ -287,8 +287,6 @@ public class Player : NetworkSetup
           CmdRequestOffensiveTroopSpawn (0, 4);
         } else if (playbackTester.GetKeyDown (Params.SK_KEY) || playbackTester.GetKeyDown (Params.SK_KEY_ALT)) {
           CmdRequestOffensiveTroopSpawn (0, laneId);
-        } else if (playbackTester.GetKeyDown (Params.BR_KEY) || playbackTester.GetKeyDown (Params.BR_KEY_ALT)) {
-          CmdRequestOffensiveTroopSpawn (1, laneId);
         } else if (playbackTester.GetKeyDown (Params.VOLLEY_KEY) || playbackTester.GetKeyDown (Params.VOLLEY_KEY_ALT)) {
           CmdVolley ();
         } else if (playbackTester.GetKeyDown (Params.LEFT_KEY)) {
@@ -390,29 +388,24 @@ public class Player : NetworkSetup
 				RpcSetSendTroopAlert ();
 				sendTroopAlerting = true;
 			}
-            //myTeamController.ResetSendTroopAlert(myTeamId);
         }
-
     }
 
     [ClientRpc]
     public void RpcSetSandboxAlert()
     {
-        Debug.Log("Sandbox");
         canvasController.SetSandboxAlert();
     }
 
     [ClientRpc]
     public void RpcResetSandboxAlert()
     {
-        Debug.Log("Reset Sandbox");
         canvasController.ResetSandboxAlert();
     }
 
     [ClientRpc]
     public void RpcSetSendTroopAlert()
     {
-        Debug.Log("send troops");
         canvasController.SetSendTroopAlert();
     }
 
