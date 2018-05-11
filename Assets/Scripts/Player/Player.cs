@@ -325,7 +325,6 @@ public class Player : NetworkSetup
             using (StreamReader r = new StreamReader(path))
             {
                 string json = r.ReadToEnd();
-                Debug.Log(json);
                 Recording recording = Recording.ParseRecording(json);
                 playbackTester.StartPlayback(recording);
             }

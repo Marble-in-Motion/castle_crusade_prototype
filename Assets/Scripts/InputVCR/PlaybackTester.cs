@@ -156,7 +156,6 @@ public class PlaybackTester : MonoBehaviour
         using (StreamReader r = new StreamReader(path))
         {
             string json = r.ReadToEnd();
-            Debug.Log(json);
             Recording recording = Recording.ParseRecording(json);
             StartPlayback(recording);
         }
